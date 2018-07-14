@@ -1,6 +1,6 @@
 # Valid bootstrap options (required): ubuntu, coreos, centos, none
-bootstrap_os: none
-
+bootstrap_os: centos
+docker_container_storage_setup: false
 #Directory where etcd data stored
 etcd_data_dir: /var/lib/etcd
 
