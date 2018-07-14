@@ -1,25 +1,18 @@
 ---
 
-m1:
-   name: k8s-01
-   ip: 10.0.35.21
-   cpus: 4
-   mem: 3000
-   type: kube_master
-
 s1:
    name: k8s-02
    ip: 10.0.35.31
    cpus: 4
    mem: 4000
-   type: kube_node
+   type: kube-node
 
 s2:
    name: k8s-03
    ip: 10.0.35.32
    cpus: 4
    mem: 4000
-   type: kube_node
+   type: kube-node
 
 
 boot:
@@ -27,6 +20,12 @@ boot:
    ip: 10.0.35.11
    cpus: 4
    mem: 4000
-   type: kube_boot
+   type: kube-boot
 
+m1:
+   name: k8s-01
+   ip: 10.0.35.21
+   cpus: 4
+   mem: 4000
+   type: kube-master,etcd
 

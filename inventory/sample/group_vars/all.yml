@@ -1,5 +1,7 @@
 # Valid bootstrap options (required): ubuntu, coreos, centos, none
-bootstrap_os: none
+bootstrap_os: centos
+redhat_subscription_user: sorididim11
+redhat_subscription_pwd: c1!DG#HJ6kWD!xwh
 
 #Directory where etcd data stored
 etcd_data_dir: /var/lib/etcd

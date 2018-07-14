@@ -9,25 +9,26 @@ UI = Vagrant::UI::Colored.new
 
 settings = YAML.load_file 'vagrantConf.yml'
 
-# Check if vagrant confile is in valid order. dcos_bootstrap should be at the bottom of config file
-UI.info 'Checking if the location of dcos_boostrap of vagrantConf.xml is valid...', bold: true
-if settings[settings.keys.last]['type'] != 'kube_boot'
-  UI.error 'Please put dcos_bootstrap at the bottom of vagrantConf.yml because of provisioning order ', bold: true
-  exit(-1)
-end
 
 # create dynamic inventory file. ansible provisioner 's dynamic inventory got some bugs
 UI.info 'Create ansible dynamic inventory file...', bold: true
 inventory_file = 'inventory/sample/hosts'
 File.open(inventory_file, 'w') do |f|
-  %w(kube_master kube_node kube_boot).each do |section|
+  settings.each do |_, machine_info|
+    f.puts(machine_info['name'] + ' ' + 'ansible_host=' + machine_info['ip'] + ' ' + 'ip=' + machine_info['ip']) 
+  end
+
+  %w(kube-master etcd kube-node).each do |section|
     f.puts("[#{section}]")
     settings.each do |_, machine_info|
-      f.puts(machine_info['ip']) if machine_info['type'] == section
+      types = machine_info['type'].split(',') 
+      types.each do |t|
+        f.puts(machine_info['name']) if t == section 
+      end
     end
     f.puts('')
   end
-  f.write("[kube_cluster:children]\nkube_master\nkube_node")
+  f.write("[k8s-cluster:children]\nkube-master\nkube-node")
 end
 
 Vagrant.configure('2') do |config|
@@ -71,13 +72,21 @@ Vagrant.configure('2') do |config|
         vb.customize ['guestproperty', 'set', :id, '/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold', 1000]
       end
 
-      if machine_info['name'] == 'bootstrap'
-        node.vm.network 'forwarded_port', guest: 22, host: 2333
+      node.vm.provision 'shell' do |sh|
+          sh.inline = <<-SHELL
+            sudo swapoff -a
+            UI.info 'swapoff...', bold: true
+          SHELL
+      end
+
+      if machine_info['name'] == 'k8s-01'
+        node.vm.network 'forwarded_port', guest: 6443, host: 443
         ssh_prv_key = File.read("#{Dir.home}/.vagrant.d/insecure_private_key")
         UI.info 'Insert vagrant insecure key to bootstreap node...', bold: true
         node.vm.provision 'shell' do |sh|
           sh.inline = <<-SHELL
             [ ! -e /home/vagrant/.ssh/id_rsa ] && echo "#{ssh_prv_key}" > /home/vagrant/.ssh/id_rsa && chown vagrant:vagrant /home/vagrant/.ssh/id_rsa && chmod 600 /home/vagrant/.ssh/id_rsa
+            pip install -r /vagrant/requirements.txt
             echo Provisioning of ssh keys completed [Success].
           SHELL
         end
@@ -87,8 +96,9 @@ Vagrant.configure('2') do |config|
           ansible.version = '2.4.3.0'
           ansible.config_file = 'ansible.cfg'
           ansible.inventory_path = inventory_file
+          ansible.become = true
           ansible.limit = 'all'
-	  ansible.playbook = 'util-install-ohmyzsh.yml'
+	  ansible.playbook = 'site.yml'
           ansible.verbose = 'true'
         end
       end

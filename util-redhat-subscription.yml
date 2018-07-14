@@ -1,5 +1,5 @@
 --- 
-- name: "Install portus docker registry"
+- name: "Register Redhat subscription"
   gather_facts: True
   hosts: all
   tasks:
@@ -9,5 +9,3 @@
         username: "{{redhat_subscription_user}}"
         password: "{{redhat_subscription_pwd}}"
         autosubscribe: true
-      when: redhat_subscription_user is defined and ansible_distribution == "RedHat"
-  environment: "{{ proxy_env }}"
