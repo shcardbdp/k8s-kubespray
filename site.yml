@@ -1,5 +1,10 @@
 
 ---
+- hosts: localhost
+  gather_facts: False
+  tasks:
+  - pip:
+      requirements: requirements.txt
 
 - include: util-redhat-subscription.yml
 # - include: util-config-ohmyzsh.yml
