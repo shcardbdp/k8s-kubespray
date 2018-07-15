@@ -75,7 +75,7 @@ Vagrant.configure('2') do |config|
       node.vm.provision 'shell' do |sh|
           sh.inline = <<-SHELL
             sudo swapoff -a
-            UI.info 'swapoff...', bold: true
+            echo 'swapoff...'
           SHELL
       end
 
