@@ -71,13 +71,8 @@ Vagrant.configure('2') do |config|
         # for dcos ntptime
         vb.customize ['guestproperty', 'set', :id, '/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold', 1000]
       end
-
-      node.vm.provision 'shell' do |sh|
-          sh.inline = <<-SHELL
-            sudo swapoff -a
-            echo 'swapoff...'
-          SHELL
-      end
+      node.provision 'shell', inline: 'swapoff -a'
+  
 
       if machine_info['name'] == 'k8s-01'
         node.vm.network 'forwarded_port', guest: 6443, host: 443
@@ -91,13 +86,14 @@ Vagrant.configure('2') do |config|
         end
 
         node.vm.provision :ansible_local do |ansible|
-          ansible.install_mode = :pip # or default( by os package manager)
-          ansible.version = '2.4.3.0'
+          #ansible.install_mode = :pip # or default( by os package manager)
+          ansible.pip_args = "-r requirements.txt"
+          #ansible.version = '2.4.3.0'
           ansible.config_file = 'ansible.cfg'
           ansible.inventory_path = inventory_file
           ansible.become = true
           ansible.limit = 'all'
-	  ansible.playbook = 'site.yml'
+          ansible.playbook = 'site.yml'
           ansible.verbose = 'true'
         end
       end
