@@ -4,7 +4,7 @@
   gather_facts: False
   pre_tasks:
   - pip:
-      requirements: /vagrant/requirements.txt
+      requirements: requirements.txt
 
 - include: util-redhat-subscription.yml
 # - include: util-config-ohmyzsh.yml
