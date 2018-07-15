@@ -71,7 +71,7 @@ Vagrant.configure('2') do |config|
         # for dcos ntptime
         vb.customize ['guestproperty', 'set', :id, '/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold', 1000]
       end
-      node.provision 'shell', inline: 'swapoff -a'
+      node.vm.provision 'shell', inline: 'swapoff -a'
   
 
       if machine_info['name'] == 'k8s-01'
