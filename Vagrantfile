@@ -86,7 +86,6 @@ Vagrant.configure('2') do |config|
         node.vm.provision 'shell' do |sh|
           sh.inline = <<-SHELL
             [ ! -e /home/vagrant/.ssh/id_rsa ] && echo "#{ssh_prv_key}" > /home/vagrant/.ssh/id_rsa && chown vagrant:vagrant /home/vagrant/.ssh/id_rsa && chmod 600 /home/vagrant/.ssh/id_rsa
-            pip install -r /vagrant/requirements.txt
             echo Provisioning of ssh keys completed [Success].
           SHELL
         end

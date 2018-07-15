@@ -2,9 +2,9 @@
 ---
 - hosts: localhost
   gather_facts: False
-  tasks:
+  pre_tasks:
   - pip:
-      requirements: requirements.txt
+      requirements: /vagrant/requirements.txt
 
 - include: util-redhat-subscription.yml
 # - include: util-config-ohmyzsh.yml
