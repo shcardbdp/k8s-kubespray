@@ -23,7 +23,16 @@ kube_version: v1.10.4
 
 # Where the binaries will be downloaded.
 # Note: ensure that you've enough disk space (about 1G)
-local_release_dir: "/tmp/releases"
+k8s_data_home: "/k8s"
+k8s_addon_home: "{{k8s_data_home}}/addons"
+
+etcd_backup_prefix: "{{k8s_data_home}}/cluster/etcd/backups"
+etcd_data_dir: "{{k8s_data_home}}/cluster/etcd/data"
+etcd_events_data_dir: "{{k8s_data_home}}/cluster/etcd-events"
+
+elasticsearch_data_dir: "{{k8s_addon_home}}/elasticsearch"
+registry_data_dir: "{{k8s_addon_home}}/registry"
+local_release_dir: "{{k8s_data_home}}/images/releases"
 download_run_once: True
 
 # Random shifts for retrying failed ops like pushing/downloading
@@ -67,7 +76,7 @@ kube_users:
 
 # Choose network plugin (cilium, calico, contiv, weave or flannel)
 # Can also be set to 'cloud', which lets the cloud provider setup appropriate routing
-kube_network_plugin: calico
+kube_network_plugin: flannel
 
 # weave's network password for encryption
 # if null then no network encryption
