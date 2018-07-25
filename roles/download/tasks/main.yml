@@ -3,6 +3,9 @@
   when:
     - not skip_downloads|default(false)
 
+- debug:
+    msg: "download delegate -> {{download_delegate}}"
+    
 - name: "Download items"
   include_tasks: "download_{% if download.container %}container{% else %}file{% endif %}.yml"
   vars:
