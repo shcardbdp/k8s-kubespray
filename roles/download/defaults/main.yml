@@ -54,6 +54,9 @@ kubeadm_checksum: 7e1169bbbeed973ab402941672dec957638dea5952a1e8bc89a37d5e709cc4
 vault_binary_checksum: 3c4d70ba71619a43229e65c67830e30e050eab7a81ac6b28325ff707e5914188
 
 # Containers
+nvidia_device_plugin_image_repo: "nvidia/k8s-device-plugin"
+nvidia_device_plugin_image_tag: "1.10"
+
 etcd_image_repo: "quay.io/coreos/etcd"
 etcd_image_tag: "{{ etcd_version }}"
 flannel_image_repo: "quay.io/coreos/flannel"
@@ -164,7 +167,17 @@ cert_manager_version: "v0.3.0"
 cert_manager_controller_image_repo: "quay.io/jetstack/cert-manager-controller"
 cert_manager_controller_image_tag: "{{ cert_manager_version }}"
 
+
+
 downloads:
+  nvidia_device_plugin:
+    enabled: true
+    container: true
+    repo: "{{ nvidia_device_plugin_image_repo }}"
+    tag: "{{ nvidia_device_plugin_image_tag }}"
+    sha256: "{{ nvidia_device_plugin_checksum|default(None) }}"
+    groups:
+      - kube-node
   netcheck_server:
     enabled: "{{ deploy_netchecker }}"
     container: true
