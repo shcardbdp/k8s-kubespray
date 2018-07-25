@@ -1,5 +1,7 @@
 ---
-
+- debug:
+    msg: "registry_storage_class: {{registry_storage_class}}"
+    
 - name: Registry | Create addon dir
   file:
     path: "{{ kube_config_dir }}/addons/registry"
