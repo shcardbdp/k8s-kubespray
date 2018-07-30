@@ -10,14 +10,3 @@ gpgkey={{ docker_rh_repo_gpgkey }}
 {% endif %}
 {% if http_proxy is defined %}proxy={{ http_proxy }}{% endif %}
 
-[docker-engine]
-name=Docker-Engine Repository
-baseurl={{ dockerproject_rh_repo_base_url }}
-enabled=1
-{% if offline_install is defined and offline_install == True %}
-gpgcheck=0
-{% else %}
-gpgcheck=1
-gpgkey={{ dockerproject_rh_repo_gpgkey }}
-{% endif %}
-{% if http_proxy is defined %}proxy={{ http_proxy }}{% endif %}
