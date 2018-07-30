@@ -2,7 +2,7 @@
 name=Docker-CE Repository
 baseurl={{ docker_rh_repo_base_url }}
 enabled=1
-{% if offline_install is defined and offline_install == True}
+{% if offline_install is defined and offline_install == True %}
 gpgcheck=0
 {% else %}
 gpgcheck=1
@@ -14,7 +14,7 @@ gpgkey={{ docker_rh_repo_gpgkey }}
 name=Docker-Engine Repository
 baseurl={{ dockerproject_rh_repo_base_url }}
 enabled=1
-{% if offline_install is defined and offline_install == True}
+{% if offline_install is defined and offline_install == True %}
 gpgcheck=0
 {% else %}
 gpgcheck=1
