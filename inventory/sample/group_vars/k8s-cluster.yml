@@ -23,6 +23,9 @@ kube_version: v1.10.4
 
 # Where the binaries will be downloaded.
 # Note: ensure that you've enough disk space (about 1G)
+offline_install: true
+docker_rh_repo_base_url: <private repo>
+
 k8s_data_home: "/k8s"
 k8s_addon_home: "{{k8s_data_home}}/addons"
 
