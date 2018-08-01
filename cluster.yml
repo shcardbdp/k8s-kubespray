@@ -102,6 +102,7 @@
     - { role: kubernetes-apps/policy_controller, tags: policy-controller }
     - { role: kubernetes-apps/ingress_controller, tags: ingress-controller }
     - { role: kubernetes-apps/external_provisioner, tags: external-provisioner }
+    - { role: kubernetes-apps/external_provisioner, tags: dl-apps }
 
 - hosts: calico-rr
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
