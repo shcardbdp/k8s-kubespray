@@ -185,6 +185,13 @@ downloads:
     tag: "all-jupyter-py36-cu90"
     groups:
       - kube-node
+  all-jupyter-py36-cu80:
+    enabled: true
+    container: true
+    repo: "ufoym/deepo"
+    tag: "all-jupyter-py36-cu80"
+    groups:
+      - kube-node
   all-jupyter-py36-cpu:
     enabled: true
     container: true
@@ -465,6 +472,13 @@ downloads:
     container: true
     repo: "ufoym/deepo"
     tag: "torch-cpu"     
+    groups:
+      - kube-node 
+  rstudio:
+    enabled: true
+    container: true
+    repo: "rocker/rstudio"
+    tag: "3.5.1"     
     groups:
       - kube-node 
 
