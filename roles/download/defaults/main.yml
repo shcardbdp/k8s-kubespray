@@ -206,6 +206,27 @@ downloads:
     tag: "all-py27-jupyter-cpu"     
     groups:
       - kube-node  
+  ufoym/deepo:
+    enabled: true
+    container: true
+    repo: "ufoym/deepo"
+    tag: "all-py27-jupyter-cu80"     
+    groups:
+      - kube-node  
+  ufoym/deepo:
+    enabled: true
+    container: true
+    repo: "ufoym/deepo"
+    tag: "all-py36-jupyter-cu80"     
+    groups:
+      - kube-node  
+  ufoym/deepo:
+    enabled: true
+    container: true
+    repo: "ufoym/deepo"
+    tag: "theano-py36-cu90"     
+    groups:
+      - kube-node  
   netcheck_server:
     enabled: "{{ deploy_netchecker }}"
     container: true
