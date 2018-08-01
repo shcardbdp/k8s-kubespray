@@ -170,6 +170,80 @@ cert_manager_controller_image_tag: "{{ cert_manager_version }}"
 
 
 downloads:
+  
+  monitoring-configmap-reload:
+    enabled: true
+    container: true
+    repo: "quay.io/coreos/configmap-reload"
+    tag: "v0.0.1"
+    groups:
+      - kube-node
+  monitoring-hyperkube:
+    enabled: true
+    container: true
+    repo: "quay.io/coreos/hyperkube"
+    tag: "v1.7.6_coreos.0"
+    groups:
+      - kube-node
+  monitoring-prometheus-operator:
+    enabled: true
+    container: true
+    repo: "quay.io/coreos/prometheus-operator"
+    tag: "v0.20.0"
+    groups:
+      - kube-node
+  monitoring-prometheus-config-reloader:
+    enabled: true
+    container: true
+    repo: "quay.io/coreos/prometheus-config-reloader"
+    tag: "v0.20.0"
+    groups:
+      - kube-node
+  monitoring-prometheus-alertmanager:
+    enabled: true
+    container: true
+    repo: "quay.io/prometheus/alertmanager"
+    tag: "v0.15.1"
+    groups:
+      - kube-node
+
+  monitoring-prometheus-resizer:
+    enabled: true
+    container: true
+    repo: "gcr.io/google_containers/addon-resizer"
+    tag: "1.7"
+    groups:
+      - kube-node
+  monitoring-prometheus-kube-state-metrics:
+    enabled: true
+    container: true
+    repo: "gcr.io/google_containers/kube-state-metrics"
+    tag: "v1.2.0"
+    groups:
+      - kube-node
+  monitoring-prometheus-node-exporter:
+    enabled: true
+    container: true
+    repo: "quay.io/prometheus/node-exporter"
+    tag: "v0.15.2"
+    groups:
+      - kube-node
+  monitoring-grafana-watcher:
+    enabled: true
+    container: true
+    repo: "quay.io/coreos/grafana-watcher"
+    tag: "v0.0.8"
+    groups:
+      - kube-node
+  monitoring-grafana:
+    enabled: true
+    container: true
+    repo: "grafana/grafana"
+    tag: "5.0.0"
+    groups:
+      - kube-node
+
+
   nvidia_device_plugin:
     enabled: true
     container: true
@@ -213,18 +287,19 @@ downloads:
     tag: "all-py27-jupyter-cpu"     
     groups:
       - kube-node  
+
   all-py27-jupyter-cu80:
     enabled: true
     container: true
     repo: "ufoym/deepo"
-    tag: "all-py27-jupyter-cu80"     
+    tag: "all-jupyter-py27-cu80"     
     groups:
       - kube-node  
   all-py36-jupyter-cu80:
     enabled: true
     container: true
     repo: "ufoym/deepo"
-    tag: "all-py36-jupyter-cu80"     
+    tag: "all-jupyter-py36-cu80"     
     groups:
       - kube-node  
   theano-py36-cu90:
