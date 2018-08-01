@@ -178,6 +178,38 @@ downloads:
     sha256: "{{ nvidia_device_plugin_checksum|default(None) }}"
     groups:
       - kube-node
+  ufoym/deepo:
+    enabled: true
+    container: true
+    repo: "ufoym/deepo"
+    tag: "all-jupyter-py36-cu90"
+    sha256: "None"
+    groups:
+      - kube-node
+  ufoym/deepo:
+    enabled: true
+    container: true
+    repo: "ufoym/deepo"
+    tag: "all-jupyter-py36-cpu"
+    sha256: "None"
+    groups:
+      - kube-node
+  ufoym/deepo:
+    enabled: true
+    container: true
+    repo: "ufoym/deepo"
+    tag: "all-py27-jupyter"     # cu90
+    sha256: "None"
+    groups:
+      - kube-node 
+  ufoym/deepo:
+    enabled: true
+    container: true
+    repo: "ufoym/deepo"
+    tag: "all-py27-jupyter-cpu"     
+    sha256: "None"
+    groups:
+      - kube-node  
   netcheck_server:
     enabled: "{{ deploy_netchecker }}"
     container: true
