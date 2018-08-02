@@ -14,6 +14,8 @@ spec:
       containers:
       - name: deep-container
         image: "ufoym/deepo:all-py36-jupyter-cpu90"
+        command: ["jupyter"]
+        args: ["notebook", "--no-browser", "--allow-root", "--NotebookApp.token=", "--notebook-dir='/root'"]
         resources:
           limits:
             nvidia.com/gpu: 2 # requesting 2 GPUs

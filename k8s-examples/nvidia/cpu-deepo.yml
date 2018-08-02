@@ -13,4 +13,6 @@ spec:
     spec:
       containers:
       - name: cpu-deep-container
-        image: "ufoym/deepo:all-py36-jupyter-cpu"        
+        image: "ufoym/deepo:all-py36-jupyter-cpu"
+        command: ["jupyter"]
+        args: ["notebook", "--no-browser", "--allow-root", "--NotebookApp.token=", "--notebook-dir='/root'"]
