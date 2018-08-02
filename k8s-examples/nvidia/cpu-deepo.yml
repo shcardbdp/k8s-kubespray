@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpu-deepo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cpu-deepo
+  template:
+    metadata:
+      app: cpu-deepo
+    spec:
+      containers:
+      - name: cpu-deep-container
+        image: "ufoym/deepo:all-py36-jupyter-cpu"        

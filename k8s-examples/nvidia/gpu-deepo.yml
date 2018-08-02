@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gpu-deepo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gpu-deepo
+  template:
+    metadata:
+      app: gpu-deepo
+    spec:
+      containers:
+      - name: deep-container
+        image: "ufoym/deepo:all-py36-jupyter-cpu90"
+        resources:
+          limits:
+            nvidia.com/gpu: 2 # requesting 2 GPUs
+    
