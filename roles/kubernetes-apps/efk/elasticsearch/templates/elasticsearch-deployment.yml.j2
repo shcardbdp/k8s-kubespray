@@ -17,6 +17,16 @@ spec:
     matchLabels:
       k8s-app: elasticsearch-logging
       version: "{{ elasticsearch_image_tag }}"
+  volumeClaimTemplates:
+  - metadata:
+      name: es-persistent-storage
+    spec:
+      storageClassName: "{{ efk_storage_class }}"
+      resources:
+        requests:
+          storage: 2Gi
+      accessModes
+      - ReadWriteOnce
   template:
     metadata:
       labels:
@@ -58,13 +68,4 @@ spec:
         name: elasticsearch-logging-init
         securityContext:
           privileged: true
-  volumeClaimTemplates:
-  - metadata:
-      name: es-persistent-storage
-    spec:
-      storageClassName: "{{ efk_storage_class }}"
-      resources:
-        requests:
-          storage: 2Gi
-      accessModes
-      - ReadWriteOnce
+  
