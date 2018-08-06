@@ -194,10 +194,9 @@ istio_enabled: false
 
 # Registry deployment
 registry_enabled: true
-registry_storage_class: none
-# registry_namespace: "{{ system_namespace }}"
-
-# registry_disk_size: "10Gi"
+registry_storage_class: "managed-nfs-storage"
+registry_namespace: "{{ system_namespace }}"
+registry_disk_size: "5Gi"
 
 # Local volume provisioner deployment
 
