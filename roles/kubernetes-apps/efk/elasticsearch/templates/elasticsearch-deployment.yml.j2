@@ -48,12 +48,7 @@ spec:
           protocol: TCP
         volumeMounts:
         - name: es-persistent-storage
-          mountPath: /data
-      volumes:
-      - name: es-persistent-storage
-        persistentVolumeClaim:
-            claimName: elasticsearch-pvc
-
+          mountPath: /data      
 {% if rbac_enabled %}
       serviceAccountName: efk 
 {% endif %}
@@ -63,4 +58,13 @@ spec:
         name: elasticsearch-logging-init
         securityContext:
           privileged: true
-
+  volumeClaimTemplates:
+  - metadata:
+      name: es-persistent-storage
+    spec:
+      storageClassName: "{{ efk_storage_class }}"
+      resources:
+        requests:
+          storage: 2Gi
+      accessModes
+      - ReadWriteOnce

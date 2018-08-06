@@ -17,16 +17,6 @@
   run_once: true
   when: rbac_enabled
 
-- name: "ElasticSearch | Write PVC"
-  template:
-    src: elasticsearch-pvc.yml.j2
-    dest: "{{ kube_config_dir }}/elasticsearch-pvc.yaml"
-  register: es_pvc_manifest
-
-- name: "ElasticSearch | Create elasticsearch PVC"
-  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/elasticsearch-pvc.yaml -n kube-system"
-  run_once: true
-  when: es_pvc_manifest.changed
 
 - name: "ElasticSearch | Write ES deployment"
   template:
