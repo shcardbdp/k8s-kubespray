@@ -51,8 +51,9 @@ spec:
           mountPath: /data
       volumes:
       - name: es-persistent-storage
-        hostPath: 
-          path: "{{ elasticsearch_data_dir }}"
+        persistentVolumeClaim:
+            claimName: elasticsearch-pvc
+
 {% if rbac_enabled %}
       serviceAccountName: efk 
 {% endif %}
