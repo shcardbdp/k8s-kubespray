@@ -256,8 +256,7 @@ downloads:
     enabled: true
     container: true
     repo: "quay.io/external_storage/nfs-client-provisioner"
-    tag: "latest"
-    sha256: "none"
+    tag: "latest"    
     groups:
       - kube-node
 
