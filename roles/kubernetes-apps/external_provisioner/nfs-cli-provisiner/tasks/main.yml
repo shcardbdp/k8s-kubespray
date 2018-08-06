@@ -17,7 +17,7 @@
     - { name: nfs-cli-sa, file: nfs-cli-sa.yml, type: sa }        
     - { name: nfs-cli-clusterrole, file: nfs-cli-clusterrole.yml, type: clusterrole }
     - { name: nfs-cli-clusterrolebinding, file: nfs-cli-clusterrolebinding.yml, type: clusterrolebinding }    
-    - { name: nfs-cli-provisiner-deploy, file: nfs-cli-provisioner-deploy.yml, type: deploy }
+    - { name: nfs-cli-provisioner-deploy, file: nfs-cli-provisioner-deploy.yml, type: deploy }
     - { name: nfs-cli-sc, file: nfs-cli-sc.yml, type: sc }
   register: nfs_cli_manifests
   when:
