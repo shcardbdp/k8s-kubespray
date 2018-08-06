@@ -1,3 +1,15 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cpu-deepo
+spec:
+  selector:
+    app: cpu-deepo
+  ports:
+    - port: 8888
+  
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9,7 +21,8 @@ spec:
       app: cpu-deepo
   template:
     metadata:
-      app: cpu-deepo
+      labels:
+        app: cpu-deepo
     spec:
       containers:
       - name: cpu-deep-container
