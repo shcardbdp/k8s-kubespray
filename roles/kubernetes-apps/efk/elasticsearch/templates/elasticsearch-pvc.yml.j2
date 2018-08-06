@@ -9,7 +9,7 @@ metadata:
     addonmanager.kubernetes.io/mode: Reconcile
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   storageClassName: "{{ efk_storage_class }}"
   resources:
     requests:
