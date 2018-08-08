@@ -22,7 +22,8 @@ COPY Anaconda3-5.2.0-Linux-x86_64.sh /data/Anaconda3-5.2.0-Linux-x86_64.sh
 RUN bash /data/Anaconda3-5.2.0-Linux-x86_64.sh -b -p /opt/conda && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-    echo "conda activate base" >> ~/.bashrc
+    echo "conda activate base" >> ~/.bashrc && \
+    rm -rf /data/Anaconda3-5.2.0-Linux-x86_64.sh
 
 RUN apt-get install -y curl grep sed dpkg && \
     TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
@@ -38,9 +39,10 @@ RUN apt-get install -y curl grep sed dpkg && \
 
 # conda opencv(3.4.2), current(3.4.1)
 COPY conda-requirements.txt /data/conda-requirements.txt
-RUN conda install --file /data/conda-requirements.txt
+RUN conda install -y --file /data/conda-requirements.txt
 
-
+COPY requirements.txt /data/requirements.txt
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
+ENTRYPOINT [ "/usr/bin/tini", "--" ]
 CMD [ "/bin/bash" ]
