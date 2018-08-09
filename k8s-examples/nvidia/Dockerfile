@@ -49,4 +49,6 @@ RUN apt-get install -y curl grep sed dpkg && \
     rm tini.deb && \
     apt-get clean
 
+EXPOSE 8888 6006
+
 CMD [ "/bin/bash" ]
