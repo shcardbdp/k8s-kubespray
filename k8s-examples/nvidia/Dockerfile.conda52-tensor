@@ -1,4 +1,4 @@
-FROM sorididim11/anaconda-cu90:0.1
+FROM sorididim11/conda-cu90-base:0.1
 
 
 #downgrade? pandas(0.22), current(0.23.4)
