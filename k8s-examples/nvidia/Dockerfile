@@ -37,7 +37,7 @@ RUN conda install -y --file /data/conda-requirements.txt
 # conda package install
 # ------------------------------------------------------------------
 COPY requirements.txt /data/requirements.txt
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r /data/requirements.txt
 
 # ==================================================================
 # Mini install to protect form zombie process
