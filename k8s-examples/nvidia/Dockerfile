@@ -65,4 +65,4 @@ EXPOSE 8888 6006
 
 WORKDIR "/notebooks"
 
-CMD [ "jupyter", "notebook", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
+CMD [ "/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
