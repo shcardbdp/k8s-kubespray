@@ -1,0 +1,42 @@
+FROM sorididim11/anaconda-cu90:0.1
+
+
+#downgrade? pandas(0.22), current(0.23.4)
+#downgrade? matplotlib(2.2.0), current(2.2.2)
+#downgrade? beautifulsoup4(4.4.0), current(4.6.0)
+#downgrade? notebook(5.3.0), notebook(5.5.0)
+# conda opencv(3.4.2), current(3.4.1)
+# ==================================================================
+# conda package install
+# ------------------------------------------------------------------
+COPY conda-requirements.txt /data/conda-requirements.txt
+RUN conda install -y --file /data/conda-requirements.txt
+
+# ==================================================================
+# conda package install
+# ------------------------------------------------------------------
+COPY requirements.txt /data/requirements.txt
+RUN pip install --upgrade pip && pip install -r /data/requirements.txt
+
+# ==================================================================
+# Mini install to protect form zombie process
+# ------------------------------------------------------------------
+RUN apt-get install -y curl grep sed dpkg && \
+    TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
+    curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
+    dpkg -i tini.deb && \
+    rm tini.deb && \
+    apt-get clean
+
+
+
+# Set up our notebook config.
+COPY jupyter_notebook_config.py /root/.jupyter/
+COPY notebooks /notebooks
+COPY run_jupyter.sh /
+
+EXPOSE 8888 6006
+
+WORKDIR "/notebooks"
+
+CMD [ "/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
