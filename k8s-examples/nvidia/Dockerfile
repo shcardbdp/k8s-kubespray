@@ -20,12 +20,18 @@ RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificate
 
 
 # anaconda3 install
-COPY Anaconda3-5.2.0-Linux-x86_64.sh /data/Anaconda3-5.2.0-Linux-x86_64.sh
-RUN bash /data/Anaconda3-5.2.0-Linux-x86_64.sh -b -p /opt/conda && \
+# COPY Anaconda3-5.2.0-Linux-x86_64.sh /data/Anaconda3-5.2.0-Linux-x86_64.sh
+# RUN bash /data/Anaconda3-5.2.0-Linux-x86_64.sh -b -p /opt/conda && \
+#     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+#     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+#     echo "conda activate base" >> ~/.bashrc && \
+#     rm -rf /data/Anaconda3-5.2.0-Linux-x86_64.sh
+RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
+    /bin/bash ~/anaconda.sh -b -p /opt/conda && \
+    rm ~/anaconda.sh && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-    echo "conda activate base" >> ~/.bashrc && \
-    rm -rf /data/Anaconda3-5.2.0-Linux-x86_64.sh
+    echo "conda activate base" >> ~/.bashrc
 
 #downgrade? pandas(0.22), current(0.23.4)
 #downgrade? matplotlib(2.2.0), current(2.2.2)
@@ -43,16 +49,6 @@ RUN conda install -y --file /data/conda-requirements.txt
 # ------------------------------------------------------------------
 COPY requirements.txt /data/requirements.txt
 RUN pip install --upgrade pip && pip install -r /data/requirements.txt
-
-# ==================================================================
-# Mini install to protect form zombie process
-# ------------------------------------------------------------------
-RUN apt-get install -y curl grep sed dpkg && \
-    TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
-    curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
-    dpkg -i tini.deb && \
-    rm tini.deb && \
-    apt-get clean
 
 
 
