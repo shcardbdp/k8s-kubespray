@@ -41,15 +41,49 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.
 # ==================================================================
 # conda package install
 # ------------------------------------------------------------------
-COPY conda-requirements.txt /data/conda-requirements.txt
-RUN conda install -y --file /data/conda-requirements.txt
+RUN conda install --yes --quiet  \
+    pytorch==0.4.0 \
+    opencv==3.4.1 \
+    tensorflow-gpu==1.9.0 \
+    keras==2.1.5 \
+    statsmodels==0.9.0 \
+    scipy==1.1.0 \
+    numpy==1.14.3 \
+    scikit-learn==0.19.1 \
+    pandas==0.23.4 \
+    matplotlib==2.2.2 \
+    bokeh==0.13.0 \
+    seaborn==0.8.1 \
+    beautifulsoup4==4.6.0 \
+    nltk==3.3.0 \
+    requests==2.18.4 \
+    urllib3==1.22 \
+    ipywidgets==7.2.1 \
+    notebook==5.5.0 
+
 
 # ==================================================================
-# conda package install
+# pip package install
 # ------------------------------------------------------------------
-COPY requirements.txt /data/requirements.txt
-RUN pip install --upgrade pip && pip install -r /data/requirements.txt
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir \
+    mxnet==1.2.0 \ 
+    konlpy==0.4.3 \
+    fasttext==0.8.3 \
+    xgboost==0.72.1 \
+    jpype1==0.6.3 \
+    gensim==3.5.0 
 
+
+# ==================================================================
+# mecab from bitbucket
+# ------------------------------------------------------------------
+
+RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko/downloads/mecab-0.996-ko-0.9.2.tar.gz -O mecab.tar.gz && \\
+    tar -zxf mecab.tar.gz && cd mecab-0.996-ko-0.9.2 && \
+    ./configure && make && make check && make install
+
+    
 
 
 # Set up our notebook config.

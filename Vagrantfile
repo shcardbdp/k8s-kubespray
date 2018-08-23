@@ -36,11 +36,6 @@ Vagrant.configure('2') do |config|
   config.ssh.insert_key = false
   config.vm.synced_folder '.', '/vagrant', type: 'virtualbox'
 
-  required_plugins = %w( vagrant-sshfs vagrant-hostmanager vagrant-cachier vagrant-vbguest )
-  required_plugins.each do |plugin|
-    exec "vagrant plugin install #{plugin};vagrant #{ARGV.join(' ')}" unless Vagrant.has_plugin?(plugin) || ARGV[0] == 'plugin'
-  end
-
   config.hostmanager.enabled = true
   config.hostmanager.manage_guest = true
   config.hostmanager.ignore_private_ip = false
@@ -75,7 +70,7 @@ Vagrant.configure('2') do |config|
   
 
       if machine_info['name'] == 'k8s-01'
-        node.vm.network 'forwarded_port', guest: 6443, host: 443
+        #node.vm.network 'forwarded_port', guest: 6443, host: 443
         ssh_prv_key = File.read("#{Dir.home}/.vagrant.d/insecure_private_key")
         UI.info 'Insert vagrant insecure key to bootstreap node...', bold: true
         node.vm.provision 'shell' do |sh|
