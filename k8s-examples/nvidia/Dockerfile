@@ -67,7 +67,7 @@ RUN conda install --yes --quiet  \
 # ------------------------------------------------------------------
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir \
-    mxnet==1.2.0 \ 
+    mxnet-cu90==1.2.0 \ 
     konlpy==0.4.3 \
     fasttext==0.8.3 \
     xgboost==0.72.1 \
@@ -76,14 +76,19 @@ RUN pip install --upgrade pip && \
 
 
 # ==================================================================
-# mecab from bitbucket
+# mecab analyzer from bitbucket
 # ------------------------------------------------------------------
-
 RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko/downloads/mecab-0.996-ko-0.9.2.tar.gz -O mecab.tar.gz && \\
     tar -zxf mecab.tar.gz && cd mecab-0.996-ko-0.9.2 && \
     ./configure && make && make check && make install
 
-    
+
+# ==================================================================
+# mecab dictionary from bitbucket
+# ------------------------------------------------------------------
+RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.1.1-20180720.tar.gz -O mecab-dic.tar.gz && \\
+    tar -zxf mecab-dic.tar.gz && cd mecab-ko-dic-2.1.1-20180720 && \
+    ./configure && make && make check && make install
 
 
 # Set up our notebook config.
