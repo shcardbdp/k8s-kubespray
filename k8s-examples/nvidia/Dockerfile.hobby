@@ -80,8 +80,6 @@ RUN pip install --upgrade pip && \
         gensim==3.5.0 \
         autopep8
 
-
-RUN  apt-get install -y --no-install-recommends autotools-dev automake
 # ==================================================================
 # mecab analyzer from bitbucket
 # ------------------------------------------------------------------
