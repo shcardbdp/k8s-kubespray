@@ -107,6 +107,20 @@ RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-di
 
 RUN pip install --quiet --no-cache-dir mecab-python3==0.7
 
+# ==================================================================
+# Hyve connector
+# ------------------------------------------------------------------
+RUN conda install --yes --quiet  \
+        thrift \
+        thrift_sasl \
+        && \
+    conda clean -tipsy
+
+RUN pip install --quiet --no-cache-dir \
+        thriftpy \
+        PyHive
+
+
 # Set up our notebook config.
 COPY jupyter_notebook_config.py /root/.jupyter/
 COPY notebooks /notebooks
