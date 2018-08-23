@@ -77,7 +77,8 @@ RUN pip install --upgrade pip && \
         fasttext==0.8.3 \
         xgboost==0.72.1 \
         jpype1==0.6.3 \
-        gensim==3.5.0 
+        gensim==3.5.0 \
+        autopep8
 
 
 # ==================================================================
