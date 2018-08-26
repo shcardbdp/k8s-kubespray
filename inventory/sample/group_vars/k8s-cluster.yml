@@ -23,6 +23,7 @@ kube_version: v1.11.1
 
 # Where the binaries will be downloaded.
 # Note: ensure that you've enough disk space (about 1G)
+kubeadm_enabled: true
 offline_install: true
 docker_rh_repo_base_url: <private repo>
 
