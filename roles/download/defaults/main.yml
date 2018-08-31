@@ -185,6 +185,13 @@ downloads:
     tag: "v1.7.6_coreos.0"
     groups:
       - kube-node
+  monitoring-prometheus:
+    enabled: true
+    container: true
+    repo: "quay.io/prometheus/prometheus"
+    tag: "v2.2.1"
+    groups:
+      - kube-node
   monitoring-prometheus-operator:
     enabled: true
     container: true
