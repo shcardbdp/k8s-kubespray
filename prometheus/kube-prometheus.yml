@@ -1,7 +1,7 @@
 alertmanager:
   storage:
-    volumeClaimTemplates:
-    - metadata:
+    volumeClaimTemplate:
+      metadata:
         name: alertmanage-kube-prometheus-db
       spec:
         storageClassName: "managed-nfs-storage"
@@ -13,8 +13,8 @@ alertmanager:
 
 prometheus:
   storage:
-    volumeClaimTemplates:
-    - metadata:
+    volumeClaimTemplate:
+      metadata:
         name: prometheus-kube-prometheus-db
       spec:
         storageClassName: "managed-nfs-storage"
