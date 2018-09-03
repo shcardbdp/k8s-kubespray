@@ -1,0 +1,26 @@
+alertmanager:
+  storage:
+    volumeClaimTemplates:
+    - metadata:
+        name: alertmanage-kube-prometheus-db
+      spec:
+        storageClassName: "managed-nfs-storage"
+        resources:
+          requests:
+            storage: 10G
+        accessModes:
+        - ReadWriteOnce
+
+prometheus:
+  storage:
+    volumeClaimTemplates:
+    - metadata:
+        name: prometheus-kube-prometheus-db
+      spec:
+        storageClassName: "managed-nfs-storage"
+        resources:
+          requests:
+            storage: 10G
+        accessModes:
+        - ReadWriteOnce
+
