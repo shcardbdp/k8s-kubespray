@@ -6,6 +6,7 @@ metadata:
 spec:
   selector:
     app: cpu-deepo
+  type: NodePort
   ports:
     - port: 8888
   
