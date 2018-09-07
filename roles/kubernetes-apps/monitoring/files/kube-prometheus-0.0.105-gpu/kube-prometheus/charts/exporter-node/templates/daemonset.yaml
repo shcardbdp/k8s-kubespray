@@ -29,7 +29,7 @@ spec:
             runAsUser: 0
           volumeMounts:
           - name: collector-textfiles
-            mountPhat: /run/prometheus      
+            mountPath: /run/prometheus      
         - name: node-exporter
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
