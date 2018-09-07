@@ -23,3 +23,7 @@ prometheus:
             storage: 10G
         accessModes:
         - ReadWriteOnce
+
+grafana:
+  serverDashboardConfigmaps:
+    - nvidia-gpu-dashboard.yml
