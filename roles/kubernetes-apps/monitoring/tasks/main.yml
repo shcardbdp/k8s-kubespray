@@ -1,5 +1,5 @@
 - name: Install prometheus operator chart
-  command: helm install {{ item.chart_name }} --name {{ item.rel_name }} --namespace {{ monitoring_namespace }}
+  command: "helm install {{ item.chart_name }} --name {{ item.rel_name }} --namespace {{ monitoring_namespace }}"
   with_items:
   - { rel_name: promethes-operator, chart_name: prometheus-operator-0.0.29.tgz }
   - { rel_name: kube-promethes, chart_name: kube-prometheus-0.0.105-gpu.tgz }
