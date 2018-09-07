@@ -2,7 +2,7 @@
 
 
 - name: Install prometheus operator chart
-  local_action: "command helm install {{ role_path }}/files/{{ item.chart_name }} --name {{ item.rel_name }} --namespace {{ monitoring_namespace }}"
+  local_action: "helm install {{ role_path }}/files/{{ item.chart_name }} --name {{ item.rel_name }} --namespace {{ monitoring_namespace }}"
   with_items:
   - { rel_name: promethes-operator, chart_name: prometheus-operator-0.0.29.tgz }
   - { rel_name: kube-promethes, chart_name: kube-prometheus-0.0.105-gpu.tgz }
