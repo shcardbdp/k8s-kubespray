@@ -156,7 +156,7 @@ dataSource: {}
 
 ## A list of additional configmaps that contain -dashboard.json and/or -datasource.json files
 ## that should be imported into grafana.
-serverDashboardConfigmaps: ["gpu-dashboard.json"]
+serverDashboardConfigmaps: []
 
 serverDashboardFiles: {}
 
