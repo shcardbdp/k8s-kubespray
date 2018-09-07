@@ -29,4 +29,4 @@ grafana:
     anonymous:
       enabled: "true"
   serverDashboardConfigmaps:
-    - nvidia-gpu-dashboard.yml
+    - gpu-dashboard.yml
