@@ -25,5 +25,8 @@ prometheus:
         - ReadWriteOnce
 
 grafana:
+  auth:
+    anonymous:
+      enabled: "true"
   serverDashboardConfigmaps:
     - nvidia-gpu-dashboard.yml
