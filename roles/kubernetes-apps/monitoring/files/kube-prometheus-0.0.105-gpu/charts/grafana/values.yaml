@@ -156,12 +156,12 @@ dataSource: {}
 
 ## A list of additional configmaps that contain -dashboard.json and/or -datasource.json files
 ## that should be imported into grafana.
-serverDashboardConfigmaps: []
+serverDashboardConfigmaps: ["gpu-dashboard.json"]
 
 serverDashboardFiles: {}
 
 ## Keep the Dashboards that are defined in this HELM chart
-keepOriginalDashboards: true
+keepOriginalDashboards: false
 
 ## Keep the Datasources that are defined in this HELM chart
 keepOriginalDatasources: true

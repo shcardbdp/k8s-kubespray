@@ -28,3 +28,5 @@ grafana:
   auth:
     anonymous:
       enabled: "true"
+  serverDashboardConfigmaps:
+    - gpu-dashboard.yml
