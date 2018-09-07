@@ -193,6 +193,9 @@ efk_disk_size: "5Gi"
 # Helm deployment
 helm_enabled: true
 
+#  monitoring deployment depending on helm
+monitoring_enabled: true
+
 # Istio deployment
 istio_enabled: false
 

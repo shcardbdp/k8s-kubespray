@@ -17,7 +17,7 @@ dependencies:
       - helm
 
   - role: kubernetes-apps/monitoring
-    when: helm_enabled
+    when: helm_enabled and monitoring_enabled
     tags:
       - apps
       - monitoring
