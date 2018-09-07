@@ -7,7 +7,7 @@
 
 
 - name: Install prometheus operator chart
-  shell: "/usr/local/bin/helm install {{ role_path }}/files/{{ item.chart_name }} --name {{ item.rel_name }} --namespace {{ monitoring_namespace }}"
+  shell: "/usr/local/bin/helm install {{ options }} {{ role_path }}/files/{{ item.chart_name }} --name {{ item.rel_name }} --namespace {{ monitoring_namespace }}"
   with_items:
-  - { rel_name: promethes-operator, chart_name: prometheus-operator-0.0.29.tgz, options: "" }
-  - { rel_name: kube-promethes, chart_name: kube-prometheus-0.0.105-gpu.tgz, options: "-f /tmp/storage_values.yml"}
+  - { rel_name: prometheus-operator, chart_name: prometheus-operator-0.0.29.tgz, options: "" }
+  - { rel_name: kube-prometheus, chart_name: kube-prometheus-0.0.105-gpu.tgz, options: "-f /tmp/storage_values.yml"}
