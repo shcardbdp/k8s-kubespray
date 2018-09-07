@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: elasticsearch-logging
-  namespace: "kube-system"
+  namespace: "{{ efk_namespace }}"
   labels:
     k8s-app: elasticsearch-logging
     kubernetes.io/cluster-service: "true"

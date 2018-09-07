@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: elasticsearch-logging
-  namespace: kube-system
+  namespace: "{{ efk_namespace }}"
   labels:
     k8s-app: elasticsearch-logging
     version: "{{ elasticsearch_image_tag }}"
