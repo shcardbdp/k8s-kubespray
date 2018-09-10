@@ -450,4 +450,4 @@ grafana:
     anonymous:
       enabled: "true"
   serverDashboardConfigmaps:
-    - gpu-dashboard.json
+    - gpu-dashboard

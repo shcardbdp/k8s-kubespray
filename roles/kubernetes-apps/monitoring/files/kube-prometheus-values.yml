@@ -23,10 +23,3 @@ prometheus:
             storage: 10G
         accessModes:
         - ReadWriteOnce
-
-grafana:
-  auth:
-    anonymous:
-      enabled: "false"
-  serverDashboardConfigmaps:
-    - gpu-dashboard.json
