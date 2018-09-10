@@ -13,7 +13,7 @@
       "annotations": {
           "list": []
       },
-      "description": "Dashboard to get an overview of one server",
+      "description": "Dashboard to get an overview of GPUs of one server",
       "editable": true,
       "gnetId": 22,
       "graphTooltip": 0,
