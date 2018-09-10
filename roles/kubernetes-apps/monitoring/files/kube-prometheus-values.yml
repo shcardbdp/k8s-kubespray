@@ -27,6 +27,6 @@ prometheus:
 grafana:
   auth:
     anonymous:
-      enabled: "true"
+      enabled: "false"
   serverDashboardConfigmaps:
     - gpu-dashboard.json

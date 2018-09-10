@@ -168,4 +168,4 @@ keepOriginalDatasources: true
 
 auth:
   anonymous:
-    enabled: "false"
+    enabled: "true"
