@@ -445,3 +445,9 @@ deployKubeEtcd: true
 additionalRulesLabels: {}
   # additionalRulesConfigMapLabels:
   #   team: devops
+grafana:
+  auth:
+    anonymous:
+      enabled: "true"
+  serverDashboardConfigmaps:
+    - gpu-dashboard
