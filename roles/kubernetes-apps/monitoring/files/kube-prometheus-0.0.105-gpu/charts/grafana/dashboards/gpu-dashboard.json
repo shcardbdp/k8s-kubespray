@@ -1,17 +1,26 @@
 {
   "dashboard": {
+    "__inputs": [
+      {
+        "description": "",
+        "label": "prometheus",
+        "name": "DS_PROMETHEUS",
+        "pluginId": "prometheus",
+        "pluginName": "Prometheus",
+        "type": "datasource"
+      }
+    ],
+    {
       "__inputs": [
-          {
-              "description": "",
-              "label": "prometheus",
-              "name": "DS_PROMETHEUS",
-              "pluginId": "prometheus",
-              "pluginName": "Prometheus",
-              "type": "datasource"
-          }
+        {
+          "name": "DS_PROMETHEUS",
+          "label": "prometheus",
+          "description": "",
+          "type": "datasource",
+          "pluginId": "prometheus",
+          "pluginName": "Prometheus"
+        }
       ],
-      
-      # Your Dashboard Template Here
       "__requires": [
         {
           "type": "grafana",
@@ -51,12 +60,12 @@
           }
         ]
       },
-      "description": "Dashboard to get an overview of GPUs of one server",
+      "description": "Dashboard to get an overview of one server",
       "editable": true,
       "gnetId": 22,
       "graphTooltip": 0,
       "id": null,
-      "iteration": 1536559987589,
+      "iteration": 1536565855741,
       "links": [],
       "panels": [
         {
@@ -107,7 +116,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "100 - (avg by (gpu) (irate(dcgm_gpu_utilization{instance=\\\"$server\\\"}[5m])) )",
+              "expr": "100 - (avg by (gpu) (irate(dcgm_gpu_utilization{instance=\\\\\\\"$server\\\\\\\"}[5m])) )",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 10,
@@ -119,7 +128,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Idle GPUs",
+          "title": "Idle CPU",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -137,7 +146,7 @@
           "yaxes": [
             {
               "format": "percent",
-              "label": "gpu usage",
+              "label": "cpu usage",
               "logBase": 1,
               "max": 100,
               "min": 0,
@@ -161,292 +170,7 @@
           ],
           "datasource": "${DS_PROMETHEUS}",
           "editable": true,
-          "format": "percent",
-          "gauge": {
-            "maxValue": 1,
-            "minValue": 0,
-            "show": true,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 6,
-            "x": 12,
-            "y": 0
-          },
-          "hideTimeOverride": false,
-          "id": 8,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "expr": "dcgm_gpu_utilization{gpu=\\\"$gpu\\\",instance=\\\"$server\\\"}",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "refId": "A",
-              "step": 60,
-              "target": ""
-            }
-          ],
-          "thresholds": "0.75, 0.9",
-          "title": "GPU utilization",
-          "transparent": false,
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "current"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "datasource": "${DS_PROMETHEUS}",
-          "editable": true,
-          "format": "celsius",
-          "gauge": {
-            "maxValue": 1,
-            "minValue": 0,
-            "show": true,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 6,
-            "x": 18,
-            "y": 0
-          },
-          "hideTimeOverride": false,
-          "id": 7,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "expr": "dcgm_gpu_temp{gpu=\\\"$gpu\\\",instance=\\\"$server\\\"}",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "refId": "A",
-              "step": 60,
-              "target": ""
-            }
-          ],
-          "thresholds": "0.75, 0.9",
-          "title": "GPU temperature",
-          "transparent": false,
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "current"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 7
-          },
-          "id": 4,
-          "isNew": false,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "hideEmpty": false,
-            "hideZero": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "node_memory_SwapFree{instance=\"172.17.0.1:9100\",job=\"prometheus\"}",
-              "yaxis": 2
-            }
-          ],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "dcgm_fb_free{gpu=\"$gpu\",instance=\"$server\"} + dcgm_fb_used{gpu=\"$gpu\",instance=\"$server\"}  ",
-              "format": "time_series",
-              "hide": false,
-              "interval": "",
-              "intervalFactor": 2,
-              "legendFormat": "total frame buffer",
-              "metric": "",
-              "refId": "C",
-              "step": 10
-            },
-            {
-              "expr": "dcgm_fb_used{gpu=\"$gpu\",instance=\"$server\"}  ",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 2,
-              "legendFormat": "frame buffer used",
-              "metric": "",
-              "refId": "E",
-              "step": 10
-            },
-            {
-              "expr": "dcgm_fb_free{gpu=\"$gpu\",instance=\"$server\"}",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "frame buffer free",
-              "metric": "",
-              "refId": "F",
-              "step": 10
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "GPU Frame buffer Usage",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "decmbytes",
-              "logBase": 1,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ]
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "datasource": "${DS_PROMETHEUS}",
-          "editable": true,
-          "format": "percent",
+          "format": "decmbytes",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -457,8 +181,8 @@
           "gridPos": {
             "h": 7,
             "w": 6,
-            "x": 12,
-            "y": 7
+            "x": 18,
+            "y": 0
           },
           "hideTimeOverride": false,
           "id": 5,
@@ -498,7 +222,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "(dcgm_fb_used{gpu=\"$gpu\",instance=\"$server\"} / (dcgm_fb_free{gpu=\"$gpu\",instance=\"$server\"} + dcgm_fb_used{gpu=\"$gpu\",instance=\"$server\"})) * 100",
+              "expr": "(dcgm_fb_used{gpu=\\\"$gpu\\\",instance=\\\"$server\\\"} / (dcgm_fb_free{gpu=\\\"$gpu\\\",instance=\\\"$server\\\"} + dcgm_fb_used{gpu=\\\"$gpu\\\",instance=\\\"$server\\\"})) * 100",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
@@ -507,7 +231,7 @@
             }
           ],
           "thresholds": "80, 90",
-          "title": "GPU Frame Buffer Usage",
+          "title": "GPU Frame Buffer usage",
           "transparent": false,
           "type": "singlestat",
           "valueFontSize": "80%",
@@ -521,6 +245,126 @@
           "valueName": "avg"
         },
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_PROMETHEUS}",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 18,
+            "x": 0,
+            "y": 7
+          },
+          "id": 4,
+          "isNew": false,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "node_memory_SwapFree{instance=\"172.17.0.1:9100\",job=\"prometheus\"}",
+              "yaxis": 2
+            }
+          ],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "node_memory_MemTotal{instance=\"$server\"} - node_memory_MemFree{instance=\"$server\"} - node_memory_Buffers{instance=\"$server\"} - node_memory_Cached{instance=\"$server\"}",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 2,
+              "legendFormat": "memory used",
+              "metric": "",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "expr": "node_memory_Buffers{instance=\"$server\"}",
+              "interval": "",
+              "intervalFactor": 2,
+              "legendFormat": "memory buffers",
+              "metric": "",
+              "refId": "E",
+              "step": 10
+            },
+            {
+              "expr": "node_memory_Cached{instance=\"$server\"}",
+              "intervalFactor": 2,
+              "legendFormat": "memory cached",
+              "metric": "",
+              "refId": "F",
+              "step": 10
+            },
+            {
+              "expr": "node_memory_MemFree{instance=\"$server\"}",
+              "intervalFactor": 2,
+              "legendFormat": "memory free",
+              "metric": "",
+              "refId": "D",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Memory Usage",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "bytes",
+              "logBase": 1,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ]
+        },
+        {
           "cacheTimeout": null,
           "colorBackground": false,
           "colorValue": false,
@@ -531,7 +375,7 @@
           ],
           "datasource": "${DS_PROMETHEUS}",
           "editable": true,
-          "format": "watt",
+          "format": "celsius",
           "gauge": {
             "maxValue": 1,
             "minValue": 0,
@@ -546,7 +390,7 @@
             "y": 7
           },
           "hideTimeOverride": false,
-          "id": 9,
+          "id": 7,
           "interval": null,
           "links": [],
           "mappingType": 1,
@@ -583,7 +427,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "dcgm_power_usage{gpu=\\\"$gpu\\\",instance=\\\"$server\\\"}",
+              "expr": "dcgm_gpu_temp{gpu=\\\\\\\"$gpu\\\\\\\",instance=\\\\\\\"$server\\\\\\\"}        ",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
@@ -592,7 +436,7 @@
             }
           ],
           "thresholds": "0.75, 0.9",
-          "title": "Power Usage",
+          "title": "GPU Temperature",
           "transparent": false,
           "type": "singlestat",
           "valueFontSize": "80%",
@@ -604,6 +448,192 @@
             }
           ],
           "valueName": "current"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_PROMETHEUS}",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 12,
+            "x": 0,
+            "y": 14
+          },
+          "id": 8,
+          "isNew": false,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "transmitted",
+              "yaxis": 2
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "rate(node_network_receive_bytes{instance=\"$server\",device!~\"lo\"}[5m])",
+              "hide": false,
+              "intervalFactor": 2,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 10,
+              "target": ""
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Network Received",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "bytes",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "bytes",
+              "logBase": 1,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_PROMETHEUS}",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 12,
+            "x": 12,
+            "y": 14
+          },
+          "id": 10,
+          "isNew": false,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "transmitted",
+              "yaxis": 2
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "rate(node_network_transmit_bytes{instance=\"$server\",device!~\"lo\"}[5m])",
+              "hide": false,
+              "intervalFactor": 2,
+              "legendFormat": "{{device}}",
+              "refId": "B",
+              "step": 10,
+              "target": ""
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Network Transmitted",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "bytes",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "bytes",
+              "logBase": 1,
+              "show": true
+            }
+          ]
         }
       ],
       "refresh": false,
@@ -664,17 +694,18 @@
         ]
       },
       "timezone": "browser",
-      "title": "GPUs",
-      "uid": "8dKeQZoik",
-      "version": 2,    
+      "title": "Nodes Copy",
+      "uid": "Hi9B6Zoiz",
+      "version": 2
+    }
   },
   "inputs": [
-      {
-          "name": "DS_PROMETHEUS",
-          "pluginId": "prometheus",
-          "type": "datasource",
-          "value": "prometheus"
-      }
+    {
+      "name": "DS_PROMETHEUS",
+      "pluginId": "prometheus",
+      "type": "datasource",
+      "value": "prometheus"
+    }
   ],
   "overwrite": true
 }
