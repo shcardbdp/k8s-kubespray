@@ -23,7 +23,9 @@ spec:
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
           args: ["dcgm-exporter -e; sleep infinity"]
           command: ["/bin/bash", "-c", "--"]
-          resources: {}          
+          resources: 
+{{ toYaml .Values.dcgm.resources | indent 12 }}        
+                               
           securityContext:
             runAsNonRoot: false
             runAsUser: 0
@@ -43,7 +45,7 @@ spec:
               containerPort: {{ .Values.service.containerPort }}
               hostPort: {{ .Values.service.containerPort }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.node.resources | indent 12 }}
           {{- if and .Values.container .Values.container.volumeMounts }}
           volumeMounts:
 {{ toYaml .Values.container.volumeMounts | indent 10 }}
