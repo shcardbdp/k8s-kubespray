@@ -23,3 +23,8 @@ prometheus:
             storage: 10G
         accessModes:
         - ReadWriteOnce
+
+grafana:
+  auth:
+    anonymous:
+      enabled: "false"
