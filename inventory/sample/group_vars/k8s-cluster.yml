@@ -280,3 +280,9 @@ kubectl_localhost: true
 ## See https://github.com/kubernetes-incubator/kubespray/issues/2141
 ## Set this variable to true to get rid of this issue
 volume_cross_zone_attachment: false
+
+
+# ETCD backend for k8s data
+kube_apiserver_storage_backend: etcd2 # clico still uses etcd2 so we don't have choice.
+# By default, force back to etcd2. Set to true to force etcd3 (experimental!)
+force_etcd3: false
