@@ -16,13 +16,6 @@ dependencies:
       - apps
       - helm
 
-  - role: kubernetes-apps/monitoring
-    when: helm_enabled and monitoring_enabled
-    tags:
-      - apps
-      - monitoring
-      - helm
-
   - role: kubernetes-apps/registry
     when: registry_enabled
     tags:
@@ -42,3 +35,10 @@ dependencies:
     tags:
       - apps
       - persistent_volumes
+
+  - role: kubernetes-apps/monitoring
+    when: helm_enabled and monitoring_enabled
+    tags:
+      - apps
+      - monitoring
+      - helm
