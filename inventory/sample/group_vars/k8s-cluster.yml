@@ -211,7 +211,7 @@ registry_disk_size: "5Gi"
 nfs_cli_volume_provisioner_enabled: true
 nfs_client_provisioner_namespace: "kube-system"
 nfs_client_provisioner_name: "nfs-cli/ifs"
-nfs_server: "{{ kube-master[0] }}"
+nfs_server: "{{ groups['kube-master'][0] }}"
 nfs_path: "/nfs/data"
 nfs-cli-reclaim-policy: Retain # Delete 
 
