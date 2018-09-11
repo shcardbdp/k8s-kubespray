@@ -27,6 +27,6 @@ spec:
     spec:
       containers:
       - name: anaconda52
-        image: "ufoym/deepo:all-py36-jupyter-cpu"
+        image: "sorididim11/ac52:cu90"
         command: ["jupyter"]
         args: ["notebook", "--no-browser", "--allow-root", "--NotebookApp.token=", "--notebook-dir='/root'"]
