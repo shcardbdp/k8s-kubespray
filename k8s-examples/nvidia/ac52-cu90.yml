@@ -1,0 +1,32 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: anaconda52-cu
+spec:
+  selector:
+    app: anaconda52-cu
+  type: NodePort
+  ports:
+    - port: 8888
+  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anaconda52-cu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: anaconda52-cu
+  template:
+    metadata:
+      labels:
+        app: anaconda52-cu
+    spec:
+      containers:
+      - name: anaconda52
+        image: "ufoym/deepo:all-py36-jupyter-cpu"
+        command: ["jupyter"]
+        args: ["notebook", "--no-browser", "--allow-root", "--NotebookApp.token=", "--notebook-dir='/root'"]
