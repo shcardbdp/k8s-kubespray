@@ -113,8 +113,7 @@ RUN pip install --quiet --no-cache-dir mecab-python3==0.7
 # ------------------------------------------------------------------
 RUN conda install --yes --quiet  \
         thrift \
-        thrift_sasl \
-        pyodbc \
+        thrift_sasl \        
         && \
     conda clean -tipsy
 
