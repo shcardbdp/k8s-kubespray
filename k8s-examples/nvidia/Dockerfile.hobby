@@ -12,7 +12,8 @@ ENV PATH=/opt/conda/bin:$PATH
 # For CUDA profiling, TensorFlow requires CUPTI.
 ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH:/usr/local/lib
 
-RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
+RUN apt-get update --fix-missing && apt-get install -y \
+    vim wget iputils-ping bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1 \
     git mercurial subversion \
     libfreetype6-dev libhdf5-serial-dev libpng12-dev libzmq3-dev pkg-config \
@@ -113,12 +114,14 @@ RUN pip install --quiet --no-cache-dir mecab-python3==0.7
 RUN conda install --yes --quiet  \
         thrift \
         thrift_sasl \
+        pyodbc \
         && \
     conda clean -tipsy
 
 RUN pip install --quiet --no-cache-dir \
         thriftpy \
-        PyHive
+        PyHive \
+        impyla 
 
 
 # Set up our notebook config.
