@@ -17,6 +17,6 @@
   register: fluentd_ds_manifest
 
 - name: "Fluentd | Create fluentd daemonset"
-  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/fluentd-ds.yaml -n kube-system"
+  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/fluentd-ds.yaml -n {{ efk_namespace }}"
   run_once: true
   when: fluentd_ds_manifest.changed
