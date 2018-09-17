@@ -56,6 +56,7 @@ vault_binary_checksum: 3c4d70ba71619a43229e65c67830e30e050eab7a81ac6b28325ff707e
 # Containers
 nvidia_device_plugin_image_repo: "nvidia/k8s-device-plugin"
 nvidia_device_plugin_image_tag: "1.11"
+nginx-ingress-controller: 0.15.0
 
 etcd_image_repo: "quay.io/coreos/etcd"
 etcd_image_tag: "{{ etcd_version }}"
@@ -169,8 +170,15 @@ cert_manager_controller_image_tag: "{{ cert_manager_version }}"
 
 
 
-downloads:
-  
+downloads:  
+  nginx-ingress-controller:
+    enabled: true
+    container: true
+    repo: "quay.io/kubernetes-ingress-controller/nginx-ingress-controller"
+    tag: "0.15.0"
+    groups:
+      - kube-node
+
   monitoring-configmap-reload:
     enabled: true
     container: true
