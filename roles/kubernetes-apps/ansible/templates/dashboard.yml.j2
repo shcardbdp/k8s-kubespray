@@ -180,9 +180,9 @@ spec:
           name: tmp-volume
         livenessProbe:
           httpGet:
-            scheme: "{{ (insecure_dashboard == True) | ternary('HTTP', 'HTTPS') }}"
+            scheme: {{ (insecure_dashboard == True) | ternary('HTTP', 'HTTPS') }}
             path: /
-            port: "{{ (insecure_dashboard == True) | ternary(9090, 8443) }}"
+            port: {{ (insecure_dashboard == True) | ternary(9090, 8443) }}
           initialDelaySeconds: 30
           timeoutSeconds: 30
       volumes:
@@ -210,7 +210,7 @@ metadata:
   namespace: kube-system
 spec:
   ports:
-    - port: "{{ (insecure_dashboard == True) | ternary(80, 443) }}"
-      targetPort: "{{ (insecure_dashboard == True) | ternary(9090, 8443) }}" 
+    - port: {{ (insecure_dashboard == True) | ternary(80, 443) }}
+      targetPort: {{ (insecure_dashboard == True) | ternary(9090, 8443) }}
   selector:
     k8s-app: kubernetes-dashboard
