@@ -33,7 +33,7 @@ spec:
               name: backup
           restartPolicy: OnFailure
           nodeSelector:
-            kubernetes.io/hostname: kube-master
+            kubernetes.io/hostname: {{ etcd_master_node }}
           tolerations:
           - effect: NoSchedule
             operator: Exists
