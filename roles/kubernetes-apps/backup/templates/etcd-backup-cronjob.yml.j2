@@ -19,7 +19,8 @@ spec:
               backupName=/backup/$(date +'%Y-%m-%d-%H:%M:%S');
               mkdir -p $backupName;
               ETCDCTL_API=2 etcdctl --endpoints $ETCD_LISTEN_CLIENT_URLS --ca-file $ETCD_TRUSTED_CA_FILE --cert-file $ETCD_CERT_FILE --key-file $ETCD_KEY_FILE backup --data-dir $ETCD_DATA_DIR --backup-dir $backupName; 
-              ETCDCTL_API=3 etcdctl --endpoints $ETCD_LISTEN_CLIENT_URLS --cacert $ETCD_TRUSTED_CA_FILE --cert $ETCD_CERT_FILE --key $ETCD_KEY_FILE snapshot save $backupName/member/snap/db              
+              ETCDCTL_API=3 etcdctl --endpoints $ETCD_LISTEN_CLIENT_URLS --cacert $ETCD_TRUSTED_CA_FILE --cert $ETCD_CERT_FILE --key $ETCD_KEY_FILE snapshot save $backupName/member/snap/db;
+              tar -zcvf $backupName.tar.gz $backupName && rm -rf $backupName
             volumeMounts:
             - mountPath: /etc/ssl/etcd/ssl
               name: etcd-certs
