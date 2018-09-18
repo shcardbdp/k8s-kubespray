@@ -38,6 +38,6 @@
     namespace: kube-system
     kubectl: "{{ bin_dir }}/kubectl"
     resource: cronjob
-    filename: "{{ kube_config_dir }}/etcd-backup.yml"
+    filename: "{{ kube_config_dir }}/etcd-backup-cronjob.yml"
     state: "latest"  
   when: inventory_hostname == groups['kube-master'][0]
