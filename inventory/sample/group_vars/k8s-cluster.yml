@@ -32,6 +32,7 @@ k8s_addon_home: "{{k8s_data_home}}/addons"
 
 # etcd backup
 backup_enabled: true
+etcd_master_node: "{{ groups['kube-master'][0] }}"
 etcd_storage_class: "managed-nfs-storage"
 etcd_disk_size: 20Gi
 # if etcd_storage_class is none, then hostpath is used
