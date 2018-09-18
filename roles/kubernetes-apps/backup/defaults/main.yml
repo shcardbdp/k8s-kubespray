@@ -1,0 +1,6 @@
+etcd_namespace: kube-system
+etcd_storage_class: none
+etcd_disk_size: 20Gi
+# if etcd_storage_class is none, then hostpath is used
+etcd_backup_path: /var/backup
+
