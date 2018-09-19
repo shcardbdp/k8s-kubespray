@@ -8,8 +8,8 @@
     src: "etcd-backup-pvc.yml.j2"
     dest: "{{ kube_config_dir }}/etcd-backup-pvc.yml"  
   when:
-    - etcd_storage_class != none
-    - etcd_disk_size != none
+    - etcd_storage_class != ""
+    - etcd_disk_size != ""
     - inventory_hostname == groups['kube-master'][0]
 
 - name: Etcd | Apply PVC manifests
@@ -21,8 +21,8 @@
     filename: "{{ kube_config_dir }}/etcd-backup-pvc.yml"
     state: "latest"  
   when:
-    - etcd_storage_class != none
-    - etcd_disk_size != none
+    - etcd_storage_class != ""
+    - etcd_disk_size != ""
     - inventory_hostname == groups['kube-master'][0]
 
 - name: Etcd | Create manifest for etcd backup
