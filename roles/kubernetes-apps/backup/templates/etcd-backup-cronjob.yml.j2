@@ -4,7 +4,7 @@ metadata:
   name: backup
   namespace: {{ etcd_namespace }}
 spec:  
-  schedule: {{ etcd_backup_schedule }}
+  schedule: "{{ etcd_backup_schedule }}"
   jobTemplate:
     spec:
       template:
