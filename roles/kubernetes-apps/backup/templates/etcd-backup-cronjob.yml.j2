@@ -51,7 +51,7 @@ spec:
             hostPath:
               path: /var/lib/etcd              
           - name: backup
-{% if etcd_storage_class != none %}          
+{% if etcd_storage_class != "" %}          
             persistentVolumeClaim:
               claimName: backup-pvc
 {% else %}
