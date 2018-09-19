@@ -21,8 +21,8 @@
     filename: "{{ kube_config_dir }}/etcd-backup-pvc.yml"
     state: "latest"  
   when:
-    - registry_storage_class != none
-    - registry_disk_size != none
+    - etcd_storage_class != none
+    - etcd_disk_size != none
     - inventory_hostname == groups['kube-master'][0]
 
 - name: Etcd | Create manifest for etcd backup
