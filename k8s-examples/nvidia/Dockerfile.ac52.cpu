@@ -5,14 +5,13 @@
 # python        3.6    
 # ==================================================================
 
-FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+FROM ubuntu:16.04
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH=/opt/conda/bin:$PATH
-# For CUDA profiling, TensorFlow requires CUPTI.
-ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH:/usr/local/lib
 
-RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
+
+RUN apt-get update --fix-missing && apt-get install -y curl grep sed dpkg wget bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1 \
     git mercurial subversion \
     libfreetype6-dev libhdf5-serial-dev libpng12-dev libzmq3-dev pkg-config \
@@ -36,9 +35,13 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate base" >> ~/.bashrc
 
+RUN TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
+    dpkg -i tini.deb && \
+    rm tini.deb && \
+    apt-get clean
 
 # ==================================================================
-# Hyve connector
+# Hive connector
 # ------------------------------------------------------------------
 RUN conda install --yes --quiet  \
         thrift \
@@ -60,4 +63,5 @@ EXPOSE 8888 6006
 
 WORKDIR "/notebooks"
 
+ENTRYPOINT [ "/usr/bin/tini", "--" ]
 CMD [ "/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
