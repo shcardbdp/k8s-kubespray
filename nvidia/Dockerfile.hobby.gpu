@@ -1,0 +1,135 @@
+# ==================================================================
+# module list
+# ------------------------------------------------------------------
+# anaconda3     5.2.0
+# python        3.6    
+# ==================================================================
+
+FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ENV PATH=/opt/conda/bin:$PATH
+# For CUDA profiling, TensorFlow requires CUPTI.
+ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH:/usr/local/lib
+
+RUN apt-get update --fix-missing && apt-get install -y \
+    vim wget iputils-ping bzip2 ca-certificates \
+    libglib2.0-0 libxext6 libsm6 libxrender1 \
+    git mercurial subversion \
+    libfreetype6-dev libhdf5-serial-dev libpng12-dev libzmq3-dev pkg-config \
+    rsync software-properties-common unzip \
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+
+# anaconda3 install
+# COPY Anaconda3-5.2.0-Linux-x86_64.sh /data/Anaconda3-5.2.0-Linux-x86_64.sh
+# RUN bash /data/Anaconda3-5.2.0-Linux-x86_64.sh -b -p /opt/conda && \
+#     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+#     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+#     echo "conda activate base" >> ~/.bashrc && \
+#     rm -rf /data/Anaconda3-5.2.0-Linux-x86_64.sh
+RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
+    /bin/bash ~/anaconda.sh -b -p /opt/conda && \
+    rm ~/anaconda.sh && \
+    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    echo "conda activate base" >> ~/.bashrc
+
+#downgrade? pandas(0.22), current(0.23.4)
+#downgrade? matplotlib(2.2.0), current(2.2.2)
+#downgrade? beautifulsoup4(4.4.0), current(4.6.0)
+#downgrade? notebook(5.3.0), notebook(5.5.0)
+# conda opencv(3.4.2), current(3.4.1)
+# ==================================================================
+# conda package install
+# ------------------------------------------------------------------
+RUN conda install --yes --quiet  \
+        pytorch==0.4.0 \
+        opencv==3.4.1 \
+        tensorflow-gpu==1.9.0 \
+        keras==2.1.5 \
+        statsmodels==0.9.0 \
+        scipy==1.1.0 \
+        numpy==1.14.3 \
+        scikit-learn==0.19.1 \
+        pandas==0.23.4 \
+        matplotlib==2.2.2 \
+        bokeh==0.13.0 \
+        seaborn==0.8.1 \
+        beautifulsoup4==4.6.0 \
+        nltk==3.3.0 \
+        requests==2.18.4 \
+        urllib3==1.22 \
+        ipywidgets==7.2.1 \
+        notebook==5.5.0 \
+    && \
+    conda clean -tipsy
+
+
+# ==================================================================
+# pip package install
+# ------------------------------------------------------------------
+RUN pip install --upgrade pip && \
+    pip install --quiet --no-cache-dir \
+        mxnet-cu90==1.2.0 \ 
+        konlpy==0.4.3 \
+        fasttext==0.8.3 \
+        xgboost==0.72.1 \
+        jpype1==0.6.3 \
+        gensim==3.5.0 \
+        autopep8
+
+# ==================================================================
+# mecab analyzer from bitbucket
+# ------------------------------------------------------------------
+RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko/downloads/mecab-0.996-ko-0.9.2.tar.gz -O mecab.tar.gz && \
+    tar -zxf mecab.tar.gz && \
+    cd mecab-0.996-ko-0.9.2 && \
+    ./configure && \
+    make && \ 
+    make check && \
+    make install && \
+    rm -rf ../mecab.tar.gz ../mecab-0.996-ko-0.9.2
+
+# ==================================================================
+# mecab dictionary from bitbucket
+# ------------------------------------------------------------------
+RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.1.1-20180720.tar.gz -O mecab-dic.tar.gz && \
+    tar -zxf mecab-dic.tar.gz && \
+    cd mecab-ko-dic-2.1.1-20180720 && \
+    ./configure && \
+    make && \
+    make check && \
+    make install && \
+    rm -rf ../mecab-dic.tar.gz ../mecab-ko-dic-2.1.1-20180720
+
+
+RUN pip install --quiet --no-cache-dir mecab-python3==0.7
+
+# ==================================================================
+# Hive connector
+# ------------------------------------------------------------------
+RUN conda install --yes --quiet  \
+        thrift \
+        thrift_sasl \        
+        && \
+    conda clean -tipsy
+
+RUN pip install --quiet --no-cache-dir \
+        thriftpy \
+        PyHive \
+        impyla 
+
+
+# Set up our notebook config.
+COPY jupyter_notebook_config.py /root/.jupyter/
+COPY notebooks /notebooks
+COPY run_jupyter.sh /
+
+EXPOSE 8888 6006
+
+WORKDIR "/notebooks"
+
+CMD [ "/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
