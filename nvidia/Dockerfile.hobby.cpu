@@ -74,6 +74,7 @@ RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko/downloads/mecab-0.996-ko-
 RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.1.1-20180720.tar.gz -O mecab-dic.tar.gz && \
     tar -zxf mecab-dic.tar.gz && \
     cd mecab-ko-dic-2.1.1-20180720 && \
+    ./autogen.sh  && \
     ./configure && \
     make && \
     make check && \
