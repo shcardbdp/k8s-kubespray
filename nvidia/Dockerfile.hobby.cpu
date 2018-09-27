@@ -7,7 +7,7 @@
 
 FROM sorididim11/ac52:cpu
 
-RUN apt-get update --fix-missing && DEBIAN_FRONTEND=noninteractive apt-get install -y aclocal automake autoconf autotools-dev && \
+RUN apt-get update --fix-missing && DEBIAN_FRONTEND=noninteractive apt-get install -y automake autoconf autotools-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
