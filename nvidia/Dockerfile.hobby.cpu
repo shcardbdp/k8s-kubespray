@@ -7,9 +7,9 @@
 
 FROM sorididim11/ac52:cpu
 
-# RUN apt-get update --fix-missing && DEBIAN_FRONTEND=noninteractive apt-get install -y autotools-dev automake-1.11 autoconf-1.11 && \
-#     apt-get clean && \
-#     rm -rf /var/lib/apt/lists/*
+RUN apt-get update --fix-missing && DEBIAN_FRONTEND=noninteractive apt-get install -y autotools-dev automake autoconf && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 
 #downgrade? pandas(0.22), current(0.23.4)
