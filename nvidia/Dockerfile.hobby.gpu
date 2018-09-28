@@ -7,7 +7,7 @@
 
 FROM sorididim11/ac52:gpu
 
-RUN apt-get update --fix-missing && DEBIAN_FRONTEND=noninteractive apt-get install -y autotools-dev automake autoconf && \
+RUN apt-get update --fix-missing && DEBIAN_FRONTEND=noninteractive apt-get install -y vim autotools-dev automake autoconf && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -67,6 +67,7 @@ RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko/downloads/mecab-0.996-ko-
     make && \ 
     make check && \
     make install && \
+    ldconfig && \
     rm -rf ../mecab.tar.gz ../mecab-0.996-ko-0.9.2
 
 # ==================================================================
@@ -79,6 +80,7 @@ RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-di
     make && \
     make check && \
     make install && \
+    ldconfig && \
     rm -rf ../mecab-dic.tar.gz ../mecab-ko-dic-2.1.1-20180720
 
 
