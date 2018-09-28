@@ -5,7 +5,7 @@
 # python        3.6    
 # ==================================================================
 
-FROM sorididim11/ac52:cpu
+FROM sorididim11/anaconda52:cpu
 
 RUN apt-get update --fix-missing && DEBIAN_FRONTEND=noninteractive apt-get install -y vim autotools-dev automake autoconf && \
     apt-get clean && \
