@@ -27,6 +27,7 @@ spec:
       containers:
       - name: hobby
         image: "sorididim11/hobby:cpu"
+        args: [ "/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token=hpinvent1!"]
         resources:
           requests:
             cpu: 1
