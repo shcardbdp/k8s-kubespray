@@ -1,5 +1,6 @@
 FROM rocker/geospatial
 
+RUN mkdir -p /usr/local/odbc
 COPY clouderahiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
 
 RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev --install-suggests && \
@@ -7,12 +8,13 @@ RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev --
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY odbcinst.ini /etc/odbcinst.ini
-COPY odbc.ini /etc/odbc.ini
-RUN cp /opt/cloudera/hiveodbc/lib/64/cloudera.hiveodbc.ini /etc
+COPY odbc.ini /etc
+COPY odbcinst.ini /etc
+COPY cloudera.hiveodbc.ini /etc
 
 ENV ODBCINI=/etc/odbc.ini
-ENV ODBCINST=/etc/odbcinst.ini
+ENV ODBCODBCSYSINI=/etc/odbcinst.ini
 ENV CLOUDERAHIVEINI=/etc/cloudera.hiveodbc.ini
+ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
 EXPOSE 8787
