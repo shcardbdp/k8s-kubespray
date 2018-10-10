@@ -23,7 +23,7 @@
   when:
     - inventory_hostname == groups['kube-master'][0]
 
-- name: NGINX Ingress Controller | Apply manifests
+- name: NFS-Client Provisiner | Apply manifests
   kube:
     name: "{{ item.item.name }}"
     namespace: "{{ nfs_client_provisioner_namespace }}"
