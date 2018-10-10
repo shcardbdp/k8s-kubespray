@@ -17,4 +17,6 @@ ENV ODBCODBCSYSINI=/etc/odbcinst.ini
 ENV CLOUDERAHIVEINI=/etc/cloudera.hiveodbc.ini
 ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
+RUN  bash -c "R -e \"install.packages('odbc')\""
+
 EXPOSE 8787
