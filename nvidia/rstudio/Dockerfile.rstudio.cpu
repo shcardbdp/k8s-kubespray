@@ -32,10 +32,10 @@ COPY oracle-instantclient11.2-odbc-11.2.0.4.0-1.x86_64.rpm  /data/oracle-instant
 
 
 #install oracle
-RUN alien -i oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm && \
-    alien -i oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.x86_64.rpm && \
-    alien -i oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm && \
-    alien -i oracle-instantclient11.2-odbc-11.2.0.4.0-1.x86_64.rpm 
+RUN alien -i /data/oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm && \
+    alien -i /data/oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.x86_64.rpm && \
+    alien -i /data/oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm && \
+    alien -i /data/oracle-instantclient11.2-odbc-11.2.0.4.0-1.x86_64.rpm 
 
 
 RUN echo "/usr/lib/oracle/11.2/client64" > /etc/ld.so.conf.d/oralce.conf && ldconfig
