@@ -12,6 +12,10 @@ COPY odbc.ini /etc
 COPY odbcinst.ini /etc
 COPY cloudera.hiveodbc.ini /etc
 
+RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
+    cp /etc/odbcinst.ini /home/rstudio/.odbcinst.ini && \
+    cp /etc/cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini
+    
 ENV ODBCINI=/etc/odbc.ini
 ENV ODBCODBCSYSINI=/etc/odbcinst.ini
 ENV CLOUDERAHIVEINI=/etc/cloudera.hiveodbc.ini
