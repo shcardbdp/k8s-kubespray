@@ -8,18 +8,18 @@ RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev --
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY odbc.ini /etc
-COPY odbcinst.ini /etc
-COPY cloudera.hiveodbc.ini /etc
+COPY odbc.ini /home/rstudio/.odbc.ini
+COPY odbcinst.ini /home/rstudio/.odbcinst.ini
+COPY cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini
 
-RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
-    cp /etc/odbcinst.ini /home/rstudio/.odbcinst.ini && \
-    cp /etc/cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini
-    
-ENV ODBCINI=/etc/odbc.ini
-ENV ODBCODBCSYSINI=/etc/odbcinst.ini
-ENV CLOUDERAHIVEINI=/etc/cloudera.hiveodbc.ini
-ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+# RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
+#     cp /etc/odbcinst.ini /home/rstudio/.odbcinst.ini && \
+#     cp /etc/cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini
+
+# ENV ODBCINI=/etc/odbc.ini
+# ENV ODBCODBCSYSINI=/etc/odbcinst.ini
+# ENV CLOUDERAHIVEINI=/etc/cloudera.hiveodbc.ini
+# ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
 RUN  bash -c "R -e \"install.packages('odbc')\""
 
