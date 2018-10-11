@@ -40,6 +40,8 @@ RUN alien -i /data/oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm && \
 
 RUN echo "/usr/lib/oracle/11.2/client64" > /etc/ld.so.conf.d/oralce.conf && ldconfig
 
+COPY Renviron /home/rstudio/.Renviron
+
 ENV ORACLE_HOME /usr/lib/oracle/11.2/client64
 ENV PATH $PATH:$ORACLE_HOME/bin
 ENV LD_LIBRARY_PATH $ORACLE_HOME/lib:$LD_LIBRARY_PATH
