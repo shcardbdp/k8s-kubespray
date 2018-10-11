@@ -38,7 +38,7 @@ RUN alien -i oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm && \
     alien -i oracle-instantclient11.2-odbc-11.2.0.4.0-1.x86_64.rpm 
 
 
-RUN echo "/usr/lib/oracle/11.2/client64" > /etc/ld.so.conf.d/oralce.conf
+RUN echo "/usr/lib/oracle/11.2/client64" > /etc/ld.so.conf.d/oralce.conf && ldconfig
 
 ENV ORACLE_HOME /usr/lib/oracle/11.2/client64
 ENV PATH $PATH:$ORACLE_HOME/bin
