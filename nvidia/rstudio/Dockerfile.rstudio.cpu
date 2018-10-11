@@ -3,7 +3,7 @@ FROM rocker/geospatial
 RUN mkdir -p /usr/local/odbc
 COPY clouderahiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
 
-RUN  apt-get install -y unixodbc unixodbc-dev alien --install-suggests && \
+RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev alien  && \
     apt-get install -y -f /data/hiveodbc.deb && \
     rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.hiveodbc.ini && \
     apt-get clean && \
