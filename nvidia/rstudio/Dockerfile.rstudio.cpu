@@ -5,16 +5,18 @@ COPY clouderahiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
 
 RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev --install-suggests && \
     apt-get install -y -f /data/hiveodbc.deb && \
+    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.hiveodbc.ini && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY odbc.ini /home/rstudio/.odbc.ini
-COPY odbcinst.ini /home/rstudio/.odbcinst.ini
-COPY cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini
+COPY odbc.ini /etc/odbc.ini
+COPY odbcinst.ini /etc/odbcinst.ini
+COPY cloudera.hiveodbc.ini /etc/cloudera.hiveodbc.ini
 
-# RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
-#     cp /etc/odbcinst.ini /home/rstudio/.odbcinst.ini && \
-#     cp /etc/cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini
+RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
+    cp /etc/odbcinst.ini /home/rstudio/.odbcinst.ini && \
+    cp /etc/cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini && \
+    chown rstudio:rstudio /home/rstudio/.*
 
 # ENV ODBCINI=/etc/odbc.ini
 # ENV ODBCODBCSYSINI=/etc/odbcinst.ini
