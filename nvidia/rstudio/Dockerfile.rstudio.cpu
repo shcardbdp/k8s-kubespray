@@ -3,7 +3,7 @@ FROM rocker/geospatial
 RUN mkdir -p /usr/local/odbc
 COPY clouderahiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
 
-RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev --install-suggests && \
+RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev alien --install-suggests && \
     apt-get install -y -f /data/hiveodbc.deb && \
     rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.hiveodbc.ini && \
     apt-get clean && \
@@ -25,4 +25,16 @@ RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
 
 RUN  bash -c "R -e \"install.packages('odbc')\""
 
-EXPOSE 8787
+#install oracle
+RUN alien -i oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm && \
+    alien -i oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.x86_64.rpm && \
+    alien -i oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm && \
+    alien -i oracle-instantclient11.2-odbc-11.2.0.4.0-1.x86_64.rpm && \
+
+
+RUN echo "/usr/lib/oracle/11.2/client64" > /etc/ld.so.conf.d/oralce.conf
+
+ENV ORACLE_HOME /usr/lib/oracle/11.2/client64
+ENV PATH $PATH:$ORACLE_HOME/bin
+
+EXPOSE 8787 
