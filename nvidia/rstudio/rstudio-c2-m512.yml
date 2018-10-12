@@ -1,4 +1,35 @@
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rstudio-admin
+  namespace: default
+data:
+  odbc.ini: |
+    [ODBC Data Sources]
+    HiveDSN=Cloudera ODBC Driver for Apache Hive 64-bit
+    [HiveDSN]
+    Description=Cloudera ODBC Driver for Apache Hive (64-bit) DSN
+    Driver=/opt/cloudera/hiveodbc/lib/64/libclouderahiveodbc64.so
+    HOST=104.251.212.192
+    PORT=10000
+    UID=admin
+    Schema=default
+    ServiceDiscoveryMode=0
+    ZKNamespace=
+    HiveServerType=2
+    AuthMech=2
+    ThriftTransport=1
+    UseNativeQuery=0
+    rbHostFQDN=_HOST
+    KrbServiceName=hive
+    KrbRealm=
+    SSL=0
+    ClientCert=
+    ClientPrivateKey=
+    ClientPrivateKeyPassword=
+
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: rstudio-u1
@@ -7,7 +38,7 @@ spec:
     app: rstudio-u1
   type: NodePort
   ports:
-    - port: 8888
+    - port: 8787
   
 ---
 apiVersion: apps/v1
@@ -36,8 +67,16 @@ spec:
             memory: 512Mi
         volumeMounts:
         - name: odbc
-          mountPath: /home/rstudio
+          mountPath: /etc/odbc.ini
+          subPath: odbc.ini
           readOnly: true
+        - name: odbc
+          mountPath: /home/rstudio/.odbc.ini
+          subPath: odbc.ini
+          readOnly: true
+        env:
+        - name: PASSWORD
+          value: "hpinvent1!"
       volumes:
       - name: odbc
         configMap:
