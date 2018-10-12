@@ -35,8 +35,8 @@ spec:
             cpu: 2
             memory: 512Mi
         volumeMounts:
-        - name: rstudio-admin
-          mountPath: /home/rstudio/.odbc.ini
+        - name: odbc
+          mountPath: /home/rstudio
           readOnly: true
       volumes:
       - name: odbc
