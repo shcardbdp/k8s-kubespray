@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:  
+  name: rstudio-user1
+  namespace: default
+data:
+  odbc.ini: "[ODBC]\n# Specify any global ODBC configuration here such as ODBC tracing.\n\n[ODBC
+    Data Sources]\nHiveDSN=Cloudera ODBC Driver for Apache Hive 64-bit\n\n\n[HiveDSN]\nDescription=Cloudera
+    ODBC Driver for Apache Hive (64-bit) DSN\nDriver=/opt/cloudera/hiveodbc/lib/64/libclouderahiveodbc64.so\n\n#
+    When using No Service Discovery, specify the IP address or host name of the Hive
+    server.\n# When using ZooKeeper as the Service Discovery Mode, specify a comma-separated
+    list of ZooKeeper\n# servers in the following format:\n#       <zk_host1:zk_port1>,<zk_host2:zk_port2>,...\nHOST=104.251.212.192\n\n#
+    The TCP port Hive server is listening. This is not required when using ZooKeeper
+    as the service\n# discovery mode as the port is specified in the HOST connection
+    attribute.\nPORT=10000\n\n# Set the UID with the user name to use to access Hive
+    when using AuthMech 2 to 8.\nUID=admin\n\n# The name of the database schema to
+    use when a schema is not explicitly specified in a query.\nSchema=default\n\n#
+    Set to 0 to when connecting directory to Hive Server 2 (No Service Discovery).\n#
+    Set to 1 to do Hive Server 2 service discovery using ZooKeeper.\n# Note service
+    discovery is not support when using Hive Server 1.\nServiceDiscoveryMode=0\n\n#
+    The namespace on ZooKeeper under which Hive Server 2 znodes are added. Required
+    only when doing\n# HS2 service discovery with ZooKeeper (ServiceDiscoveryMode=1).\nZKNamespace=\n\n#
+    Set to 1 if you are connecting to Hive Server 1. Set to 2 if you are connecting
+    to Hive Server 2.\nHiveServerType=2\n\n# The authentication mechanism to use for
+    the connection.\n#   Set to 0 for No Authentication\n#   Set to 1 for Kerberos\n#
+    \  Set to 2 for User Name\n#   Set to 3 for User Name and Password\n# Note only
+    No Authentication is supported when connecting to Hive Server 1.\nAuthMech=2\n\n#
+    The Thrift transport to use for the connection.\n#\tSet to 0 for Binary\n#\tSet
+    to 1 for SASL\n#\tSet to 2 for HTTP\n# Note for Hive Server 1 only Binary can
+    be used.\nThriftTransport=1\n\n# When this option is enabled (1), the driver does
+    not transform the queries emitted by an\n# application, so the native query is
+    used.\n# When this option is disabled (0), the driver transforms the queries emitted
+    by an application and\n# converts them into an equivalent from in HiveQL.\nUseNativeQuery=0\n\n\n\n#
+    The following is settings used when using Kerberos authentication (AuthMech 1
+    and 10)\n\n# The fully qualified host name part of the of the Hive Server 2 Kerberos
+    service principal.\n# For example if the service principal name of you Hive Server
+    2 is:\n#   hive/myhs2.mydomain.com@EXAMPLE.COM\n# Then set KrbHostFQDN to myhs2.mydomain.com\nKrbHostFQDN=_HOST\n\n#
+    The service name part of the of the Hive Server 2 Kerberos service principal.\n#
+    For example if the service principal name of you Hive Server 2 is:\n#   hive/myhs2.mydomain.com@EXAMPLE.COM\n#
+    Then set KrbServiceName to hive\nKrbServiceName=hive\n\n# The realm part of the
+    of the Hive Server 2 Kerberos service principal.\n# For example if the service
+    principal name of you Hive Server 2 is:\n#   hive/myhs2.mydomain.com@EXAMPLE.COM\n#
+    Then set KrbRealm to EXAMPLE.COM\nKrbRealm=\n\n# Set to 1 to enable SSL. Set to
+    0 to disable.\nSSL=0\n\n# Set to 1 to enable two-way SSL. Set to 0 to disable.
+    You must enable SSL in order to\n# use two-way SSL.\nTwoWaySSL=0\n\n# The file
+    containing the client certificate in PEM format. This is required when using two-way
+    SSL.\nClientCert=\n\n# The client private key. This is used for two-way SSL authentication.\nClientPrivateKey=\n\n#
+    The password for the client private key. Password is only required for password
+    protected\n# client private key.\nClientPrivateKeyPassword=\n"

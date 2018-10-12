@@ -13,6 +13,10 @@ COPY odbc.ini /etc/odbc.ini
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY cloudera.hiveodbc.ini /etc/cloudera.hiveodbc.ini
 
+ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+
+# odbc config for studio 
+RUN  bash -c "R -e \"install.packages('odbc')\""
 RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
     cp /etc/odbcinst.ini /home/rstudio/.odbcinst.ini && \
     cp /etc/cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini && \
@@ -21,9 +25,7 @@ RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
 # ENV ODBCINI=/etc/odbc.ini
 # ENV ODBCODBCSYSINI=/etc/odbcinst.ini
 # ENV CLOUDERAHIVEINI=/etc/cloudera.hiveodbc.ini
-ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
-RUN  bash -c "R -e \"install.packages('odbc')\""
 
 COPY oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm /data/oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm
 COPY oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.x86_64.rpm /data/oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.x86_64.rpm
@@ -41,5 +43,9 @@ RUN alien -i /data/oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm && \
 RUN echo "/usr/lib/oracle/11.2/client64" > /etc/ld.so.conf.d/oralce.conf && ldconfig
 
 COPY profile /home/rstudio/.profile
-\
+
+ENV ORACLE_HOME /usr/lib/oracle/11.2/client64
+ENV PATH $PATH:$ORACLE_HOME/bin
+ENV LD_LIBRARY_PATH $ORACLE_HOME/lib:$LD_LIBRARY_PATH
+
 EXPOSE 8787 

@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rstudio-u1
+spec:
+  selector:
+    app: rstudio-u1
+  type: NodePort
+  ports:
+    - port: 8888
+  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rstudio-u1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rstudio-u1
+  template:
+    metadata:
+      labels:
+        app: rstudio-u1
+    spec:
+      containers:
+      - name: rstudio
+        image: "localhost:5000/rstudo:hive"        
+        resources:
+          requests:
+            cpu: 1
+            memory: 128Mi
+          limits:
+            cpu: 2
+            memory: 512Mi
+        volumeMounts:
+        - name: rstudio-admin
+          mountPath: /home/rstudio/.odbc.ini
+          readOnly: true
+      volumes:
+      - name: odbc
+        configMap:
+          name: rstudio-admin
