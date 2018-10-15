@@ -27,7 +27,7 @@ RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
 # ENV CLOUDERAHIVEINI=/etc/cloudera.hiveodbc.ini
 
 
-COPY oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm /data/oralce-basic.x86_64.rpm
+COPY oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm /data/oralce-basic.rpm
 COPY oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm /data/oracle-sqlplus.rpm
 COPY oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm /data/oracle-devel.rpm
 COPY oracle-instantclient12.2-odbc-12.2.0.1.0-2.x86_64.rpm  /data/oracle-odbc.rpm 
