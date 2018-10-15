@@ -1,4 +1,14 @@
 apiVersion: v1
+kind: Secret
+metadata:  
+  name: datalake  
+data:
+  ip: MTA0LjI1MS4yMTIuMTky
+  port: MTAwMDA=
+  uid: YWRtaW4=
+
+---
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: rstudio-admin
@@ -74,10 +84,16 @@ spec:
           mountPath: /home/rstudio/.odbc.ini
           subPath: odbc.ini
           readOnly: true
+        - name: datalake
+          mountPath: /etc/datalake          
+          readOnly: true
         env:
         - name: PASSWORD
-          value: "hpinvent1!"
+          value: "hpinvent1!"        
       volumes:
       - name: odbc
         configMap:
           name: rstudio-admin
+      - name: datalake
+        secret:
+          secretName: datalake

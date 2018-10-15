@@ -27,17 +27,18 @@ RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
 # ENV CLOUDERAHIVEINI=/etc/cloudera.hiveodbc.ini
 
 
-COPY oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm /data/oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm
-COPY oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.x86_64.rpm /data/oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.x86_64.rpm
-COPY oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm /data/oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm
-COPY oracle-instantclient11.2-odbc-11.2.0.4.0-1.x86_64.rpm  /data/oracle-instantclient11.2-odbc-11.2.0.4.0-1.x86_64.rpm 
-
+COPY oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm /data/oralce-basic.x86_64.rpm
+COPY oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm /data/oracle-sqlplus.rpm
+COPY oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm /data/oracle-devel.rpm
+COPY oracle-instantclient12.2-odbc-12.2.0.1.0-2.x86_64.rpm  /data/oracle-odbc.rpm 
+COPY oracle-instantclient12.2-jdbc-12.2.0.1.0-1.x86_64.rpm /data/oracle-jdbc.rpm
 
 #install oracle
-RUN alien -i /data/oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm && \
-    alien -i /data/oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.x86_64.rpm && \
-    alien -i /data/oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm && \
-    alien -i /data/oracle-instantclient11.2-odbc-11.2.0.4.0-1.x86_64.rpm 
+RUN alien -i /data/oralce-basic.rpm && \
+    alien -i /data/oracle-sqlplus.rpm && \
+    alien -i /data/oracle-devel.rpm && \
+    alien -i /data/oracle-odbc.rpm && \
+    alien -i /data/oracle-jdbc.rpm
 
 
 RUN echo "/usr/lib/oracle/11.2/client64" > /etc/ld.so.conf.d/oralce.conf && ldconfig
