@@ -41,11 +41,11 @@ RUN alien -i /data/oralce-basic.rpm && \
     alien -i /data/oracle-jdbc.rpm
 
 
-RUN echo "/usr/lib/oracle/11.2/client64" > /etc/ld.so.conf.d/oralce.conf && ldconfig
+RUN echo "/usr/lib/oracle/12.2/client64/lib" > /etc/ld.so.conf.d/oralce.conf && ldconfig
 
 COPY profile /home/rstudio/.profile
 
-ENV ORACLE_HOME /usr/lib/oracle/11.2/client64
+ENV ORACLE_HOME /usr/lib/oracle/12.2/client64
 ENV PATH $PATH:$ORACLE_HOME/bin
 ENV LD_LIBRARY_PATH $ORACLE_HOME/lib:$LD_LIBRARY_PATH
 
