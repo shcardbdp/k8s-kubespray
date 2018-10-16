@@ -18,7 +18,6 @@ ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 # odbc config for studio 
 RUN  bash -c "R -e \"install.packages('odbc')\""
 RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
-    cp /etc/odbcinst.ini /home/rstudio/.odbcinst.ini && \
     cp /etc/cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini && \
     chown rstudio:rstudio /home/rstudio/.*
 
@@ -47,6 +46,6 @@ COPY profile /home/rstudio/.profile
 
 ENV ORACLE_HOME /usr/lib/oracle/12.2/client64
 ENV PATH $PATH:$ORACLE_HOME/bin
-ENV LD_LIBRARY_PATH $ORACLE_HOME/lib:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$ORACLE_HOME/lib
 
 EXPOSE 8787 
