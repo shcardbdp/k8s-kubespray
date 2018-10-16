@@ -9,23 +9,6 @@ RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev al
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY odbc.ini /etc/odbc.ini
-COPY odbcinst.ini /etc/odbcinst.ini
-COPY cloudera.hiveodbc.ini /etc/cloudera.hiveodbc.ini
-
-ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
-
-# odbc config for studio 
-RUN  bash -c "R -e \"install.packages('odbc')\""
-RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
-    cp /etc/cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini && \
-    chown rstudio:rstudio /home/rstudio/.*
-
-# ENV ODBCINI=/etc/odbc.ini
-# ENV ODBCODBCSYSINI=/etc/odbcinst.ini
-# ENV CLOUDERAHIVEINI=/etc/cloudera.hiveodbc.ini
-
-
 COPY oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm /data/oralce-basic.rpm
 COPY oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm /data/oracle-sqlplus.rpm
 COPY oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm /data/oracle-devel.rpm
@@ -40,12 +23,27 @@ RUN alien -i /data/oralce-basic.rpm && \
     alien -i /data/oracle-jdbc.rpm
 
 
-RUN echo "/usr/lib/oracle/12.2/client64/lib" > /etc/ld.so.conf.d/oralce.conf && ldconfig
+ENV ORACLE_HOME /usr/lib/oracle/12.2/client64
+ENV PATH $PATH:$ORACLE_HOME/bin
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib
+
+
+# system-wide config for odbc
+COPY odbc.ini /etc/odbc.ini
+COPY odbcinst.ini /etc/odbcinst.ini
+COPY cloudera.hiveodbc.ini /etc/cloudera.hiveodbc.ini
+COPY tnsnames.ora $ORACLE_HOME/network/admin/
+
+
+
+# user-level config for odbc 
+RUN  bash -c "R -e \"install.packages('odbc')\""
+RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
+    cp /etc/cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini && \
+    cp $ORACLE_HOME/network/admin/tnsnames.ora /home/rstudio/.tnsnames.ora && \
+    chown rstudio:rstudio /home/rstudio/.*
 
 COPY profile /home/rstudio/.profile
 
-ENV ORACLE_HOME /usr/lib/oracle/12.2/client64
-ENV PATH $PATH:$ORACLE_HOME/bin
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$ORACLE_HOME/lib
 
 EXPOSE 8787 
