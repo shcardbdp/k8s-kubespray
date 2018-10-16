@@ -11,7 +11,7 @@ RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev al
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-ENV D_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu
+ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
 # system-wide config for odbc
 COPY odbcinst.ini /etc/odbcinst.ini
