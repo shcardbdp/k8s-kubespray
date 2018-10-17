@@ -1,0 +1,58 @@
+FROM 7914795942e5
+
+COPY clouderahiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
+COPY clouderaimpalaodbc_2.5.42.1031-2_amd64.deb /data/impalaodbc.deb
+
+RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev alien  && \
+    apt-get install -y -f /data/hiveodbc.deb && \
+    apt-get install -y -f /data/impalaodbc.deb && \
+    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.hiveodbc.ini && \
+    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.impalaodbc.ini && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+
+# system-wide config for odbc
+COPY odbcinst.ini /etc/odbcinst.ini
+COPY odbc.ini /etc/odbc.ini
+COPY cloudera.odbc.ini /etc/cloudera.hiveodbc.ini
+COPY cloudera.odbc.ini /etc/cloudera.impalaodbc.ini
+
+
+
+
+#install oracle
+COPY oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm /data/oralce-basic.rpm
+COPY oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm /data/oracle-sqlplus.rpm
+COPY oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm /data/oracle-devel.rpm
+COPY oracle-instantclient12.2-odbc-12.2.0.1.0-2.x86_64.rpm  /data/oracle-odbc.rpm 
+COPY oracle-instantclient12.2-jdbc-12.2.0.1.0-1.x86_64.rpm /data/oracle-jdbc.rpm
+
+
+RUN alien -i /data/oralce-basic.rpm && \
+    alien -i /data/oracle-sqlplus.rpm && \
+    alien -i /data/oracle-devel.rpm && \
+    alien -i /data/oracle-odbc.rpm && \
+    alien -i /data/oracle-jdbc.rpm
+
+
+ENV ORACLE_HOME /usr/lib/oracle/12.2/client64
+ENV PATH $PATH:$ORACLE_HOME/bin
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$ORACLE_HOME/lib
+COPY tnsnames.ora $ORACLE_HOME/network/admin/
+
+
+# user-level config for odbc 
+RUN  bash -c "R -e \"install.packages('odbc')\"" 
+
+RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
+    cp /etc/cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini && \
+     cp /etc/cloudera.impalaodbc.ini /home/rstudio/.cloudera.impalaodbc.ini && \
+    cp $ORACLE_HOME/network/admin/tnsnames.ora /home/rstudio/.tnsnames.ora && \
+    chown rstudio:rstudio /home/rstudio/.*
+
+COPY profile /home/rstudio/.profile
+
+
+EXPOSE 8787 
