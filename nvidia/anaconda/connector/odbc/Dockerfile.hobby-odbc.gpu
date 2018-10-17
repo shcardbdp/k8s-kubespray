@@ -1,7 +1,7 @@
 FROM 7914795942e5
 
-COPY clouderahiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
-COPY clouderaimpalaodbc_2.5.42.1031-2_amd64.deb /data/impalaodbc.deb
+COPY cloudera/clouderahiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
+COPY cloudera/clouderaimpalaodbc_2.5.42.1031-2_amd64.deb /data/impalaodbc.deb
 
 RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev alien libaio1 libaio-dev && \
     apt-get install -y -f /data/hiveodbc.deb && \
@@ -16,16 +16,16 @@ ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 # system-wide config for odbc
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
-COPY cloudera.hiveodbc.ini /etc/cloudera.hiveodbc.ini
-COPY cloudera.impalaodbc.ini /etc/cloudera.impalaodbc.ini
+COPY cloudera/cloudera.hiveodbc.ini /etc/cloudera.hiveodbc.ini
+COPY cloudera/cloudera.impalaodbc.ini /etc/cloudera.impalaodbc.ini
 
 
 #install oracle
-COPY oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm /data/oralce-basic.rpm
-COPY oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm /data/oracle-sqlplus.rpm
-COPY oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm /data/oracle-devel.rpm
-COPY oracle-instantclient12.2-odbc-12.2.0.1.0-2.x86_64.rpm  /data/oracle-odbc.rpm 
-COPY oracle-instantclient12.2-jdbc-12.2.0.1.0-1.x86_64.rpm /data/oracle-jdbc.rpm
+COPY oracle/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm /data/oralce-basic.rpm
+COPY oracle/oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm /data/oracle-sqlplus.rpm
+COPY oracle/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm /data/oracle-devel.rpm
+COPY oracle/oracle-instantclient12.2-odbc-12.2.0.1.0-2.x86_64.rpm  /data/oracle-odbc.rpm 
+COPY oracle/oracle-instantclient12.2-jdbc-12.2.0.1.0-1.x86_64.rpm /data/oracle-jdbc.rpm
 
 
 RUN alien -i /data/oralce-basic.rpm && \
@@ -39,4 +39,4 @@ ENV ORACLE_HOME /usr/lib/oracle/12.2/client64
 ENV PATH $PATH:$ORACLE_HOME/bin
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$ORACLE_HOME/lib
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
-COPY tnsnames.ora $ORACLE_HOME/network/admin/
+COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
