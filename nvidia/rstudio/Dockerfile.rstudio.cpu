@@ -3,7 +3,7 @@ FROM rocker/geospatial
 COPY clouderahiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
 COPY clouderaimpalaodbc_2.5.42.1031-2_amd64.deb /data/impalaodbc.deb
 
-RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev alien  && \
+RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev alien libaio1 libaio-dev && \
     apt-get install -y -f /data/hiveodbc.deb && \
     apt-get install -y -f /data/impalaodbc.deb && \
     rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.hiveodbc.ini && \
