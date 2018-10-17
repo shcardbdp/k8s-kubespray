@@ -8,4 +8,4 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV PATH      $PATH:$JAVA_HOME/bin
 
 COPY HiveJDBC41.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
-COPY impalaJDBC41.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
+COPY ImpalaJDBC41.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
