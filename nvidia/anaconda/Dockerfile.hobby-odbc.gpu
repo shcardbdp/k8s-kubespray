@@ -39,6 +39,3 @@ ENV ORACLE_HOME /usr/lib/oracle/12.2/client64
 ENV PATH $PATH:$ORACLE_HOME/bin
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$ORACLE_HOME/lib
 COPY tnsnames.ora $ORACLE_HOME/network/admin/
-
-
-EXPOSE 8787 
