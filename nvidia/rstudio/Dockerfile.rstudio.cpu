@@ -45,6 +45,7 @@ COPY tnsnames.ora $ORACLE_HOME/network/admin/
 
 # user-level config for odbc 
 RUN  bash -c "R -e \"install.packages('odbc')\"" 
+RUN  bash -c "Rscript -e \"update.packages(ask=F)\"" 
 
 RUN cp /etc/odbc.ini /home/rstudio/.odbc.ini && \
     cp /etc/cloudera.hiveodbc.ini /home/rstudio/.cloudera.hiveodbc.ini && \
