@@ -56,7 +56,8 @@ RUN pip install  --no-cache-dir \
         PyHive \
         impala \
         pyodbc \
-        jupyter
+        pandas \
+        jupyter 
 
 
 COPY odbc/cloudera/clouderahiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
