@@ -55,7 +55,8 @@ RUN pip install  --no-cache-dir \
         thrift_sasl \
         PyHive \
         impala \
-        pyodbc 
+        pyodbc \
+        jupyter
 
 
 COPY odbc/cloudera/clouderahiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
