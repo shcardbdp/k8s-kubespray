@@ -23,6 +23,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         build-essential \
         unixodbc \
         unixodbc-dev \
+        libsasl2-dev \
         && \
 
 
