@@ -47,7 +47,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
 
 
 
-RUN pip install --quiet --no-cache-dir \    
+RUN pip install  --no-cache-dir \    
         setuptools \    
         thriftpy \
         thrift \
