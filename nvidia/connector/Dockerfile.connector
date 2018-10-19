@@ -29,8 +29,8 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
 # ==================================================================
 # cloudera hive/impala - odbc/jdbc
 # ------------------------------------------------------------------
-COPY odbc/cloudera/cloudera-hiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
-COPY odbc/cloudera/cloudera-impalaodbc_2.5.42.1031-2_amd64.deb /data/impalaodbc.deb
+COPY odbc/cloudera/cloudera_hiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
+COPY odbc/cloudera/cloudera_impalaodbc_2.5.42.1031-2_amd64.deb /data/impalaodbc.deb
 
 RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev alien libaio1 libaio-dev && \
     apt-get install -y -f /data/hiveodbc.deb && \
