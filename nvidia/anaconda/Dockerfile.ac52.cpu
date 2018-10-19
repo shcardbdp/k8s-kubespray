@@ -54,7 +54,7 @@ RUN pip install --quiet --no-cache-dir \
         thriftpy \
         PyHive \
         impala \
-        pyodbc \
+        pyodbc
 
 
 # Set up our notebook config.
