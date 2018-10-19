@@ -19,8 +19,8 @@ ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 # system-wide config for odbc
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
-COPY cloudera.odbc.ini /etc/cloudera.hiveodbc.ini
-COPY cloudera.odbc.ini /etc/cloudera.impalaodbc.ini
+COPY cloudera.hiveodbc.ini /etc/cloudera.hiveodbc.ini
+COPY cloudera.impalaodbc.ini /etc/cloudera.impalaodbc.ini
 
 
 
