@@ -22,39 +22,8 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         build-essential \
         unixodbc \
         unixodbc-dev \
-        libsasl2-dev \
-        && \
-
-
-# ==================================================================
-# python
-# ------------------------------------------------------------------
-    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
-        software-properties-common \
-        && \
-        add-apt-repository ppa:deadsnakes/ppa && \
-        apt-get update && \
-        DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
-          python3.6 \
-          python3.6-dev \
-        && \
-    wget -O ~/get-pip.py \
-        https://bootstrap.pypa.io/get-pip.py && \
-    python3.6 ~/get-pip.py && \
-    ln -s /usr/bin/python3.6 /usr/local/bin/python3 && \
-    ln -s /usr/bin/python3.6 /usr/local/bin/python 
-
-RUN pip install  --no-cache-dir \    
-        setuptools \    
-        thriftpy \
-        thrift \
-        thrift_sasl \
-        PyHive \
-        impala \
-        pyodbc \
-        pandas \
-        jupyter \
-        jupyterlab
+        libsasl2-dev 
+        
 
 
 # ==================================================================
@@ -118,5 +87,3 @@ ENV PATH      $PATH:$JAVA_HOME/bin
 COPY jdbc/HiveJDBC41.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
 COPY jdbc/ImpalaJDBC41.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
 RUN cp /usr/lib/oracle/12.2/client64/lib/ojdbc8.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
-
-CMD [ "jupyter", "notebook", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
