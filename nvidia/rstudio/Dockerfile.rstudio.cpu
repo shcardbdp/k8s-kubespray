@@ -5,7 +5,7 @@ FROM rocker/geospatial
 # ==================================================================
 # Unixodbc & clouder hive/impla odbc 
 # ------------------------------------------------------------------
-COPY --from=connecctor /data/ /data/
+COPY --from=connector /data/ /data/
 COPY clouderaimpalaodbc_2.5.42.1031-2_amd64.deb /data/impalaodbc.deb
 
 RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev alien libaio1 libaio-dev && \
