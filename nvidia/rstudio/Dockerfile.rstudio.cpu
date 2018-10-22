@@ -19,7 +19,7 @@ RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev al
 #ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
 # system-wide config for odbc
-COPY --from=connecctor /etc/*.ini /etc/
+COPY --from=connector /etc/*.ini /etc/
 # COPY --from=connecctor /etc/odbcinst.ini /etc/odbcinst.ini
 # COPY --from=connecctor /etc/odbc.ini /etc/odbc.ini
 # COPY --from=connecctor /etc/cloudera.hiveodbc.ini /etc/cloudera.hiveodbc.ini
