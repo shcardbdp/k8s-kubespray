@@ -1,4 +1,4 @@
-From FROM sorididim/datalake-conn:cpu-ubuntu16.04 as connector
+From sorididim11/datalake-conn:cpu-ubuntu16.04 as connector
 
 
 FROM rocker/geospatial
