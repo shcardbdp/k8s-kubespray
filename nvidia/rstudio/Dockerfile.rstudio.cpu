@@ -6,7 +6,6 @@ FROM rocker/geospatial
 # Unixodbc & clouder hive/impla odbc 
 # ------------------------------------------------------------------
 COPY --from=connector /data/ /data/
-COPY clouderaimpalaodbc_2.5.42.1031-2_amd64.deb /data/impalaodbc.deb
 
 RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev alien libaio1 libaio-dev && \
     apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
@@ -44,7 +43,7 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
 # ENV ORACLE_HOME /usr/lib/oracle/12.2/client64
 # ENV PATH $PATH:$ORACLE_HOME/bin
 # ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$ORACLE_HOME/lib
-COPY --from=connector  $ORACLE_HOME/network/admin/tnsnames.ora $ORACLE_HOME/network/admin/tnsnames.ora
+COPY --from=connector  /usr/lib/oracle/12.2/client64/network/admin/tnsnames.ora /usr/lib/oracle/12.2/client64/network/admin/tnsnames.ora
 
 
 
