@@ -2,11 +2,14 @@ FROM sorididim11/datalake-conn:cpu-ubuntu16.04 as connector
 
 
 FROM rocker/geospatial
+
+COPY --from=connector /data/ /data/
+COPY --from=connector /etc/*.ini /etc/
+
+
 # ==================================================================
 # Unixodbc & clouder hive/impla odbc 
 # ------------------------------------------------------------------
-COPY --from=connector /data/ /data/
-
 RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev alien libaio1 libaio-dev && \
     apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
     apt-get install -y -f /data/clouderaimpalaodbc_2.5.42.1031-2_amd64.deb && \
@@ -16,15 +19,6 @@ RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev al
     rm -rf /var/lib/apt/lists/*
 
 #ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
-
-# system-wide config for odbc
-COPY --from=connector /etc/*.ini /etc/
-# COPY --from=connecctor /etc/odbcinst.ini /etc/odbcinst.ini
-# COPY --from=connecctor /etc/odbc.ini /etc/odbc.ini
-# COPY --from=connecctor /etc/cloudera.hiveodbc.ini /etc/cloudera.hiveodbc.ini
-# COPY --from=connecctor /etc/cloudera.impalaodbc.ini /etc/cloudera.impalaodbc.ini
-
-
 
 # ==================================================================
 # Oracle sqlplus & odbc extension
@@ -37,17 +31,17 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
     alien -i /data/oracle-instantclient12.2-jdbc-12.2.0.1.0-1.x86_64.rpm && \
     cp /usr/lib/oracle/12.2/client64/lib/ojdbc8.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
 
-
 COPY --from=connector  /usr/lib/oracle/12.2/client64/network/admin/tnsnames.ora /usr/lib/oracle/12.2/client64/network/admin/tnsnames.ora
-
 
 
 # ==================================================================
 # R packages upgrade + odbc install 
-# ------------------------------------------------------------------
-RUN  bash -c "R -e \"install.packages('odbc')\"" 
-RUN  bash -c "R -e \"install.packages('AER')\"" 
-RUN  bash -c "R -e \"install.packages('stargazer'); install.packages('DataExplorer'); install.packages('xgboost')\"" 
+# ------------------------------------------------------------------  
+RUN  bash -c "R -e \"install.packages('stargazer'); \
+                     install.packages('odbc'); \
+                     install.packages('DataExplorer'); \
+                     install.packages('AER'); \
+                     install.packages('xgboost')\"" 
 RUN  bash -c "Rscript -e \"update.packages(ask=F)\"" 
 
 ENV ORACLE_HOME /usr/lib/oracle/12.2/client64
