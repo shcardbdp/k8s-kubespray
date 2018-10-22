@@ -28,11 +28,6 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
-ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
-ENV PATH      $PATH:$JAVA_HOME/bin
-
 COPY cloudera/ /data/
 COPY oracle/ /data/
 COPY odbcinst.ini /etc/odbcinst.ini
@@ -43,10 +38,8 @@ COPY odbc.ini /etc/odbc.ini
 # ------------------------------------------------------------------
 RUN  apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
     apt-get install -y -f /data/clouderaimpalaodbc_2.5.42.1031-2_amd64.deb && \
-    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.hiveodbc.ini && \
-    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.impalaodbc.ini && \
-    cp /data/cloudera.hiveodbc.ini /etc/cloudera.hiveodbc.ini && \
-    cp /data/cloudera.impalaodbc.ini /etc/cloudera.impalaodbc.ini
+    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.*.ini && \    
+    cp /data/cloudera.*.ini /etc/
 
 # ==================================================================
 # Oracle sqlplus, odbc/jdbc
@@ -59,8 +52,10 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
     cp /data/HiveJDBC41.jar /data/ImpalaJDBC41.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext && \
     cp /usr/lib/oracle/12.2/client64/lib/ojdbc8.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
 
-ENV ORACLE_HOME /usr/lib/oracle/12.2/client64
-ENV PATH $PATH:$ORACLE_HOME/bin
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$ORACLE_HOME/lib
+
+ENV LD_LIBRARY_PATH $ORACLE_HOME/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+ENV JAVA_HOME       /usr/lib/jvm/java-8-openjdk-amd64
+ENV ORACLE_HOME     /usr/lib/oracle/12.2/client64
+ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin$PATH
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
 COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
