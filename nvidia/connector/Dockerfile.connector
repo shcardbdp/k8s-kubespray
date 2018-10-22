@@ -56,6 +56,6 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
 ENV LD_LIBRARY_PATH $ORACLE_HOME/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 ENV JAVA_HOME       /usr/lib/jvm/java-8-openjdk-amd64
 ENV ORACLE_HOME     /usr/lib/oracle/12.2/client64
-ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin$PATH
+ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
 COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
