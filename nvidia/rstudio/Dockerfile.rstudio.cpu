@@ -1,50 +1,50 @@
-FROM rocker/geospatial
+From FROM sorididim/datalake-conn:cpu-ubuntu16.04 as connector
 
+
+FROM rocker/geospatial
 # ==================================================================
 # Unixodbc & clouder hive/impla odbc 
 # ------------------------------------------------------------------
-COPY clouderahiveodbc_2.5.25.1020-2_amd64.deb /data/hiveodbc.deb
+COPY --from=connecctor /data/ /data/
 COPY clouderaimpalaodbc_2.5.42.1031-2_amd64.deb /data/impalaodbc.deb
 
 RUN  apt-get update --fix-missing && apt-get install -y unixodbc unixodbc-dev alien libaio1 libaio-dev && \
-    apt-get install -y -f /data/hiveodbc.deb && \
-    apt-get install -y -f /data/impalaodbc.deb && \
+    apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
+    apt-get install -y -f /data/clouderaimpalaodbc_2.5.42.1031-2_amd64.deb && \
     rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.hiveodbc.ini && \
     rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.impalaodbc.ini && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+#ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
 # system-wide config for odbc
-COPY odbcinst.ini /etc/odbcinst.ini
-COPY odbc.ini /etc/odbc.ini
-COPY cloudera.hiveodbc.ini /etc/cloudera.hiveodbc.ini
-COPY cloudera.impalaodbc.ini /etc/cloudera.impalaodbc.ini
+COPY --from=connecctor /etc/*.ini /etc/
+# COPY --from=connecctor /etc/odbcinst.ini /etc/odbcinst.ini
+# COPY --from=connecctor /etc/odbc.ini /etc/odbc.ini
+# COPY --from=connecctor /etc/cloudera.hiveodbc.ini /etc/cloudera.hiveodbc.ini
+# COPY --from=connecctor /etc/cloudera.impalaodbc.ini /etc/cloudera.impalaodbc.ini
 
 
 
 # ==================================================================
 # Oracle sqlplus & odbc extension
 # ------------------------------------------------------------------
-COPY oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm /data/oralce-basic.rpm
-COPY oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm /data/oracle-sqlplus.rpm
-COPY oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm /data/oracle-devel.rpm
-COPY oracle-instantclient12.2-odbc-12.2.0.1.0-2.x86_64.rpm  /data/oracle-odbc.rpm 
-COPY oracle-instantclient12.2-jdbc-12.2.0.1.0-1.x86_64.rpm /data/oracle-jdbc.rpm
+
+RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
+    alien -i /data/oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm && \
+    alien -i /data/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm && \
+    alien -i /data/oracle-instantclient12.2-odbc-12.2.0.1.0-2.x86_64.rpm && \
+    alien -i /data/oracle-instantclient12.2-jdbc-12.2.0.1.0-1.x86_64.rpm && \
+    cp /usr/lib/oracle/12.2/client64/lib/ojdbc8.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
 
 
-RUN alien -i /data/oralce-basic.rpm && \
-    alien -i /data/oracle-sqlplus.rpm && \
-    alien -i /data/oracle-devel.rpm && \
-    alien -i /data/oracle-odbc.rpm && \
-    alien -i /data/oracle-jdbc.rpm
 
 
-ENV ORACLE_HOME /usr/lib/oracle/12.2/client64
-ENV PATH $PATH:$ORACLE_HOME/bin
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$ORACLE_HOME/lib
-COPY tnsnames.ora $ORACLE_HOME/network/admin/
+# ENV ORACLE_HOME /usr/lib/oracle/12.2/client64
+# ENV PATH $PATH:$ORACLE_HOME/bin
+# ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$ORACLE_HOME/lib
+COPY --from=connector  $ORACLE_HOME/network/admin/tnsnames.ora $ORACLE_HOME/network/admin/tnsnames.ora
 
 
 
@@ -52,6 +52,8 @@ COPY tnsnames.ora $ORACLE_HOME/network/admin/
 # R packages upgrade + odbc install 
 # ------------------------------------------------------------------
 RUN  bash -c "R -e \"install.packages('odbc')\"" 
+RUN  bash -c "R -e \"install.packages('AER')\"" 
+RUN  bash -c "R -e \"install.packages('stargazer'); install.packages('DataExplorer'); install.packages('xgboost')\"" 
 RUN  bash -c "Rscript -e \"update.packages(ask=F)\"" 
 
 
