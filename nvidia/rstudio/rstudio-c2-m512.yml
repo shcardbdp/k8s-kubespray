@@ -67,7 +67,7 @@ spec:
     spec:
       containers:
       - name: rstudio
-        image: "localhost:5000/rstudo:hive"        
+        image: "localhost:5000/rstudo:cpu"        
         resources:
           requests:
             cpu: 1
