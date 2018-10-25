@@ -40,6 +40,10 @@ RUN conda install --yes --quiet  \
         thrift \
         thrift_sasl \
         && \
+    conda install --yes --quiet -c lukepfister \
+        pycuda \
+        scikit.cuda \
+        && \
     conda clean -tipsy
 
 RUN pip install --quiet --no-cache-dir \
