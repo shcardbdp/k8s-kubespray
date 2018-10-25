@@ -5,7 +5,7 @@
 # python        3.6    
 # ==================================================================
 
-FROM sorididim11/datalake-conn:cpu
+FROM sorididim11/shinhan-dl-base:cpu
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH=/opt/conda/bin:$PATH

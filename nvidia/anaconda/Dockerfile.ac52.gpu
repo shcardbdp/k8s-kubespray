@@ -1,5 +1,5 @@
 
-FROM sorididim11/datalake-conn:gpu
+FROM sorididim11/shinhan-dl-base:gpu
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH=/opt/conda/bin:$PATH
