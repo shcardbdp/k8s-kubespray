@@ -42,7 +42,7 @@ RUN conda install --yes --quiet  \
         && \
     conda install --yes --quiet -c lukepfister \
         pycuda \
-        scikit.cuda \
+        scikits.cuda \
         && \
     conda clean -tipsy
 
