@@ -3,7 +3,7 @@ FROM jupyter/r-notebook
 RUN R -e "install.packages(c('odbc', \ 
                              'stargazer', \
                              'DataExplorer', \
-                             'AER', \
+                             'AER'), \
                              repos='http://cran.us.r-project.org')"
 
 
