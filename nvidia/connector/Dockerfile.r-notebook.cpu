@@ -12,6 +12,7 @@ COPY oracle/ /data/
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
 
+USER root
 # ==================================================================
 # Unixodbc & clouder hive/impla odbc 
 # ------------------------------------------------------------------
