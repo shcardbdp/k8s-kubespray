@@ -12,9 +12,6 @@ USER root
 # ==================================================================
 # Unixodbc & clouder hive/impla odbc 
 # ------------------------------------------------------------------
-RUN  apt-get update 
-RUN apt-get install --no-install-recommends -y wget vim unixodbc unixodbc-dev
-RUN apt-get install --no-install-recommends -y alien
 
 RUN  apt-get update && apt-get install --no-install-recommends -y wget vim unixodbc unixodbc-dev alien libaio1 libaio-dev openjdk-8-jdk && \
     apt-get clean && \
