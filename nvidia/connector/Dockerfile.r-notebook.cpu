@@ -15,7 +15,7 @@ COPY odbc.ini /etc/odbc.ini
 # ==================================================================
 # Unixodbc & clouder hive/impla odbc 
 # ------------------------------------------------------------------
-RUN  apt-get update --fix-missing && apt-get install -y wget vim openjdk-8-jdk unixodbc unixodbc-dev alien libaio1 libaio-dev && \
+RUN  apt-get update && apt-get install -y wget vim openjdk-8-jdk unixodbc unixodbc-dev alien libaio1 libaio-dev && \
     apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
     apt-get install -y -f /data/clouderaimpalaodbc_2.5.42.1031-2_amd64.deb && \
     rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.hiveodbc.ini && \
