@@ -1,0 +1,51 @@
+FROM jupyter/r-notebook
+
+RUN R -e "install.packages(c('odbc', \ 
+                             'stargazer', \
+                             'DataExplorer', \
+                             'AER', \
+                             repos='http://cran.us.r-project.org')"
+
+
+COPY cloudera/ /data/
+COPY oracle/ /data/
+COPY odbcinst.ini /etc/odbcinst.ini
+COPY odbc.ini /etc/odbc.ini
+
+# ==================================================================
+# Unixodbc & clouder hive/impla odbc 
+# ------------------------------------------------------------------
+RUN  apt-get update --fix-missing && apt-get install -y wget vim default-jdk unixodbc unixodbc-dev alien libaio1 libaio-dev && \
+    apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
+    apt-get install -y -f /data/clouderaimpalaodbc_2.5.42.1031-2_amd64.deb && \
+    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.hiveodbc.ini && \
+    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.impalaodbc.ini && \
+    cp /data/cloudera.*.ini /etc/ && \
+    cp /data/HiveJDBC41.jar /data/ImpalaJDBC41.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# ==================================================================
+# Hive JDBC CLI client
+# ------------------------------------------------------------------
+COPY hivecli.jar /usr/local/bin
+COPY hive-cli /usr/local/bin
+RUN chmod 755 /usr/local/bin/hive-cli 
+
+# ==================================================================
+# Oracle sqlplus & odbc extension
+# ------------------------------------------------------------------
+
+RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
+    alien -i /data/oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm && \
+    alien -i /data/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm && \
+    alien -i /data/oracle-instantclient12.2-odbc-12.2.0.1.0-2.x86_64.rpm && \
+    alien -i /data/oracle-instantclient12.2-jdbc-12.2.0.1.0-1.x86_64.rpm && \
+    cp /usr/lib/oracle/12.2/client64/lib/ojdbc8.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
+
+
+ENV JAVA_HOME       /usr/lib/jvm/java-8-openjdk-amd64
+ENV ORACLE_HOME     /usr/lib/oracle/12.2/client64
+ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH
+ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib
+ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
