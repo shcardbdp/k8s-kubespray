@@ -28,8 +28,8 @@ COPY odbc.ini /etc/odbc.ini
 #    apt-get install -y -f /data/clouderaimpalaodbc_2.5.42.1031-2_amd64.deb && \
 #    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.hiveodbc.ini && \
 #    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.impalaodbc.ini && \
-RUN    cp /data/cloudera.*.ini /etc/ && \
-    cp /data/HiveJDBC41.jar /data/ImpalaJDBC41.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext && \
+RUN    mv /data/cloudera.*.ini /etc/ && \
+    mv /data/HiveJDBC41.jar /data/ImpalaJDBC41.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext && \
 
 
 # ==================================================================
