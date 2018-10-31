@@ -31,7 +31,7 @@ RUN bash /data/Anaconda3-5.2.0-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
 #     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
 #     echo "conda activate base" >> ~/.bashrc
 
-
+RUN echo "whoami user: $NB_USER , $HOME "
 # ==================================================================
 # Hive/impala, odbc connector
 # ------------------------------------------------------------------
