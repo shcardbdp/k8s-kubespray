@@ -35,7 +35,7 @@ ENV GOSU_URL https://github.com/tianon/gosu/releases/download/1.4/gosu
 ENV JAVA_HOME       /usr/lib/jvm/java-8-openjdk-amd64
 ENV ORACLE_HOME     /usr/lib/oracle/12.2/client64
 ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH
-ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib
+ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib:$LD_LIBRARY_PATH
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
 
 COPY odbcinst.ini /etc/odbcinst.ini
