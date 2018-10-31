@@ -34,12 +34,12 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-ENV GOSU_URL https://github.com/tianon/gosu/releases/download/1.4/gosu \
-    JAVA_HOME       /usr/lib/jvm/java-8-openjdk-amd64 \
-    ORACLE_HOME     /usr/lib/oracle/12.2/client64 \
-    PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH \
-    LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib:$LD_LIBRARY_PATH \
-    LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so \
+ENV GOSU_URL=https://github.com/tianon/gosu/releases/download/1.4/gosu \
+    JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 \
+    ORACLE_HOME=/usr/lib/oracle/12.2/client64 \
+    PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH \
+    LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib:$LD_LIBRARY_PATH \
+    LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libodbcinst.so \
     CONDA_DIR=/opt/conda \
     NB_USER=jupyter \
     NB_UID=1000 \
