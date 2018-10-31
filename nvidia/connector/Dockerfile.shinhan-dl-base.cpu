@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-
+USER root
 # software-properties-common
 RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     PIP_INSTALL="python -m pip --no-cache-dir install --upgrade" && \
@@ -34,12 +34,33 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-ENV GOSU_URL https://github.com/tianon/gosu/releases/download/1.4/gosu
-ENV JAVA_HOME       /usr/lib/jvm/java-8-openjdk-amd64
-ENV ORACLE_HOME     /usr/lib/oracle/12.2/client64
-ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH
-ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib:$LD_LIBRARY_PATH
-ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
+ENV GOSU_URL https://github.com/tianon/gosu/releases/download/1.4/gosu \
+    JAVA_HOME       /usr/lib/jvm/java-8-openjdk-amd64 \
+    ORACLE_HOME     /usr/lib/oracle/12.2/client64 \
+    PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH \
+    LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib:$LD_LIBRARY_PATH \
+    LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so \
+    CONDA_DIR=/opt/conda \
+    NB_USER=jupyter \
+    NB_UID=1000 \
+    NB_GID=1000 \
+    HOME=/home/$NB_USER
+
+ADD fix-permissions /usr/local/bin/fix-permissions
+RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+    mkdir -p $CONDA_DIR && \
+    chown $NB_USER:$NB_GID $CONDA_DIR && \
+    chmod g+w /etc/passwd /etc/group && \
+    fix-permissions $HOME && \
+    fix-permissions $CONDA_DIR
+
+# Setup work directory for backward-compatibility
+USER $NB_UID
+
+RUN mkdir /home/$NB_USER/notebooks && \
+    fix-permissions /home/$NB_USER
+
+USER root
 
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
@@ -48,7 +69,6 @@ COPY hivecli.jar /usr/local/bin
 COPY hive-cli /usr/local/bin
 COPY oracle/ /data/
 COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
-
 
 
 RUN  gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \ 
@@ -96,5 +116,8 @@ RUN groupadd -r jupyter && useradd --shell /bin/bash  -c "" -g jupyter -m jupyte
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN  chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT [ "/usr/bin/tini", "--"]
+
+USER $NB_UID
+
 # when running container, with -e flag for env, uid like uid=000, it works but wanna use k8s user flag instead of env
 # ENTRYPOINT [ "/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
