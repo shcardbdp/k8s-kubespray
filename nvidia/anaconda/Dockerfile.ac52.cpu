@@ -59,7 +59,7 @@ RUN pip install --quiet --no-cache-dir \
 
 # Set up our notebook config.
 COPY jupyter_notebook_config.py /root/.jupyter/
-COPY notebooks /notebooks
+COPY notebooks /notebooks/samples/
 COPY run_jupyter.sh /
 
 EXPOSE 8888 6006

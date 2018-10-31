@@ -1,5 +1,18 @@
 FROM jupyter/r-notebook
 
+RUN conda install --yes --quiet  \
+        thrift \
+        thrift_sasl \
+        && \
+    conda clean -tipsy
+
+RUN pip install --quiet --no-cache-dir \
+        thriftpy \
+        PyHive \
+        impala \
+        pyodbc
+
+
 RUN R -e "install.packages(c('odbc', \ 
                              'stargazer', \
                              'DataExplorer', \

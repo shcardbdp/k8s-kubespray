@@ -1,38 +1,37 @@
-FROM ubuntu:16.04
+FROM jupyter/all-spark-notebook
 
-RUN groupadd -r jupyter && useradd -r -g jupyter jupyter
-USER jupyter
+RUN conda install --yes --quiet  \
+        thrift \
+        thrift_sasl \
+        && \
+    conda install --yes -c r \
+        r-essentials \
+        r-acepack \
+        r-aer \
+        r-afex \
+        && \
+    conda clean -tipsy
 
-RUN mkdir -p /notebooks && chmod 755 /notebooks && chown jupyter:jupyter /notebooks
-WORKDIR /notebooks
+RUN pip install --quiet --no-cache-dir \
+        thriftpy \
+        PyHive \
+        impala \
+        pyodbc
 
 
-RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
-    PIP_INSTALL="python -m pip --no-cache-dir install --upgrade" && \
-    rm -rf /var/lib/apt/lists/* \
-           /etc/apt/sources.list.d/cuda.list \
-           /etc/apt/sources.list.d/nvidia-ml.list && \
-    apt-get update && \
+RUN R -e "install.packages(c('odbc', \ 
+                             'stargazer', \
+                             'DataExplorer', \
+                             'AER'), \
+                             repos='http://cran.us.r-project.org')"
 
+
+
+USER root
 # ==================================================================
-# tools
+# Unixodbc & clouder hive/impla odbc 
 # ------------------------------------------------------------------
-    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
-        build-essential \
-        ca-certificates \
-        cmake \
-        wget \
-        git \
-        vim \
-        build-essential \
-        unixodbc \
-        unixodbc-dev \
-        libsasl2-dev \
-        alien \
-        libaio1 \
-        libaio-dev \
-        default-jdk \ 
-          && \
+RUN  apt-get update && apt-get install -y wget vim openjdk-8-jdk unixodbc unixodbc-dev alien libaio1 libaio-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -41,15 +40,15 @@ COPY oracle/ /data/
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
 
-# ==================================================================
-# cloudera hive/impala - odbc/jdbc
-# ------------------------------------------------------------------
-RUN  apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
+
+
+RUN apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
     apt-get install -y -f /data/clouderaimpalaodbc_2.5.42.1031-2_amd64.deb && \
-    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.*.ini && \    
-    rm -rf /opt/cloudera/impalaodbc/lib/64/cloudera.*.ini && \    
+    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.hiveodbc.ini && \
+    rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.impalaodbc.ini && \
     cp /data/cloudera.*.ini /etc/ && \
     cp /data/HiveJDBC41.jar /data/ImpalaJDBC41.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
+
 
 # ==================================================================
 # Hive JDBC CLI client
@@ -59,8 +58,9 @@ COPY hive-cli /usr/local/bin
 RUN chmod 755 /usr/local/bin/hive-cli 
 
 # ==================================================================
-# Oracle sqlplus, odbc/jdbc
+# Oracle sqlplus & odbc extension
 # ------------------------------------------------------------------
+
 RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
     alien -i /data/oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm && \
     alien -i /data/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm && \
@@ -74,4 +74,3 @@ ENV ORACLE_HOME     /usr/lib/oracle/12.2/client64
 ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH
 ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
-COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
