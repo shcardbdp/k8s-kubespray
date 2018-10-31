@@ -42,10 +42,9 @@ ENV GOSU_URL=https://github.com/tianon/gosu/releases/download/1.4/gosu \
     LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libodbcinst.so \
     CONDA_DIR=/opt/conda \    
     NB_USER=jupyter \
-    HOME=/home/$NB_USER \
+    HOME=/home/jupyter \
     NB_UID=1000 \
     NB_GID=1000 \
-    HOME=/home/$NB_USER
 
 ADD fix-permissions /usr/local/bin/fix-permissions
 RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
