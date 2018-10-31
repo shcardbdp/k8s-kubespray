@@ -48,7 +48,7 @@ COPY jupyter_notebook_config.py /root/.jupyter/
 COPY notebooks /notebooks/samples/
 COPY run_jupyter.sh /
 
-mkdir -p /.local && chmod 777 /.local
+RUN mkdir -p /.local && chmod 777 /.local
 
 EXPOSE 8888 6006
 
