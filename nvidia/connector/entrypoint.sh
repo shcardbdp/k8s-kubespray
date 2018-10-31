@@ -7,9 +7,8 @@ CURRENT_UID=${uid:-9999}
 # Notify user about the UID selected
 echo "Current UID : $CURRENT_UID"
 # Create user called "docker" with selected UID
-useradd --shell /bin/bash -u $CURRENT_UID -o -c "" -m docker
-# Set "HOME" ENV variable for user's home directory
-export HOME=/home/docker
+groupadd -r jupyter && useradd --shell /bin/bash -u $CURRENT_UID -o -c "" -g jupyter -m jupyter
+chown jupyter:jupyter /notebooks
  
 # Execute process
-exec /usr/local/bin/gosu docker "$@"
+exec /usr/local/bin/gosu jupyter "$@"

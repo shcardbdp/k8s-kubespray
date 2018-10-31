@@ -1,9 +1,7 @@
 FROM ubuntu:16.04
 
-RUN groupadd -r jupyter && useradd -r -g jupyter jupyter
 
-
-RUN mkdir -p /notebooks && chmod 755 /notebooks && chown jupyter:jupyter /notebooks
+RUN mkdir -p /notebooks && chmod 755 /notebooks
 WORKDIR /notebooks
 
  
