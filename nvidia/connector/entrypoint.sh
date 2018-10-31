@@ -13,4 +13,4 @@ echo "Current UID : $CURRENT_UID, Current GID: $CURRENT_GID"
 #chown jupyter:jupyter /notebooks
  
 # Execute process
-exec /usr/local/bin/gosu jupyter "$@"
+exec /usr/local/bin/gosu $(id -u) "$@"
