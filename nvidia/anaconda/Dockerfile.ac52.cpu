@@ -17,7 +17,7 @@ USER $NB_UID
 COPY Anaconda3-5.2.0-Linux-x86_64.sh /data/Anaconda3-5.2.0-Linux-x86_64.sh
 RUN bash /data/Anaconda3-5.2.0-Linux-x86_64.sh -u -b -p $CONDA_DIR && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/$NB_USER/.bashrc && \
-    echo "conda activate base" >> ~/.bashrc && \
+    echo "conda activate base" >> /home/$NB_USER/.bashrc && \
     rm -rf /data/Anaconda3-5.2.0-Linux-x86_64.sh \
     rm -rf /home/$NB_USER/.cache/yarn && \ 
     fix-permissions $CONDA_DIR && \
