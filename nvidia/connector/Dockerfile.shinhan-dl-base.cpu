@@ -92,4 +92,5 @@ RUN groupadd -r jupyter && useradd --shell /bin/bash  -c "" -g jupyter -m jupyte
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN  chmod +x /usr/local/bin/entrypoint.sh
-ENTRYPOINT [ "/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT [ "/usr/bin/tini", "--"]
+# ENTRYPOINT [ "/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
