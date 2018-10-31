@@ -15,6 +15,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         build-essential \
         ca-certificates \
         cmake \
+        curl \
         wget \
         git \
         vim \
