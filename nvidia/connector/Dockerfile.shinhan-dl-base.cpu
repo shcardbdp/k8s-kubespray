@@ -88,7 +88,7 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
 RUN mkdir -p /notebooks && chmod 755 /notebooks
 WORKDIR /notebooks
 
-RUN groupadd -r jupyter && useradd --shell /bin/bash -o -c "" -g jupyter -m jupyter
+RUN groupadd -r jupyter && useradd --shell /bin/bash  -c "" -g jupyter -m jupyter
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN  chmod +x /usr/local/bin/entrypoint.sh
