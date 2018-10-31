@@ -16,7 +16,6 @@ USER $NB_UID
 # anaconda3 install
 COPY Anaconda3-5.2.0-Linux-x86_64.sh /data/Anaconda3-5.2.0-Linux-x86_64.sh
 RUN bash /data/Anaconda3-5.2.0-Linux-x86_64.sh -u -b -p $CONDA_DIR && \
-    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate base" >> ~/.bashrc && \
     rm -rf /data/Anaconda3-5.2.0-Linux-x86_64.sh \
