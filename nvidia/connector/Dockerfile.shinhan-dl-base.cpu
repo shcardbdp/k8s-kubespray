@@ -44,7 +44,7 @@ ENV GOSU_URL=https://github.com/tianon/gosu/releases/download/1.4/gosu \
     NB_USER=jupyter \
     HOME=/home/jupyter \
     NB_UID=1000 \
-    NB_GID=1000 \
+    NB_GID=1000 
 
 ADD fix-permissions /usr/local/bin/fix-permissions
 RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
