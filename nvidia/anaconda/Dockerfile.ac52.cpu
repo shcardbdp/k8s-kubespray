@@ -7,17 +7,23 @@
 
 FROM sorididim11/shinhan-dl-base:cpu
 
+
+
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH=/opt/conda/bin:$PATH
 
-
+USER $NB_UID
 # anaconda3 install
 COPY Anaconda3-5.2.0-Linux-x86_64.sh /data/Anaconda3-5.2.0-Linux-x86_64.sh
-RUN bash /data/Anaconda3-5.2.0-Linux-x86_64.sh -b -p /opt/conda && \
+RUN bash /data/Anaconda3-5.2.0-Linux-x86_64.sh -b -p $CONDA_DIR && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate base" >> ~/.bashrc && \
-    rm -rf /data/Anaconda3-5.2.0-Linux-x86_64.sh
+    rm -rf /data/Anaconda3-5.2.0-Linux-x86_64.sh \
+    rm -rf /home/$NB_USER/.cache/yarn && \ 
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+    
 
 # RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
 #     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
@@ -34,7 +40,10 @@ RUN conda install --yes --quiet  \
         thrift \
         thrift_sasl \
         && \
-    conda clean -tipsy
+    conda clean -tipsy && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
 
 RUN pip install --quiet --no-cache-dir \
         thriftpy \
@@ -44,13 +53,11 @@ RUN pip install --quiet --no-cache-dir \
 
 
 # Set up our notebook config.
-COPY jupyter_notebook_config.py /root/.jupyter/
-COPY notebooks /notebooks/samples/
-COPY run_jupyter.sh /
-
-RUN mkdir -p /.local && chmod 777 /.local
+COPY jupyter_notebook_config.py /home/$NB_USER/.jupyter/
+COPY notebooks /home/$NB_USER/notebooks/samples/
+COPY run_jupyter.sh /home/$NB_USER
 
 EXPOSE 8888 6006
 
 
-CMD [ "/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
+CMD [ "/home/$NB_USER/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
