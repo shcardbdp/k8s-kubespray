@@ -11,16 +11,6 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH=/opt/conda/bin:$PATH
 
 
-RUN apt-get update --fix-missing && apt-get install -y curl grep sed dpkg wget bzip2 ca-certificates \
-    libglib2.0-0 libxext6 libsm6 libxrender1 \
-    git mercurial subversion \
-    libfreetype6-dev libhdf5-serial-dev libpng12-dev libzmq3-dev pkg-config \
-    rsync software-properties-common unzip \
-    && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-
 # anaconda3 install
 # COPY Anaconda3-5.2.0-Linux-x86_64.sh /data/Anaconda3-5.2.0-Linux-x86_64.sh
 # RUN bash /data/Anaconda3-5.2.0-Linux-x86_64.sh -b -p /opt/conda && \
@@ -57,6 +47,8 @@ RUN pip install --quiet --no-cache-dir \
 COPY jupyter_notebook_config.py /root/.jupyter/
 COPY notebooks /notebooks/samples/
 COPY run_jupyter.sh /
+
+mkdir -p /.local && chmod 777 /.local
 
 EXPOSE 8888 6006
 

@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 
-
+# software-properties-common
 RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     PIP_INSTALL="python -m pip --no-cache-dir install --upgrade" && \
     rm -rf /var/lib/apt/lists/* \
@@ -15,6 +15,9 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         build-essential \
         ca-certificates \
         cmake \
+        unzip grep sed dpkg bzip2 rsync \
+        libglib2.0-0 libxext6 libsm6 libxrender1 \
+        libfreetype6-dev libhdf5-serial-dev libpng12-dev libzmq3-dev pkg-config \
         curl \
         wget \
         git \
@@ -93,4 +96,5 @@ RUN groupadd -r jupyter && useradd --shell /bin/bash  -c "" -g jupyter -m jupyte
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN  chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT [ "/usr/bin/tini", "--"]
+# when running container, with -e flag for env, uid like uid=000, it works but wanna use k8s user flag instead of env
 # ENTRYPOINT [ "/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
