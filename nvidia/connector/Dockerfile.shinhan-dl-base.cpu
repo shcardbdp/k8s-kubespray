@@ -1,21 +1,22 @@
 FROM ubuntu:16.04
 
-
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 ENV GOSU_URL https://github.com/tianon/gosu/releases/download/1.4/gosu
-RUN  curl -o /usr/local/bin/gosu -SL "$GOSU_URL-$(dpkg --print-architecture)" \
-  && curl -o /usr/local/bin/gosu.asc -SL "$GOSU_URL-$(dpkg --print-architecture).asc" \
-  && gpg --verify /usr/local/bin/gosu.asc \
-  && rm /usr/local/bin/gosu.asc \
-  && chmod +x /usr/local/bin/gosu \
-  && chmod +x /usr/local/bin/entrypoint.sh \
-  && TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
-    dpkg -i tini.deb && \
-    rm tini.deb && \
-    apt-get clean
+ENV JAVA_HOME       /usr/lib/jvm/java-8-openjdk-amd64
+ENV ORACLE_HOME     /usr/lib/oracle/12.2/client64
+ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH
+ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib
+ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
 
+COPY odbcinst.ini /etc/odbcinst.ini
+COPY odbc.ini /etc/odbc.ini
+COPY cloudera/ /data/
+COPY hivecli.jar /usr/local/bin
+COPY hive-cli /usr/local/bin
+COPY oracle/ /data/
+COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN echo "user id : $USER" && APT_INSTALL="apt-get install -y --no-install-recommends" && \
+RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     PIP_INSTALL="python -m pip --no-cache-dir install --upgrade" && \
     rm -rf /var/lib/apt/lists/* \
            /etc/apt/sources.list.d/cuda.list \
@@ -44,10 +45,17 @@ RUN echo "user id : $USER" && APT_INSTALL="apt-get install -y --no-install-recom
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY cloudera/ /data/
-COPY oracle/ /data/
-COPY odbcinst.ini /etc/odbcinst.ini
-COPY odbc.ini /etc/odbc.ini
+
+RUN  curl -o /usr/local/bin/gosu -SL "$GOSU_URL-$(dpkg --print-architecture)" \
+  && curl -o /usr/local/bin/gosu.asc -SL "$GOSU_URL-$(dpkg --print-architecture).asc" \
+  && gpg --verify /usr/local/bin/gosu.asc \
+  && rm /usr/local/bin/gosu.asc \
+  && chmod +x /usr/local/bin/gosu \
+  && chmod +x /usr/local/bin/entrypoint.sh \
+  && TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
+    dpkg -i tini.deb && \
+    rm tini.deb && \
+    apt-get clean
 
 # ==================================================================
 # cloudera hive/impala - odbc/jdbc
@@ -62,8 +70,6 @@ RUN  apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
 # ==================================================================
 # Hive JDBC CLI client
 # ------------------------------------------------------------------
-COPY hivecli.jar /usr/local/bin
-COPY hive-cli /usr/local/bin
 RUN chmod 755 /usr/local/bin/hive-cli 
 
 # ==================================================================
@@ -77,16 +83,7 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
     cp /usr/lib/oracle/12.2/client64/lib/ojdbc8.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
 
 
-ENV JAVA_HOME       /usr/lib/jvm/java-8-openjdk-amd64
-ENV ORACLE_HOME     /usr/lib/oracle/12.2/client64
-ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH
-ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib
-ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
-COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
-
-
 RUN mkdir -p /notebooks && chmod 755 /notebooks
 WORKDIR /notebooks
-
 
 ENTRYPOINT [ "/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]

@@ -297,7 +297,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "dcgm_gpu_temp{gpu=\"$gpu\",instance=\"$server\"",
+          "expr": "dcgm_gpu_temp{gpu=\"$gpu\",instance=\"$server\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "refId": "A",
