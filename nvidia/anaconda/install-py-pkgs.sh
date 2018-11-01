@@ -4,7 +4,7 @@
 
 set -e
 
- echo "param: ${DEVICE}"
+echo "param: $1"
 
 if (( $# != 1 )); then
     echo "Illegal number of parameters"
