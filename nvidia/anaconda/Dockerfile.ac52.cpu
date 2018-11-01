@@ -53,9 +53,9 @@ RUN pip install --quiet --no-cache-dir \
 
 
 # Set up our notebook config.
-COPY --chown=$NB_UID:$NB_GID jupyter_notebook_config.py /etc/jupyter/
-COPY --chown=$NB_UID:$NB_GID notebooks /home/$NB_USER/notebooks/samples/
-COPY --chown=$NB_UID:$NB_GID run_jupyter.sh /home/$NB_USER
+ADD --chown=$NB_UID:$NB_GID jupyter_notebook_config.py /etc/jupyter/
+ADD --chown=$NB_UID:$NB_GID notebooks /home/$NB_USER/notebooks/samples/
+ADD --chown=$NB_UID:$NB_GID run_jupyter.sh /home/$NB_USER
 
 EXPOSE 8888 6006
 
