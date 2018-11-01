@@ -4,7 +4,7 @@
 
 set -e
 
- echo "param: ${DEVICE_TYPE}"
+ echo "param: ${DEVICE}"
 
 if (( $# != 1 )); then
     echo "Illegal number of parameters"
@@ -56,7 +56,7 @@ if [ "${DEVICE_TYPE}" == "gpu" ]; then
         jpype1==0.6.3 \
         gensim==3.5.0 \
         autopep8
-elif [ "${DEVICE_TYPE}" == "cpu" ]; then 
+elif [ "${DEVICE}" == "cpu" ]; then 
 # ==================================================================
 # conda package install
 # ------------------------------------------------------------------

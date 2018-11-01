@@ -7,6 +7,8 @@
 ARG DEVICE_TYPE=gpu
 FROM sorididim11/ac52-lab:$DEVICE_TYPE
 
+ENV DEVICE=${DEVICE_TYPE}
+
 USER root
 
 RUN apt-get update --fix-missing && DEBIAN_FRONTEND=noninteractive \
