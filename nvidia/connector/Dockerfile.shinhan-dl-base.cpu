@@ -120,8 +120,8 @@ RUN mkdir /home/$NB_USER/notebooks && \
     fix-permissions /home/$NB_USER
 WORKDIR /home/$NB_USER
 
-RUN echo "export LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib" >> /home/$NB_USER/.bashrc && \
-    echo "export PATH $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc
+RUN echo "export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib" >> /home/$NB_USER/.bashrc && \
+    echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc
 USER root
 COPY entrypoint.sh /usr/local/bin/
 
