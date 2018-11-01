@@ -118,7 +118,9 @@ RUN mkdir /home/$NB_USER/notebooks && \
 WORKDIR /home/$NB_USER
 
 USER root
-ENTRYPOINT [ "/usr/bin/tini", "--"]
+COPY entrypoint.sh /usr/local/bin/
+
+ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint.sh"]
 
 USER $NB_UID
 
