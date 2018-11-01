@@ -3,15 +3,19 @@
 
 set -e
 
+ echo "param: $@"
+
 if (( $# != 1 )); then
     echo "Illegal number of parameters"
 fi
 
 
-if (( $1 == "gpu" )); then 
+if [ $1 == "gpu" ]; then 
 # ==================================================================
 # conda package install
 # ------------------------------------------------------------------
+    echo "start to install GPU related pkgs"
+
     conda install --yes --quiet  \
         pytorch==0.4.0 \
         opencv==3.4.1 \
@@ -51,7 +55,7 @@ if (( $1 == "gpu" )); then
         jpype1==0.6.3 \
         gensim==3.5.0 \
         autopep8
-elif (( $1 == "cpu" )); then 
+elif [ $1 == "cpu" ]; then 
 # ==================================================================
 # conda package install
 # ------------------------------------------------------------------
