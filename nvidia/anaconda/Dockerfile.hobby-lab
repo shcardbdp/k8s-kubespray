@@ -24,7 +24,7 @@ USER $NB_UID
 # conda package install
 # ------------------------------------------------------------------
 COPY install-py-pkgs.sh /tmp/install-py-pkgs.sh
-RUN ["/tmp/install-py-pkgs.sh", "$DEVICE_TYPE"]
+RUN /tmp/install-py-pkgs.sh
 
 
 USER root
