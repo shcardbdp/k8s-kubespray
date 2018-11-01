@@ -53,11 +53,12 @@ RUN pip install --quiet --no-cache-dir \
 
 
 # Set up our notebook config.
-ADD --chown=$NB_UID:$NB_GID jupyter_notebook_config.py /etc/jupyter/
-ADD --chown=$NB_UID:$NB_GID notebooks /home/$NB_USER/notebooks/samples/
-ADD --chown=$NB_UID:$NB_GID run_jupyter.sh /home/$NB_USER
+COPY  jupyter_notebook_config.py /etc/jupyter/
+COPY  notebooks /home/$NB_USER/notebooks/samples/
+COPY  run_jupyter.sh /usr/local/bin/$NB_USER
+RUN fix-permissions /etc/jupyter/ && fix-permissions /home/$NB_USER
 
 EXPOSE 8888 6006
 
 
-CMD [ "/home/$NB_USER/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
+CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
