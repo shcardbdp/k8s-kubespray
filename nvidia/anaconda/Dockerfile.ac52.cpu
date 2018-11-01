@@ -7,10 +7,9 @@
 
 FROM sorididim11/shinhan-dl-base:cpu
 
-
-
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH=/opt/conda/bin:$PATH
+ENV SHELL=/bin/bash
 
 USER $NB_UID
 # anaconda3 install
