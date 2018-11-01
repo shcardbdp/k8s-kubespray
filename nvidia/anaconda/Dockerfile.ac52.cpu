@@ -32,7 +32,6 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
-RUN echo "whoami user: $NB_USER , $HOME "
 # ==================================================================
 # Hive/impala, odbc connector
 # ------------------------------------------------------------------
