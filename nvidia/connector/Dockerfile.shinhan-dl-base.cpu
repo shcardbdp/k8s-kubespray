@@ -58,8 +58,6 @@ ENV PATH $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH
 ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib 
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so 
 
-RUN echo "/usr/lib/x86_64-linux-gnu\n${ORACLE_HOME}/lib " >> /etc/ld.so.conf
-
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
 COPY cloudera/ /data/
@@ -122,6 +120,8 @@ RUN mkdir /home/$NB_USER/notebooks && \
     fix-permissions /home/$NB_USER
 WORKDIR /home/$NB_USER
 
+RUN echo "export LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib" >> /home/$NB_USER/.bashrc && \
+    echo "export PATH $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc
 USER root
 COPY entrypoint.sh /usr/local/bin/
 
