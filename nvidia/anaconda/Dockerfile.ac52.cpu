@@ -51,7 +51,7 @@ RUN pip install --quiet --no-cache-dir \
         impala \
         pyodbc
 
-USER $NB_UID
+USER root
 
 # Set up our notebook config.
 COPY  jupyter_notebook_config.py /etc/jupyter/
