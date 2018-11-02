@@ -82,7 +82,7 @@ RUN  apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
 # ==================================================================
 # Hive JDBC CLI client
 # ------------------------------------------------------------------
-RUN chmod 755 /usr/local/bin/hive-cli 
+RUN chmod 755 /usr/local/bin/hive-cli && chmod 777 /etc/datalake.properties
 # ==================================================================
 # Oracle sqlplus, odbc/jdbc
 # ------------------------------------------------------------------
@@ -111,7 +111,6 @@ RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
     mkdir -p $CONDA_DIR && \
     chown $NB_USER:$NB_GID $CONDA_DIR && \
     chmod g+w /etc/passwd /etc/group && \
-    chown $NB_USER:$NB_GID /etc/datalake.properties && \
     rm -rf /home/$NB_USER/.rpmdb && \
     fix-permissions $CONDA_DIR  && \
     fix-permissions $HOME
