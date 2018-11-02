@@ -129,7 +129,7 @@ RUN mkdir /home/$NB_USER/notebooks && \
 
 
 USER root
-WORKDIR $HOME
+WORKDIR /home/$NB_USER
 COPY entrypoint.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint.sh"]
 
