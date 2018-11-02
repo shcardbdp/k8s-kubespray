@@ -48,7 +48,7 @@ RUN pip install --quiet --no-cache-dir \
         thriftpy \
         PyHive \
         impala \
-        pyodbc
+        pyodbc \
 
 USER root
 
@@ -57,7 +57,9 @@ COPY  jupyter_notebook_config.py /etc/jupyter/
 COPY  notebooks /home/$NB_USER/notebooks/samples/
 COPY  run_jupyter.sh /usr/local/bin/
 RUN chown -R $NB_USER:$NB_UID /home/$NB_USER/notebooks/samples && \
-    fix-permissions /etc/jupyter/ && fix-permissions /home/$NB_USER/notebooks/samples
+    fix-permissions /etc/jupyter/ && fix-permissions /home/$NB_USER/notebooks/samples && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER    
 
 EXPOSE 8888 6006
 
