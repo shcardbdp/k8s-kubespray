@@ -32,7 +32,6 @@ run-hooks () {
     done
 }
 
-run-hooks /usr/local/bin/start-notebook.d
 
 # Handle special flags if we're root
 if [ $(id -u) == 0 ] ; then
