@@ -48,9 +48,7 @@ if [ $1 == "gpu" ]; then
 # pip package install
 # ------------------------------------------------------------------
     pip install --upgrade pip && \
-    pip install --quiet --no-cache-dir \
-        mxnet-cu90==1.2.0 \ 
-        konlpy==0.4.3 \
+    pip install --quiet --no-cache-dir mxnet-cu90==1.2.0 konlpy==0.4.3 \
         fasttext==0.8.3 \
         xgboost==0.72.1 \
         jpype1==0.6.3 \
@@ -87,9 +85,7 @@ elif [ $1 == "cpu" ]; then
 # pip package install
 # ------------------------------------------------------------------
     pip install --upgrade pip && \
-    pip install --quiet --no-cache-dir \
-        mxnet==1.2.0 \ 
-        konlpy==0.4.3 \
+    pip install --quiet --no-cache-dir mxnet==1.2.0 konlpy==0.4.3 \
         fasttext==0.8.3 \
         xgboost==0.72.1 \
         jpype1==0.6.3 \
