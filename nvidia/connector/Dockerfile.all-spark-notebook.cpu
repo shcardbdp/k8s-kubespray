@@ -1,34 +1,6 @@
 FROM jupyter/all-spark-notebook
 
 
-
-RUN conda install --yes --quiet  \
-        thrift \
-        thrift_sasl \
-        && \
-    conda install --yes -c r \
-        r-essentials \
-        r-acepack \
-        r-aer \
-        r-afex \
-        && \
-    conda clean -tipsy
-
-RUN pip install --quiet --no-cache-dir \
-        thriftpy \
-        PyHive \
-        impala \
-        pyodbc
-
-
-RUN R -e "install.packages(c('odbc', \ 
-                             'stargazer', \
-                             'DataExplorer', \
-                             'AER'), \
-                             repos='http://cran.us.r-project.org')"
-
-
-
 USER root
 # ==================================================================
 # Unixodbc & clouder hive/impla odbc 
@@ -75,3 +47,29 @@ ENV ORACLE_HOME     /usr/lib/oracle/12.2/client64
 ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH
 ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
+
+
+RUN conda install --yes --quiet  \
+        thrift \
+        thrift_sasl \
+        && \
+    conda install --yes -c r \
+        r-essentials \
+        r-acepack \
+        r-aer \
+        r-afex \
+        && \
+    conda clean -tipsy
+
+RUN pip install --quiet --no-cache-dir \
+        thriftpy \
+        PyHive \
+        impala \
+        pyodbc
+
+
+RUN R -e "install.packages(c('odbc', \ 
+                             'stargazer', \
+                             'DataExplorer', \
+                             'AER'), \
+                             repos='http://cran.us.r-project.org')"
