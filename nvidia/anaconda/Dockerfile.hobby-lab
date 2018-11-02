@@ -8,7 +8,6 @@ ARG DEVICE_TYPE=gpu
 FROM sorididim11/ac52-lab:$DEVICE_TYPE
 
 ARG DEVICE_TYPE
-ENV DEVICE=${DEVICE_TYPE}
 
 USER root
 
@@ -27,7 +26,7 @@ USER $NB_UID
 # conda package install
 # ------------------------------------------------------------------
 COPY install-py-pkgs.sh /tmp/install-py-pkgs.sh
-RUN /tmp/install-py-pkgs.sh $DEVICE
+RUN /tmp/install-py-pkgs.sh $DEVICE_TYPE
 
 
 USER root
