@@ -125,11 +125,10 @@ RUN mkdir /home/$NB_USER/notebooks && \
     echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc && \
     fix-permissions /home/$NB_USER 
 
-
-
+WORKDIR /home/jovyan
 
 USER root
-WORKDIR /home/jovyan
+
 COPY entrypoint.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint.sh"]
 
