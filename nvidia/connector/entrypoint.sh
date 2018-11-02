@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -e
 
 # Exec the specified command or fall back on bash
