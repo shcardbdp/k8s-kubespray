@@ -1,6 +1,6 @@
-ARG  BASE_IMAGE=nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+ARG  ROOT_IMAGE=nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 
-FROM $BASE_IMAGE
+FROM $ROOT_IMAGE
 
 USER root
 # ==================================================================
@@ -61,6 +61,7 @@ ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
 
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
+COPY datalake.properties /etc/datalake.properties
 COPY cloudera/ /data/
 COPY hivecli.jar /usr/local/bin
 COPY hive-cli /usr/local/bin
@@ -81,7 +82,7 @@ RUN  apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
 # ==================================================================
 # Hive JDBC CLI client
 # ------------------------------------------------------------------
-RUN chmod 755 /usr/local/bin/hive-cli 
+RUN chmod 755 /usr/local/bin/hive-cli && chown $NB_USER:$NB_GID /etc/datalake.properties
 
 # ==================================================================
 # Oracle sqlplus, odbc/jdbc
