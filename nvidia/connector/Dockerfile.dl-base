@@ -102,7 +102,7 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
 ADD fix-permissions /usr/local/bin/fix-permissions
 
 ENV CONDA_DIR=/opt/conda \    
-    NB_USER=jupyter \
+    NB_USER=jovyan \
     HOME=/home/$NB_USER \
     NB_UID=1000 \
     NB_GID=100 

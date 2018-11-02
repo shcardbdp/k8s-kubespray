@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
 
 set -e
 
@@ -14,25 +16,25 @@ if [ $(id -u) == 0 ] ; then
 
     # Handle username change. Since this is cheap, do this unconditionally
     echo "Set username to: $NB_USER"
-    usermod -d /home/$NB_USER -l $NB_USER jupyter
+    usermod -d /home/$NB_USER -l $NB_USER jovyan
 
     # Handle case where provisioned storage does not have the correct permissions by default
     # Ex: default NFS/EFS (no auto-uid/gid)
     if [[ "$CHOWN_HOME" == "1" || "$CHOWN_HOME" == 'yes' ]]; then
         echo "Changing ownership of /home/$NB_USER to $NB_UID:$NB_GID"
-        chown -R $NB_UID:$NB_GID /home/$NB_USER
+        chown $NB_UID:$NB_GID /home/$NB_USER
     fi
 
     # handle home and working directory if the username changed
-    if [[ "$NB_USER" != "jupyter" ]]; then
+    if [[ "$NB_USER" != "jovyan" ]]; then
         # changing username, make sure homedir exists
         # (it could be mounted, and we shouldn't create it if it already exists)
         if [[ ! -e "/home/$NB_USER" ]]; then
             echo "Relocating home dir to /home/$NB_USER"
-            mv /home/jupyter "/home/$NB_USER"
+            mv /home/jovyan "/home/$NB_USER"
         fi
-        # if workdir is in /home/jupyter, cd to /home/$NB_USER
-        if [[ "$PWD/" == "/home/jupyter/"* ]]; then
+        # if workdir is in /home/jovyan, cd to /home/$NB_USER
+        if [[ "$PWD/" == "/home/jovyan/"* ]]; then
             newcwd="/home/$NB_USER/${PWD:13}"
             echo "Setting CWD to $newcwd"
             cd "$newcwd"
@@ -65,7 +67,7 @@ if [ $(id -u) == 0 ] ; then
     echo "Executing the command: $cmd"
     exec sudo -E -H -u $NB_USER PATH=$PATH PYTHONPATH=$PYTHONPATH $cmd
 else
-    if [[ "$NB_UID" == "$(id -u jupyter)" && "$NB_GID" == "$(id -g jupyter)" ]]; then
+    if [[ "$NB_UID" == "$(id -u jovyan)" && "$NB_GID" == "$(id -g jovyan)" ]]; then
         # User is not attempting to override user/group via environment
         # variables, but they could still have overridden the uid/gid that
         # container runs as. Check that the user has an entry in the passwd
@@ -75,14 +77,14 @@ else
 	if [[ "$STATUS" != "0" ]]; then
             if [[ -w /etc/passwd ]]; then
                 echo "Adding passwd file entry for $(id -u)"
-                cat /etc/passwd | sed -e "s/^jupyter:/nayvoj:/" > /tmp/passwd
-                echo "jupyter:x:$(id -u):$(id -g):,,,:/home/jupyter:/bin/bash" >> /tmp/passwd
+                cat /etc/passwd | sed -e "s/^jovyan:/nayvoj:/" > /tmp/passwd
+                echo "jovyan:x:$(id -u):$(id -g):,,,:/home/jovyan:/bin/bash" >> /tmp/passwd
                 cat /tmp/passwd > /etc/passwd
                 rm /tmp/passwd
                 id -G -n 2>/dev/null | grep -q -w $(id -u) || STATUS=$? && true
                 if [[ "$STATUS" != "0" && "$(id -g)" == "0" ]]; then
                     echo "Adding group file entry for $(id -u)"
-                    echo "jupyter:x:$(id -u):" >> /etc/group
+                    echo "jovyan:x:$(id -u):" >> /etc/group
                 fi
             else
                 echo 'Container must be run with group root to update passwd file'
@@ -90,7 +92,7 @@ else
         fi
 
         # Warn if the user isn't going to be able to write files to $HOME.
-        if [[ ! -w /home/jupyter ]]; then
+        if [[ ! -w /home/jovyan ]]; then
             echo 'Container must be run with group users to update files'
         fi
     else
