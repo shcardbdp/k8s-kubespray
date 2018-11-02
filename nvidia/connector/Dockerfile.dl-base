@@ -106,7 +106,7 @@ ENV CONDA_DIR=/opt/conda \
     NB_USER=jupyter \
     HOME=/home/jupyter \
     NB_UID=1000 \
-    NB_GID=1000 
+    NB_GID=100 
 
 RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
     mkdir -p $CONDA_DIR && \

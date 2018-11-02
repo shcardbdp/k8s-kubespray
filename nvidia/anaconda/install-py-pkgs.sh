@@ -4,8 +4,6 @@
 
 set -e
 
-echo "param: $1"
-
 if (( $# != 1 )); then
     echo "Illegal number of parameters"
 fi
