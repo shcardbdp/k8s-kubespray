@@ -103,7 +103,7 @@ ADD fix-permissions /usr/local/bin/fix-permissions
 
 ENV CONDA_DIR=/opt/conda \    
     NB_USER=jovyan \
-    HOME=/home/$NB_USER \
+    HOME=/home/jovyan \
     NB_UID=1000 \
     NB_GID=100 
 
@@ -125,10 +125,11 @@ RUN mkdir /home/$NB_USER/notebooks && \
     echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc && \
     fix-permissions /home/$NB_USER 
 
-WORKDIR /home/jovyan
+
+
 
 USER root
-
+WORKDIR /home/$NB_USER
 COPY entrypoint.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint.sh"]
 
