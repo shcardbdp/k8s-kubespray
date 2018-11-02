@@ -82,8 +82,7 @@ RUN  apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
 # ==================================================================
 # Hive JDBC CLI client
 # ------------------------------------------------------------------
-RUN chmod 755 /usr/local/bin/hive-cli && chown $NB_USER:$NB_GID /etc/datalake.properties
-
+RUN chmod 755 /usr/local/bin/hive-cli 
 # ==================================================================
 # Oracle sqlplus, odbc/jdbc
 # ------------------------------------------------------------------
@@ -92,8 +91,9 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
     alien -i /data/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm && \
     alien -i /data/oracle-instantclient12.2-odbc-12.2.0.1.0-2.x86_64.rpm && \
     alien -i /data/oracle-instantclient12.2-jdbc-12.2.0.1.0-1.x86_64.rpm && \
-    rm -rf /home/$NB_USER/.rpmdb && \
+    
     cp /usr/lib/oracle/12.2/client64/lib/ojdbc8.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
+
 
 
 # ==================================================================
@@ -104,7 +104,7 @@ ADD fix-permissions /usr/local/bin/fix-permissions
 
 ENV CONDA_DIR=/opt/conda \    
     NB_USER=jupyter \
-    HOME=/home/jupyter \
+    HOME=/home/$NB_USER \
     NB_UID=1000 \
     NB_GID=100 
 
@@ -112,8 +112,10 @@ RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
     mkdir -p $CONDA_DIR && \
     chown $NB_USER:$NB_GID $CONDA_DIR && \
     chmod g+w /etc/passwd /etc/group && \
-    fix-permissions $HOME && \
-    fix-permissions $CONDA_DIR
+    chown $NB_USER:$NB_GID /etc/datalake.properties && \
+    rm -rf /home/$NB_USER/.rpmdb && \
+    fix-permissions $CONDA_DIR  && \
+    fix-permissions $HOME
 
 # Setup work directory for backward-compatibility
 USER $NB_UID
@@ -121,15 +123,14 @@ USER $NB_UID
 RUN mkdir /home/$NB_USER/notebooks && \
     cp $ORACLE_HOME/network/admin/tnsnames.ora /home/$NB_USER/.tnsnames.ora && \
     cp /etc/odbc.ini /home/$NB_USER/.odbc.ini && \
-    fix-permissions /home/$NB_USER && \
     echo "export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib" >> /home/$NB_USER/.bashrc && \
-    echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc
+    echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc && \
+    fix-permissions /home/$NB_USER 
 
 
-WORKDIR /home/$NB_USER
 
 USER root
-
+WORKDIR $HOME
 COPY entrypoint.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint.sh"]
 
