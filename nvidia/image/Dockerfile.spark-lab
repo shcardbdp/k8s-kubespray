@@ -80,8 +80,6 @@ RUN R -e "install.packages(c('odbc', \
                              'AER'), \
                              repos='http://cran.us.r-project.org')"
 
-RUN fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
 
 USER root
 # Set up our notebook config.
@@ -89,7 +87,9 @@ COPY  jupyter_notebook_config.py /etc/jupyter/
 COPY  notebooks /home/$NB_USER/notebooks/samples/
 COPY  run_jupyter.sh /usr/local/bin/
 RUN chown -R $NB_USER:$NB_UID /home/$NB_USER/notebooks/samples && \
-    fix-permissions /etc/jupyter/ && fix-permissions /home/$NB_USER/notebooks/samples
+    fix-permissions /etc/jupyter/ && fix-permissions /home/$NB_USER/notebooks/samples && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
 
 CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
 
