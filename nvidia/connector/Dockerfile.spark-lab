@@ -2,6 +2,9 @@ FROM jupyter/all-spark-notebook
 
 
 USER root
+
+ADD fix-permissions /usr/local/bin/fix-permissions
+
 # ==================================================================
 # Unixodbc & clouder hive/impla odbc 
 # ------------------------------------------------------------------
@@ -22,6 +25,7 @@ RUN apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
     rm -rf /opt/cloudera/hiveodbc/lib/64/cloudera.impalaodbc.ini && \
     cp /data/cloudera.*.ini /etc/ && \
     cp /data/HiveJDBC41.jar /data/ImpalaJDBC41.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
+    
 
 
 # ==================================================================
@@ -73,3 +77,6 @@ RUN R -e "install.packages(c('odbc', \
                              'DataExplorer', \
                              'AER'), \
                              repos='http://cran.us.r-project.org')"
+
+RUN fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
