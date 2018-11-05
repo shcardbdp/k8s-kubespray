@@ -31,9 +31,9 @@ RUN apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
 # ==================================================================
 # Hive JDBC CLI client
 # ------------------------------------------------------------------
-COPY hivecli.jar /usr/local/bin
-COPY hive-cli /usr/local/bin
-RUN chmod 755 /usr/local/bin/hive-cli 
+COPY jdbc-cli.jar /usr/local/bin
+COPY jdbc-cli /usr/local/bin
+RUN chmod 755 /usr/local/bin/jdbc-cli 
 
 # ==================================================================
 # Oracle sqlplus & odbc extension
