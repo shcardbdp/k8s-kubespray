@@ -38,9 +38,7 @@ if [ $1 == "gpu" ]; then
         pycuda \
         scikits.cuda \
         && \
-    conda clean -tipsy && \
-    ln -s /usr/local/cuda-9.0/lib64/libcurand.so.9.0 /usr/local/cuda-9.0/lib64/libcurand.so.8.0
-
+    conda clean -tipsy 
 
 # ==================================================================
 # pip package install
