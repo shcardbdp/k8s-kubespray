@@ -53,6 +53,8 @@ ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
 
 
+USER $NB_UID
+
 RUN conda install --yes --quiet  \
         thrift \
         thrift_sasl \
@@ -81,6 +83,7 @@ RUN R -e "install.packages(c('odbc', \
 RUN fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
+USER root
 # Set up our notebook config.
 COPY  jupyter_notebook_config.py /etc/jupyter/
 COPY  notebooks /home/$NB_USER/notebooks/samples/
