@@ -80,3 +80,7 @@ RUN R -e "install.packages(c('odbc', \
 
 RUN fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
+
+CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
+
+USER $NB_UID
