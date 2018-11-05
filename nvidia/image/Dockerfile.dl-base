@@ -64,7 +64,7 @@ COPY odbc.ini /etc/odbc.ini
 COPY datalake.properties /etc/datalake.properties
 COPY cloudera/ /data/
 COPY hivecli.jar /usr/local/bin
-COPY hive-cli /usr/local/bin
+COPY jdbc-cli /usr/local/bin
 COPY oracle/ /data/
 COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
 
@@ -82,7 +82,7 @@ RUN  apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
 # ==================================================================
 # Hive JDBC CLI client
 # ------------------------------------------------------------------
-RUN chmod 755 /usr/local/bin/hive-cli && chmod 777 /etc/datalake.properties
+RUN chmod 755 /usr/local/bin/jdbc-cli && chmod 777 /etc/datalake.properties
 # ==================================================================
 # Oracle sqlplus, odbc/jdbc
 # ------------------------------------------------------------------

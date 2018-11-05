@@ -6,4 +6,4 @@ if (( $# != 4 )); then
     echo "Illegal number of parameters"
 fi
 
-java -jar /usr/local/bin/hivecli.jar $1 $2 $3 $4
+java -jar /usr/local/bin/jdbc-cli.jar $1 $2 $3 $4
