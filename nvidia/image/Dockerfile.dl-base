@@ -63,7 +63,7 @@ COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
 COPY datalake.properties /etc/datalake.properties
 COPY cloudera/ /data/
-COPY hivecli.jar /usr/local/bin
+COPY jdbc-cli.jar /usr/local/bin
 COPY jdbc-cli /usr/local/bin
 COPY oracle/ /data/
 COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
