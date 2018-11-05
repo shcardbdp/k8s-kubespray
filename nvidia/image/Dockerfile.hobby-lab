@@ -33,7 +33,7 @@ RUN /tmp/install-py-pkgs.sh $DEVICE_TYPE && \
 
 USER root
 
-RUN  if test $DEVICE_TYPE == "gpu"; then ln -s /usr/local/cuda-9.0/lib64/libcurand.so.9.0 /usr/local/cuda-9.0/lib64/libcurand.so.8.0 ; fi
+RUN  if [ $DEVICE_TYPE == "gpu" ]; then ln -s /usr/local/cuda-9.0/lib64/libcurand.so.9.0 /usr/local/cuda-9.0/lib64/libcurand.so.8.0 ; fi
 # ==================================================================
 # mecab analyzer from bitbucket
 # ------------------------------------------------------------------
