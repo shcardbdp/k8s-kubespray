@@ -5,4 +5,4 @@ COPY datalake.properties /etc/datalake.properties
 
 RUN chmod 755 /usr/local/bin/jdbc-cli && chmod 777 /etc/datalake.properties
 
-ENTRYPOINT [ "jdbc-cli" ]
+ENTRYPOINT [ "/usr/local/bin/jdbc-cli" ]
