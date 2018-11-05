@@ -2,9 +2,15 @@
   vars_files:
     - ./users.yml
   tasks:
+    - name: Ensure group "hive" exists
+      group:
+        gid: 3000
+        name: hive
+        state: present
     - name: adding several users
       user:
         name: "{{ item.name }}"
+        uid: "{{ item.uid }}"
         state: present
         comment: "{{ item.comment }}"
         password: "{{ item.password }}"

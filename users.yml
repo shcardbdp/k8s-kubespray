@@ -1,9 +1,11 @@
 users:
   - name: shd_001
+    uid: 3001
     comment: k8s user
     groups: hive
     password: Shd_001!
   - name: shd_002
+    uid: 3002
     comment: k8s user
     groups: hive
     password: Shd_002!
