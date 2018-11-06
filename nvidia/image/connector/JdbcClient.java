@@ -64,7 +64,7 @@ public class JdbcClient {
 			input.close();
 		}
 		
-		outDir = (outDir != null) ? outDir + "/" : "./"
+		outDir = (outDir != null) ? (outDir + "/") : "./";
 		System.out.println("[JdbcClient] dirver : " + driverName);
 		System.out.println("[JdbcClient] url : " + url);
 		System.out.println("[JdbcClient] username : " + username);
