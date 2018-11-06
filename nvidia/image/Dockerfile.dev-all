@@ -8,7 +8,7 @@ ADD fix-permissions /usr/local/bin/fix-permissions
 # ==================================================================
 # Unixodbc & clouder hive/impla odbc 
 # ------------------------------------------------------------------
-RUN  apt-get update && apt-get install -y wget vim openjdk-8-jdk unixodbc unixodbc-dev alien libaio1 libaio-dev && \
+RUN  apt-get update && apt-get install -y locales wget vim openjdk-8-jdk unixodbc unixodbc-dev alien libaio1 libaio-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
