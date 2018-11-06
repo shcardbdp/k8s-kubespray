@@ -90,7 +90,12 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
     alien -i /data/oracle-instantclient12.2-jdbc-12.2.0.1.0-1.x86_64.rpm && \
     cp /usr/lib/oracle/12.2/client64/lib/ojdbc8.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
 
-
+# ==================================================================
+# Hive JDBC CLI client
+# ------------------------------------------------------------------
+RUN javac /etc/datalake/JdbcClient.java && \
+    chmod 755 /usr/local/bin/jdbc-cli && \
+    chmod -R 777 /etc/datalake
 
 # ==================================================================
 # User, Home, UID/GID
@@ -112,14 +117,6 @@ RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
     fix-permissions $CONDA_DIR  && \
     fix-permissions $HOME
 
-# ==================================================================
-# Hive JDBC CLI client
-# ------------------------------------------------------------------
-RUN javac /etc/datalake/JdbcClient.java && \    
-    chmod 755 /usr/local/bin/jdbc-cli && \
-    fix-permissions /etc/datalake
-
-    
 # Setup work directory for backward-compatibility
 USER $NB_UID
 
