@@ -1,5 +1,5 @@
 FROM openjdk:8-jdk AS builder
-COPY connector/JdbcClient.java /etc/datalake
+COPY connector/JdbcClient.java /etc/datalake/
 
 RUN javac /etc/datalake/JdbcClient.java
 
