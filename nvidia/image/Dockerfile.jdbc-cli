@@ -6,8 +6,8 @@ RUN javac /etc/datalake/JdbcClient.java
 
 FROM openjdk:8-jre
 
-COPY --from=builder /etc/datalake/JdbcClient.java /etc/datalake
-COPY --from=builder /etc/datalake/JdbcClient.class /etc/datalake
+COPY --from=builder /etc/datalake/JdbcClient.java /etc/datalake/
+COPY --from=builder /etc/datalake/JdbcClient.class /etc/datalake/
 COPY connector/jdbc-cli /usr/local/bin
 COPY connector/datalake.properties /etc/datalake/datalake.properties
 
