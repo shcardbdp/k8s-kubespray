@@ -45,7 +45,7 @@ COPY jdbc-cli.jar /usr/local/bin
 COPY jdbc-cli /usr/local/bin
 RUN chmod 755 /usr/local/bin/jdbc-cli 
 COPY datalake.properties /etc/datalake/datalake.properties
-COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
+
 # ==================================================================
 # Oracle sqlplus & odbc extension
 # ------------------------------------------------------------------
@@ -63,6 +63,7 @@ ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH
 ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
 
+COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
 
 # ==================================================================
 # User, Home, UID/GID
