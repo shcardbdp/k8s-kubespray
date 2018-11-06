@@ -94,7 +94,7 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
 # Hive JDBC CLI client
 # ------------------------------------------------------------------
 RUN javac /etc/datalake/JdbcClient.java && \
-    chown -R $NB_USER:NB_GID /etc/datalake && \
+    chown -R $NB_USER:$NB_GID /etc/datalake && \
     chmod 755 /usr/local/bin/jdbc-cli    
 
 # ==================================================================
