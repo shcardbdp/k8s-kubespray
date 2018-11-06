@@ -14,7 +14,8 @@ if [ $1 == "gpu" ]; then
 # conda package install
 # ------------------------------------------------------------------
     echo "start to install GPU related pkgs"
-
+    ln -s /usr/local/cuda-9.0/lib64/libcurand.so.9.0 /usr/local/cuda-9.0/lib64/libcurand.so.8.0
+    
     conda install --yes --quiet  \
         pytorch==0.4.0 \
         opencv==3.4.1 \
