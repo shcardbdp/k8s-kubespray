@@ -14,4 +14,4 @@ COPY connector/datalake.properties /etc/datalake/datalake.properties
 RUN chmod 755 /usr/local/bin/jdbc-cli && \
     chmod -R 777 /etc/datalake
 
-ENTRYPOINT [ "/usr/local/bin/jdbc-cli"]
+CMD [ "/usr/local/bin/jdbc-cli"]
