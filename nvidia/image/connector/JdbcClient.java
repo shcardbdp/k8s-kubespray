@@ -67,9 +67,8 @@ public class JdbcClient {
 		outDir = (outDir != null) ? (outDir + "/") : "./";
 		System.out.println("[JdbcClient] dirver : " + driverName);
 		System.out.println("[JdbcClient] url : " + url);
-		System.out.println("[JdbcClient] username : " + username);
-		System.out.println("[JdbcClient] password : " + password);
-		System.out.println("[JdbcClient] password : " + outDir);
+		System.out.println("[JdbcClient] username : " + username);		
+		System.out.println("[JdbcClient] outdir : " + outDir);
 
 		try {
 			Class.forName(driverName);
