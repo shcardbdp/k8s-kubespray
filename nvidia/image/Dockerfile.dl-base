@@ -93,6 +93,8 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
 # ==================================================================
 # Hive JDBC CLI client
 # ------------------------------------------------------------------
+ADD fix-permissions /usr/local/bin/fix-permissions
+
 RUN javac /etc/datalake/JdbcClient.java && \    
     chmod 755 /usr/local/bin/jdbc-cli && \
     fix-permissions /etc/datalake
@@ -101,7 +103,7 @@ RUN javac /etc/datalake/JdbcClient.java && \
 # User, Home, UID/GID
 # ------------------------------------------------------------------
 
-ADD fix-permissions /usr/local/bin/fix-permissions
+
 
 ENV CONDA_DIR=/opt/conda \    
     NB_USER=jovyan \
