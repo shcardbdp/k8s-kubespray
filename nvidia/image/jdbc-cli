@@ -34,4 +34,4 @@ echo "q = ${q}"
 echo "o = ${o}"
 
 
-java -jar /usr/local/bin/jdbc-cli.jar $1 $2 $3
+java -jar /usr/local/bin/jdbc-cli.jar ${t} ${q} ${o}
