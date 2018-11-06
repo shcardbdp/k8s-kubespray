@@ -61,7 +61,7 @@ ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
 
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
-COPY datalake.properties /etc/datalake.properties
+COPY datalake.properties /etc/datalake/datalake.properties
 COPY cloudera/ /data/
 COPY jdbc-cli.jar /usr/local/bin
 COPY jdbc-cli /usr/local/bin
