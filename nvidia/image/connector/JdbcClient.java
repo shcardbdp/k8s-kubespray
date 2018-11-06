@@ -52,7 +52,7 @@ public class JdbcClient {
 				url = prop.getProperty("oracle.datasource.url");
 				username = prop.getProperty("oracle.datasource.username");
 				password = prop.getProperty("oracle.datasource.password");
-				outDir = prop.getProperty("hive.datasource.outdir");
+				outDir = prop.getProperty("oracle.datasource.outdir");
 				break;
 
 			default:
