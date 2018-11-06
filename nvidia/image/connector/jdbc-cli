@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -e
+
+#!/bin/bash
+
+usage() { echo "Usage: $0 [-t <oracle|hive>] [-q <query>] [-o <path for outfile>]" 1>&2; exit 1; }
+
+while getopts ":t:q:o:" flag; do
+    case "${flag}" in
+        t)
+            t=${OPTARG}
+            ((s == 45 || s == 90)) || usage
+            ;;
+        q)
+            q=${OPTARG}
+            ;;
+        o)
+            o=${OPTARG}
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [ -z "${t}" ] || [ -z "${q}" ]; then
+    usage
+fi
+
+echo "t = ${t}"
+echo "q = ${q}"
+echo "o = ${o}"
+
+
+java -jar /etc/datalake/JdbcClient.jar ${t} ${q} ${o}
