@@ -21,8 +21,6 @@ import java.util.Properties;
 public class JdbcClient {
 
 	public static void main(String[] args) throws SQLException, IOException {
-		SpringApplication.run(JdbcClientApplication.class, args);
-
 		// java -jar JdbcClient-1.0.0.jar <type:oracle/hive> <sql> <filename>
 		String type = args[0];
 		String sql = args[1];
