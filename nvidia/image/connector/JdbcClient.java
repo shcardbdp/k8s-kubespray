@@ -69,6 +69,7 @@ public class JdbcClient {
 		System.out.println("[JdbcClient] url : " + url);
 		System.out.println("[JdbcClient] username : " + username);
 		System.out.println("[JdbcClient] password : " + password);
+		System.out.println("[JdbcClient] password : " + outDir);
 
 		try {
 			Class.forName(driverName);
@@ -85,7 +86,7 @@ public class JdbcClient {
 		
 		FileOutputStream fos = null;
 		try {
-			fos = new FileOutputStream(new File( outdir +filename), false);
+			fos = new FileOutputStream(new File( outDir +filename), false);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
