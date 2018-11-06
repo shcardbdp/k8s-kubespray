@@ -24,7 +24,7 @@ while getopts ":t:q:o:" flag; do
 done
 shift $((OPTIND-1))
 
-if [ -z "${t}" ] || [ -z "${q}" ]; then
+if [ -z "${t}" ] || [ -z "${q}" ] || [ -z "${o}" ]; then
     usage
 fi
 
