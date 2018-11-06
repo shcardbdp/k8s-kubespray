@@ -18,7 +18,6 @@ import java.util.Properties;
 
 
 
-@SpringBootApplication
 public class JdbcClient {
 
 	public static void main(String[] args) throws SQLException, IOException {
