@@ -4,16 +4,19 @@ set -e
 
 #!/bin/bash
 
-usage() { echo "Usage: $0 [-s <45|90>] [-p <string>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-t <oracle|hive>] [-q <query>] [-o <path for outfile>]" 1>&2; exit 1; }
 
-while getopts ":s:q:" o; do
-    case "${o}" in
-        s)
-            s=${OPTARG}
+while getopts ":t:q:o:" flag; do
+    case "${flag}" in
+        t)
+            t=${OPTARG}
             ((s == 45 || s == 90)) || usage
             ;;
-        p)
-            p=${OPTARG}
+        q)
+            q=${OPTARG}
+            ;;
+        o)
+            o=${OPTARG}
             ;;
         *)
             usage
@@ -22,12 +25,13 @@ while getopts ":s:q:" o; do
 done
 shift $((OPTIND-1))
 
-if [ -z "${s}" ] || [ -z "${p}" ]; then
+if [ -z "${t}" ] || [ -z "${q}" ]; then
     usage
 fi
 
-echo "s = ${s}"
-echo "p = ${p}"
+echo "t = ${t}"
+echo "q = ${q}"
+echo "o = ${o}"
 
 
 java -jar /usr/local/bin/jdbc-cli.jar $1 $2 $3
