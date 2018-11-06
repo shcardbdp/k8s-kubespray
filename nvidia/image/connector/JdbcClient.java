@@ -35,6 +35,7 @@ public class JdbcClient {
 		String url = null;
 		String username = null;
 		String password = null;
+		String outDir = null;
 		try {
 			input = new FileInputStream("/etc/datalake/datalake.properties");
 			prop.load(input);
@@ -44,12 +45,14 @@ public class JdbcClient {
 				url = prop.getProperty("hive.datasource.url");
 				username = prop.getProperty("hive.datasource.username");
 				password = prop.getProperty("hive.datasource.password");
+				outDir = prop.getProperty("hive.datasource.outdir");
 				break;
 			case "oracle":
 				driverName = prop.getProperty("oracle.datasource.driver");
 				url = prop.getProperty("oracle.datasource.url");
 				username = prop.getProperty("oracle.datasource.username");
 				password = prop.getProperty("oracle.datasource.password");
+				outDir = prop.getProperty("hive.datasource.outdir");
 				break;
 
 			default:
@@ -61,6 +64,7 @@ public class JdbcClient {
 			input.close();
 		}
 		
+		outDir = (outDir != null) ? outDir + "/" : "./"
 		System.out.println("[JdbcClient] dirver : " + driverName);
 		System.out.println("[JdbcClient] url : " + url);
 		System.out.println("[JdbcClient] username : " + username);
@@ -81,7 +85,7 @@ public class JdbcClient {
 		
 		FileOutputStream fos = null;
 		try {
-			fos = new FileOutputStream(new File("./"+filename), false);
+			fos = new FileOutputStream(new File( outdir +filename), false);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

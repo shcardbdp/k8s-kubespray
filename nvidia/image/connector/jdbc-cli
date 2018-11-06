@@ -10,7 +10,6 @@ while getopts ":t:q:o:" flag; do
     case "${flag}" in
         t)
             t=${OPTARG}
-            ((s == 45 || s == 90)) || usage
             ;;
         q)
             q=${OPTARG}
