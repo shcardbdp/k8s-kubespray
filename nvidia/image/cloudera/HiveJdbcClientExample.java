@@ -11,7 +11,7 @@ public class HiveJdbcClientExample {
          * Thrift server we should run below command in terminal
          * hive --service hiveserver &
          */
-        private static String driverName = "com.cloudera.hive.jdbc4.HS2Driver";
+        private static String driverName = "com.cloudera.hive.jdbc41.HS2Driver";
 
         public static void main(String[] args) throws SQLException {
                 try {
