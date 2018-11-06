@@ -1,4 +1,5 @@
-FROM ufoym/deepo:all-py36-jupyter
+ARG  ROOT_IMAGE=ufoym/deepo:all-py36-jupyter
+FROM $ROOT_IMAGE
 
 
 USER root
