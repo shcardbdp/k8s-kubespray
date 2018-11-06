@@ -12,6 +12,16 @@ RUN  apt-get update && apt-get install -y wget vim openjdk-8-jdk unixodbc unixod
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen
+
+RUN  TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
+    curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
+    dpkg -i tini.deb && \
+    rm tini.deb && \
+    apt-get clean
+
+
 COPY cloudera/ /data/
 COPY oracle/ /data/
 COPY odbcinst.ini /etc/odbcinst.ini
@@ -53,5 +63,42 @@ ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
 
 
+# ==================================================================
+# User, Home, UID/GID
+# ------------------------------------------------------------------
 
+
+ENV CONDA_DIR=/opt/conda \    
+    NB_USER=jovyan \
+    HOME=/home/jovyan \
+    NB_UID=1000 \
+    NB_GID=100 
+
+RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+    mkdir -p $CONDA_DIR && \
+    chown $NB_USER:$NB_GID $CONDA_DIR && \
+    chmod g+w /etc/passwd /etc/group && \
+    rm -rf /home/$NB_USER/.rpmdb && \
+    fix-permissions $CONDA_DIR  && \
+    fix-permissions $HOME
+
+# Setup work directory for backward-compatibility
+USER $NB_UID
+
+RUN mkdir /home/$NB_USER/notebooks && \
+    cp $ORACLE_HOME/network/admin/tnsnames.ora /home/$NB_USER/.tnsnames.ora && \
+    cp /etc/odbc.ini /home/$NB_USER/.odbc.ini && \
+    echo "export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib" >> /home/$NB_USER/.bashrc && \
+    echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc && \
+    fix-permissions /home/$NB_USER 
+
+
+
+
+USER root
+WORKDIR /home/$NB_USER
+COPY entrypoint.sh /usr/local/bin/
+ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint.sh"]
+
+USER $NB_UID
 #RUN fix-permissions /home/$NB_USER
