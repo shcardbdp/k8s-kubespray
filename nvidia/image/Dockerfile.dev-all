@@ -51,8 +51,6 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
     cp /usr/lib/oracle/12.2/client64/lib/ojdbc8.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext
 
 
-
-
 ENV JAVA_HOME       /usr/lib/jvm/java-8-openjdk-amd64
 ENV ORACLE_HOME     /usr/lib/oracle/12.2/client64
 ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH
@@ -72,7 +70,7 @@ RUN javac /etc/datalake/JdbcClient.java && \
     chmod 755 /usr/local/bin/jdbc-cli && \
     chmod 777 /etc/datalake/datalake.properties && \
     chmod 777 /etc/datalake/JdbcClient.java
-    
+
 # ==================================================================
 # User, Home, UID/GID
 # ------------------------------------------------------------------
@@ -98,11 +96,9 @@ USER $NB_UID
 RUN mkdir /home/$NB_USER/notebooks && \
     cp $ORACLE_HOME/network/admin/tnsnames.ora /home/$NB_USER/.tnsnames.ora && \
     cp /etc/odbc.ini /home/$NB_USER/.odbc.ini && \
-    echo "export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib" >> /home/$NB_USER/.bashrc && \
+    echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib" >> /home/$NB_USER/.bashrc && \
     echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc && \
-    fix-permissions /home/$NB_USER 
-
-
+    fix-permissions /home/$NB_USER     
 
 
 USER root
