@@ -2,8 +2,32 @@
 
 set -e
 
-if (( $# != 3 )); then
-    echo "Illegal number of parameters - type, sql, out-file"
+#!/bin/bash
+
+usage() { echo "Usage: $0 [-s <45|90>] [-p <string>]" 1>&2; exit 1; }
+
+while getopts ":s:q:" o; do
+    case "${o}" in
+        s)
+            s=${OPTARG}
+            ((s == 45 || s == 90)) || usage
+            ;;
+        p)
+            p=${OPTARG}
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [ -z "${s}" ] || [ -z "${p}" ]; then
+    usage
 fi
+
+echo "s = ${s}"
+echo "p = ${p}"
+
 
 java -jar /usr/local/bin/jdbc-cli.jar $1 $2 $3
