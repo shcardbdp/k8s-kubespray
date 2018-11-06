@@ -1,14 +1,17 @@
+FROM openjdk:8-jdk AS builder
+COPY connector/JdbcClient.java /etc/datalake
+
+RUN javac /etc/datalake/JdbcClient.java
+
+
 FROM openjdk:8-jre
 
-# ==================================================================
-#  JDBC CLI client
-# ------------------------------------------------------------------
 COPY connector/datalake.properties /etc/datalake/datalake.properties
-COPY connector/JdbcClient.java /etc/datalake
+COPY --from=builder /etc/datalake/JdbcClient.java /etc/datalake
+COPY --from=builder /etc/datalake/JdbcClient.class /etc/datalake
 COPY connector/jdbc-cli /usr/local/bin
 
-RUN javac /etc/datalake/JdbcClient.java && \
-    chmod 755 /usr/local/bin/jdbc-cli && \
+RUN chmod 755 /usr/local/bin/jdbc-cli && \
     chmod 777 /etc/datalake/datalake.properties && \
     chmod 777 /etc/datalake/JdbcClient.java
 
