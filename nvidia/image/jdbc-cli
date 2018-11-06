@@ -2,8 +2,8 @@
 
 set -e
 
-if (( $# != 4 )); then
-    echo "Illegal number of parameters"
+if (( $# != 3 )); then
+    echo "Illegal number of parameters - type, sql, out-file"
 fi
 
-java -jar /usr/local/bin/jdbc-cli.jar $1 $2 $3 $4
+java -jar /usr/local/bin/jdbc-cli.jar $1 $2 $3
