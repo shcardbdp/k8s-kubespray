@@ -33,4 +33,4 @@ echo "q = ${q}"
 echo "o = ${o}"
 
 
-java -cp /etc/datalake JdbcClient "${t}" "${q}" "${o}"
+java -cp /usr/local/bin JdbcClient "${t}" "${q}" "${o}"

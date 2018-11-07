@@ -63,7 +63,7 @@ COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
 COPY cloudera/ /data/
 COPY connector/datalake.properties /etc/datalake/datalake.properties
-COPY connector/JdbcClient.java /etc/datalake
+COPY connector/JdbcClient.java /usr/local/bin/
 COPY connector/jdbc-cli /usr/local/bin
 COPY oracle/ /data/
 COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
@@ -93,7 +93,7 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
 # ==================================================================
 # Hive JDBC CLI client
 # ------------------------------------------------------------------
-RUN javac /etc/datalake/JdbcClient.java && \
+RUN javac /usr/local/bin/JdbcClient.java && \
     chmod 755 /usr/local/bin/jdbc-cli && \
     chmod -R 777 /etc/datalake
 
