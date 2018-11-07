@@ -64,14 +64,12 @@ COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
 #  JDBC CLI client
 # ------------------------------------------------------------------
 COPY connector/datalake.properties /etc/datalake/datalake.properties
-COPY connector/JdbcClient.java /etc/datalake
+COPY connector/JdbcClient.java /usr/local/bin/
 COPY connector/jdbc-cli /usr/local/bin
 
-RUN javac /etc/datalake/JdbcClient.java && \
+RUN javac /usr/local/bin/JdbcClient.java && \
     chmod 755 /usr/local/bin/jdbc-cli && \
-    chmod 777 /etc/datalake/datalake.properties && \
-    chmod 777 /etc/datalake/JdbcClient.java
-
+    chmod 777 /etc/datalake/datalake.properties
 # ==================================================================
 # User, Home, UID/GID
 # ------------------------------------------------------------------

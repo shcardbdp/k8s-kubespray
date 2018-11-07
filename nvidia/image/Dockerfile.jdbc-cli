@@ -13,6 +13,6 @@ COPY connector/datalake.properties /etc/datalake/datalake.properties
 COPY jars/ $JAVA_HOME/lib/ext/
 
 RUN chmod 755 /usr/local/bin/jdbc-cli && \
-    chmod -R 777 /etc/datalake
+    chmod -R 777 /etc/datalake 
 
 CMD [ "/usr/local/bin/jdbc-cli"]
