@@ -104,6 +104,10 @@ RUN mkdir /home/$NB_USER/notebooks && \
 
 USER root
 
+COPY  jupyter_notebook_config.py /etc/jupyter/
+COPY  notebooks /home/$NB_USER/notebooks/samples/
+COPY  run_jupyter.sh /usr/local/bin/
+
 WORKDIR /home/$NB_USER
 COPY entrypoint.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint.sh"]
