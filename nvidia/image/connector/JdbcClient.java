@@ -25,9 +25,12 @@ public class JdbcClient {
 		String type = args[0];
 		String sql = args[1];
 		String filename = args[2];
+		String delimiter  = args[3];
+
 		System.out.println("[JdbcClient] type : " + type);
 		System.out.println("[JdbcClient] sql : " + sql);
 		System.out.println("[JdbcClient] filename : " + filename);
+		System.out.println("[JdbcClient] delimiter : " + delimiter);
 		
 		Properties prop =new Properties();
 		InputStream input = null;
@@ -103,7 +106,7 @@ public class JdbcClient {
 				e.printStackTrace();
 			}
 			if (j < ncols)
-				out.append(",");
+				out.append(delimiter);
 			else
 				out.append("\r\n");
 		}
@@ -112,7 +115,7 @@ public class JdbcClient {
 			for (int k = 1; k < (ncols + 1); k++) {
 				out.append(result.getString(k));
 				if (k < ncols)
-					out.append(",");
+					out.append(delimiter);
 				else
 					out.append("\r\n");
 			}
@@ -123,6 +126,6 @@ public class JdbcClient {
 		result.close();
 		stmt.close();
 		con.close();
-		System.out.println("[JdbcClient] The End");
+		System.out.println("[JdbcClient] the job is done...");
 	}
 }

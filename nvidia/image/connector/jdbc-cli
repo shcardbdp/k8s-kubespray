@@ -2,8 +2,6 @@
 
 set -e
 
-#!/bin/bash
-
 usage() { echo "Usage: $0 [-t <oracle|hive>] [-q <query>] [-o <path for outfile>]" 1>&2; exit 1; }
 
 while getopts ":t:q:o:" flag; do
