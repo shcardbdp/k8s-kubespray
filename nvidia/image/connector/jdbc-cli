@@ -2,9 +2,9 @@
 
 set -e
 
-usage() { echo "Usage: $0 [-t <oracle|hive>] [-q <query>] [-o <path for outfile>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-t <oracle|hive>] [-q <query> must be in a quote.] [-o <path for outfile>] [-s separator. must be in a quote. default: ,]" 1>&2; exit 1; }
 
-while getopts ":t:q:o:" flag; do
+while getopts ":t:q:o:s:" flag; do
     case "${flag}" in
         t)
             t=${OPTARG}
@@ -14,6 +14,9 @@ while getopts ":t:q:o:" flag; do
             ;;
         o)
             o=${OPTARG}
+            ;;
+        s)
+            s=${OPTARG}
             ;;
         *)
             usage
@@ -26,9 +29,14 @@ if [ -z "${t}" ] || [ -z "${q}" ] || [ -z "${o}" ]; then
     usage
 fi
 
+if [ -z "${s}" ]; then
+  s=","
+fi
+
 echo "t = ${t}"
 echo "q = ${q}"
 echo "o = ${o}"
+echo "s = ${s}"
 
 
-java -cp /usr/local/bin JdbcClient "${t}" "${q}" "${o}"
+java -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -cp /usr/local/bin JdbcClient "${t}" "${q}" "${o}" "${s}"

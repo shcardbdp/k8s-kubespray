@@ -16,23 +16,24 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-
-
 public class JdbcClient {
+	public static long getUsedMemory() {
+		return (Runtime.getRuntime().maxMemory() - Runtime.getRuntime().freeMemory()) / 1024768;
+	}
 
 	public static void main(String[] args) throws SQLException, IOException {
 		// java -jar JdbcClient-1.0.0.jar <type:oracle/hive> <sql> <filename>
 		String type = args[0];
 		String sql = args[1];
 		String filename = args[2];
-		String delimiter  = args[3];
+		String separator = args[3];
 
 		System.out.println("[JdbcClient] type : " + type);
 		System.out.println("[JdbcClient] sql : " + sql);
 		System.out.println("[JdbcClient] filename : " + filename);
-		System.out.println("[JdbcClient] delimiter : " + delimiter);
-		
-		Properties prop =new Properties();
+		System.out.println("[JdbcClient] separator : " + separator);
+
+		Properties prop = new Properties();
 		InputStream input = null;
 		String driverName = null;
 		String url = null;
@@ -66,11 +67,11 @@ public class JdbcClient {
 		} finally {
 			input.close();
 		}
-		
+
 		outDir = (outDir != null) ? (outDir + "/") : "./";
 		System.out.println("[JdbcClient] dirver : " + driverName);
 		System.out.println("[JdbcClient] url : " + url);
-		System.out.println("[JdbcClient] username : " + username);		
+		System.out.println("[JdbcClient] username : " + username);
 		System.out.println("[JdbcClient] outdir : " + outDir);
 
 		try {
@@ -80,52 +81,48 @@ public class JdbcClient {
 		}
 		Connection con = DriverManager.getConnection(url, username, password);
 		Statement stmt = con.createStatement();
-		System.out.println("[JdbcClient] Running : " + sql);
-		
+		System.out.println("[JdbcClient] Running : " + sql + " memory used(MB): " + getUsedMemory());
 		ResultSet result = stmt.executeQuery(sql);
 		int ncols = result.getMetaData().getColumnCount();
 		System.out.println("[JdbcClient] Column Count : " + ncols);
-		
+
 		FileOutputStream fos = null;
-		try {
-			fos = new FileOutputStream(new File( outDir +filename), false);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
 		Writer out = null;
 		try {
+			fos = new FileOutputStream(new File(outDir + filename), false);
 			out = new OutputStreamWriter(new BufferedOutputStream(fos), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
 
-		for (int j = 1; j < (ncols + 1); j++) {
-			try {
+			for (int j = 1; j < (ncols + 1); j++) {
 				out.append(result.getMetaData().getColumnName(j));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if (j < ncols)
-				out.append(delimiter);
-			else
-				out.append("\r\n");
-		}
-		int m = 1;
-		while (result.next()) {
-			for (int k = 1; k < (ncols + 1); k++) {
-				out.append(result.getString(k));
-				if (k < ncols)
-					out.append(delimiter);
+				if (j < ncols)
+					out.append(separator);
 				else
 					out.append("\r\n");
 			}
-			m++;
+			int m = 1;
+			while (result.next()) {
+				for (int k = 1; k < (ncols + 1); k++) {
+					out.append(result.getString(k));
+					if (k < ncols)
+						out.append(separator);
+					else
+						out.append("\r\n");
+				}
+				m++;
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			out.close();
+			fos.close();
+			result.close();
+			stmt.close();
+			con.close();		
 		}
-		out.close();
-		fos.close();
-		result.close();
-		stmt.close();
-		con.close();
 		System.out.println("[JdbcClient] the job is done...");
 	}
 }
