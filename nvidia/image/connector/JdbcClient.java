@@ -1,4 +1,3 @@
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,6 +27,7 @@ public class JdbcClient {
 		String filename = args[2];
 		String separator = args[3];
 
+		System.out.println("memory used(MB): " + getUsedMemory());
 		System.out.println("[JdbcClient] type : " + type);
 		System.out.println("[JdbcClient] sql : " + sql);
 		System.out.println("[JdbcClient] filename : " + filename);
