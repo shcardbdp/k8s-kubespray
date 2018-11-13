@@ -2,9 +2,9 @@
 
 set -e
 
-usage() { echo "Usage: $0 [-t <oracle|hive>] [-q <query> must be in a quote.] [-o <path for outfile>] [-s separator. must be in a quote. default: ,]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-t {oracle|hive}]  [-q <query> must be in a quote.] [-o <csv file name> ex) mytable.csv] [-s separator. must be in a quote. default: \",\"]" 1>&2; exit 1; }
 
-while getopts ":t:q:o:s:" flag; do
+while getopts ":t:q:o:s:h:" flag; do
     case "${flag}" in
         t)
             t=${OPTARG}
@@ -18,6 +18,9 @@ while getopts ":t:q:o:s:" flag; do
         s)
             s=${OPTARG}
             ;;
+        h)
+            usage
+            ;;                
         *)
             usage
             ;;
