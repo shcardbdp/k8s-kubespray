@@ -255,6 +255,74 @@ RUN conda install --yes -c r \
         r-rsqlite	\
         r-rstan	\
         r-rversions	\
+        r-rvest	\
+        r-rzmq	\
+        r-sandwich	\
+        r-scales	\
+        r-seacarb	\
+        r-selectr	\
+        r-sf	\
+        r-sfsmisc	\
+        r-shiny	\
+        r-shinybs	\
+        r-shinycssloaders	\
+        r-shinydashboard	\
+        r-shinyjs	\
+        r-shinysky	\
+        r-shinythemes	\
+        r-slam	\
+        r-snowballc	\
+        r-sourcetools	\
+        r-sp	\
+        r-sparklyr	\
+        r-sparsem	\
+        r-spatial	\
+        r-stabledist	\
+        r-stanheaders	\
+        r-stringdist	\
+        r-stringi	\
+        r-stringr	\
+        r-strucchange	\
+        r-survival	\
+        r-tensorflow	\
+        r-testit	\
+        r-testthat	\
+        r-tfruns	\
+        r-th.data	\
+        r-threejs	\
+        r-tibble	\
+        r-tidyr	\
+        r-tidyselect	\
+        r-tidytext	\
+        r-tidyverse	\
+        r-tilegramsr	\
+        r-timedate	\
+        r-tm	\
+        r-tokenizers	\
+        r-tseries	\
+        r-ttr	\
+        r-udunits2	\
+        r-units	\
+        r-urca	\
+        r-uuid	\
+        r-vars	\
+        r-vgam	\
+        r-viridis	\
+        r-viridislite	\
+        r-visnetwork	\
+        r-weatherdata	\
+        r-whisker	\
+        r-withr	\
+        r-xlsx	\
+        r-xlsxjars	\
+        r-xml	\
+        r-xml2	\
+        r-xtable	\
+        r-xts	\
+        r-yaml	\
+        r-zoo	\
+        rpy2	\
+        rpy2	\
         r-aer \
         r-afex \
         && \
