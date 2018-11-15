@@ -4,9 +4,7 @@ USER $NB_UID
 
 RUN conda install --yes -c r \
         r-essentials \
-        r-suppdists \
-        mro-base \
-        mro-base_impl \
+        r-suppdists \        
         r-zip \
         r-xfun \
         r-webshot \
