@@ -239,8 +239,7 @@ RUN conda install --yes -c r \
         r-rjsonio	\
         r-rlang	\
         r-rlist	\
-        r-rmarkdown	\
-        r-rmr2	\
+        r-rmarkdown	\        
         r-rms	\
         r-rngtools	\
         r-robustbase	\
