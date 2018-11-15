@@ -6,7 +6,6 @@ set -e
 
 usage() { echo "Usage: $0 [-v image version]" 1>&2; exit 1; }
 
-t=1m
 while getopts ":v:" flag; do
     case "${flag}" in
         v)
@@ -20,6 +19,7 @@ while getopts ":v:" flag; do
 done
 shift $((OPTIND-1))
 
+echo "VERSION = ${v}"
 if [ -z "${VERSION}" ]; then
     usage
 fi
