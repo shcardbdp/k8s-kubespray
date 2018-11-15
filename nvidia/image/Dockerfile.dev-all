@@ -1,6 +1,10 @@
 ARG  ROOT_IMAGE=ufoym/deepo:all-py36-jupyter
+ARG VERSION
+
 FROM $ROOT_IMAGE
 
+ARG VERSION
+LABEL version=$VERSION
 
 USER root
 

@@ -1,5 +1,7 @@
 FROM jupyter/all-spark-notebook
 
+ARG VERSION
+LABEL version=$VERSION device-type=cpu
 
 USER root
 

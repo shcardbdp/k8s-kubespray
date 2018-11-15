@@ -1,6 +1,9 @@
 ARG VERSION
 FROM sorididim11/spark-lab-cpu:$VERSION
 
+ARG VERSION
+LABEL version=$VERSION device-type=cpu
+
 USER $NB_UID
 
 RUN conda install --yes -c r \

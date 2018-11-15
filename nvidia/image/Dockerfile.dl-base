@@ -1,7 +1,9 @@
 ARG  ROOT_IMAGE=nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
-
+ARG VERSION
 FROM $ROOT_IMAGE
 
+ARG VERSION
+LABEL version=$VERSION
 USER root
 # ==================================================================
 # base tools/libs
