@@ -13,6 +13,7 @@ while getopts ":v:" flag; do
             VERSION=${OPTARG}
             ;;            
         *)
+            echo "invalid args..."
             usage
             ;;
     esac
