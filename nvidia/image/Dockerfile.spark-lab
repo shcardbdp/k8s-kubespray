@@ -65,12 +65,6 @@ RUN conda install --yes --quiet  \
         thrift \
         thrift_sasl \
         && \
-    conda install --yes -c r \
-        r-essentials \
-        r-acepack \
-        r-aer \
-        r-afex \
-        && \
     conda clean -tipsy
 
 RUN pip install --quiet --no-cache-dir \
@@ -80,15 +74,9 @@ RUN pip install --quiet --no-cache-dir \
         pyodbc
 
 
-RUN R -e "install.packages(c('odbc', \ 
-                             'stargazer', \
-                             'DataExplorer', \
-                             'AER'), \
-                             repos='http://cran.us.r-project.org')"
-
-
 USER root
 # Set up our notebook config.
+
 COPY  jupyter_notebook_config.py /etc/jupyter/
 COPY  notebooks /home/$NB_USER/notebooks/samples/
 COPY  run_jupyter.sh /usr/local/bin/
