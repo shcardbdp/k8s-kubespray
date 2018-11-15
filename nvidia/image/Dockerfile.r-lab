@@ -1,4 +1,5 @@
-FROM sorididim11/spark-lab:cpu
+ARG VERSION
+FROM sorididim11/spark-lab-cpu:$VERSION
 
 USER $NB_UID
 

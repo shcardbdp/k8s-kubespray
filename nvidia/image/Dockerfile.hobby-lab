@@ -5,7 +5,8 @@
 # python        3.6    
 # ==================================================================
 ARG DEVICE_TYPE=gpu
-FROM sorididim11/ac52-lab:$DEVICE_TYPE
+ARG VERSION
+FROM sorididim11/ac52-lab:$DEVICE_TYPE:$VERSION
 
 ARG DEVICE_TYPE
 
