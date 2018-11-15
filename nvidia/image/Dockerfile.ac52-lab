@@ -5,7 +5,8 @@
 # python        3.6    
 # ==================================================================
 ARG  DEVICE_TYPE=gpu
-FROM sorididim11/dl-base:$DEVICE_TYPE
+ARG VERSION
+FROM sorididim11/dl-base-$DEVICE_TYPE:$VERSION
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH=/opt/conda/bin:$PATH

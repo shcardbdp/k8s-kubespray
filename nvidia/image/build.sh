@@ -27,7 +27,7 @@ echo "VERSION = ${VERSION}"
 
 
 sudo docker build -t sorididim11/dl-base-cpu:${VERSION} -f Dockerfile.dl-base --build-arg ROOT_IMAGE=ubuntu:16.04  .  && \
-sudo docker build -t sorididim11/ac52-lab-cpu:${VERSION} -f Dockerfile.ac52-lab --build-arg DEVICE_TYPE=cpu . && \
+sudo docker build -t sorididim11/ac52-lab-cpu:${VERSION} -f Dockerfile.ac52-lab --build-arg DEVICE_TYPE=cpu,VERSION=${VERSION} . && \
 sudo docker build -t sorididim11/hobby-lab-cpu:${VERSION} -f Dockerfile.hobby-lab --build-arg DEVICE_TYPE=cpu . && \
 sudo docker build -t sorididim11/dev-lab-cpu:${VERSION} -f Dockerfile.dev-all --build-arg ROOT_IMAGE=ufoym/deepo:all-py36-jupyter-cpu . && \
 sudo docker build -t sorididim11/spark-lab-cpu:${VERSION} -f Dockerfile.spark-lab . && \
