@@ -327,5 +327,4 @@ RUN conda install --yes -c r \
         && \
     conda clean -tipsy
 
-RUN conda install -c fongchun r-stargazer
-RUN R -e "install.packages(c('DataExplorer'), repos='http://cran.us.r-project.org')"
+RUN R -e "install.packages(c('stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org')"
