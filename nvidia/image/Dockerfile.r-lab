@@ -328,8 +328,4 @@ RUN conda install --yes -c r \
     conda clean -tipsy
 
 
-RUN R -e "install.packages(c('odbc', \ 
-                             'stargazer', \
-                             'DataExplorer', \
-                             'AER'), \
-                             repos='http://cran.us.r-project.org')"
+RUN R -e "install.packages(c('stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org')"
