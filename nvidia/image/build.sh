@@ -10,7 +10,7 @@ t=1m
 while getopts ":v:" flag; do
     case "${flag}" in
         v)
-            VERSION=${OPTARG}
+            v=${OPTARG}
             ;;            
         *)
             echo "invalid args..."
@@ -26,8 +26,8 @@ fi
 
 
 
-echo "VERSION = ${VERSION}"
-
+echo "VERSION = ${v}"
+VERSION=v
 
 sudo docker build -t sorididim11/dl-base-cpu:{VERSION} -f Dockerfile.dl-base --build-arg ROOT_IMAGE=ubuntu:16.04  .  && \
 sudo docker build -t sorididim11/ac52-lab-cpu:{VERSION} -f Dockerfile.ac52-lab --build-arg DEVICE_TYPE=cpu . && \
