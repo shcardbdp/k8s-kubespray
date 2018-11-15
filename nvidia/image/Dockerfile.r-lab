@@ -14,8 +14,7 @@ RUN conda install --yes -c r \
         r-uroot \
         r-tkrplot \
         r-tkrgl \
-        r-tinytex \
-        r-timeseries \
+        r-tinytex \        
         r-x13binary \
         r-acepack \
         r-adgoftest \
