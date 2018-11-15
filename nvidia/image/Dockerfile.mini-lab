@@ -13,8 +13,9 @@ USER root
 ENV CONDA_DIR=/opt/conda \
     SHELL=/bin/bash 
 ENV PATH=$CONDA_DIR/bin:$PATH \
-    HOME=/home/$NB_USER
+    HOME=/home/$NB_USER 
 
+ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 
 
 USER $NB_UID
@@ -51,13 +52,33 @@ RUN conda install --quiet --yes \
 
 # Install Jupyter Notebook and Hub
 RUN conda install --quiet --yes \
-    'seaborn==0.9.0' \
-    'jupyterhub' \
-    'jupyterlab' \
-    && conda clean -tipsy && \
+          seaborn==0.9.0 \  
+          matplotlib==3.0.0 \
+          scikit-learn==0.20.0 \
+          numpy==1.15.2 \
+          pandas==0.23.4 \
+          statsmodels==0.9.0 \ 
+          scipy==1.1.0 \
+          cython==0.28.5 \
+          pytest==3.8.2 \
+          numba==0.40.0 \
+          && conda clean -tipsy \
+    && \
+    pip install --quiet --no-cache-dir \
+        xgboost==0.80 \
+        eli5==0.8 \
+        datatable==0.6.0 \
+    && \
     rm -rf /home/$NB_USER/.cache/yarn && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
+
+COPY install-py-pkgs-mini.sh /tmp/install-py-pkgs.sh
+RUN /tmp/install-py-pkgs-mini.sh $DEVICE_TYPE && \
+    echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER 
+
 
 USER root
 
