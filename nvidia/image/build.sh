@@ -4,7 +4,7 @@ set -e
 
 
 
-usage() { echo "Usage: $0 [-v" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-v image version]" 1>&2; exit 1; }
 
 t=1m
 while getopts ":v:" flag; do
