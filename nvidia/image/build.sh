@@ -23,7 +23,7 @@ if [ -z "${VERSION}" ]; then
     usage
 fi
 
-echo "VERSION = ${v}"
+echo "VERSION = ${VERSION}"
 
 
 sudo docker build -t sorididim11/dl-base-cpu:{VERSION} -f Dockerfile.dl-base --build-arg ROOT_IMAGE=ubuntu:16.04  .  && \
