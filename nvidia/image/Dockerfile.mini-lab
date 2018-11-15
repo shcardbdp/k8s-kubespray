@@ -43,10 +43,18 @@ RUN conda install --quiet --yes \
     'notebook' \
     'jupyterhub' \
     'jupyterlab' \
-    && conda clean -tipsy && \
-    jupyter labextension install @jupyterlab/hub-extension@^0.8.0 && \
-    npm cache clean && \
+    && conda clean -tipsy && \        
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+# Install Jupyter Notebook and Hub
+RUN conda install --quiet --yes \
+    'seaborn==0.9.0' \
+    'jupyterhub' \
+    'jupyterlab' \
+    && conda clean -tipsy && \
     rm -rf /home/$NB_USER/.cache/yarn && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
