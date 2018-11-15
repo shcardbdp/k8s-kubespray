@@ -27,7 +27,6 @@ public class JdbcClient {
 		String filename = args[2];
 		String separator = args[3];
 
-		System.out.println("memory used(MB): " + getUsedMemory());
 		System.out.println("[JdbcClient] type : " + type);
 		System.out.println("[JdbcClient] sql : " + sql);
 		System.out.println("[JdbcClient] filename : " + filename);
@@ -82,9 +81,10 @@ public class JdbcClient {
 		Connection con = DriverManager.getConnection(url, username, password);
 		Statement stmt = con.createStatement();
 		System.out.println("[JdbcClient] Running : " + sql + " memory used(MB): " + getUsedMemory());
+
 		ResultSet result = stmt.executeQuery(sql);
 		int ncols = result.getMetaData().getColumnCount();
-		System.out.println("[JdbcClient] Column Count : " + ncols);
+		System.out.println("[JdbcClient] Started to receive records. Column Count : " + ncols);
 
 		FileOutputStream fos = null;
 		Writer out = null;
