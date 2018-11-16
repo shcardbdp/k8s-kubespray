@@ -46,7 +46,6 @@ RUN conda install --quiet --yes \
     && conda clean -tipsy && \        
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
-    fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
 RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.9.0; else conda install --quiet --yes tensorflow==1.9.0 ; fi
@@ -82,11 +81,7 @@ RUN pip install --quiet --no-cache-dir \
     fix-permissions /home/$NB_USER
 
 
-RUN /tmp/install-py-pkgs-mini.sh $DEVICE_TYPE && \
-    echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER 
-
+RUN echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \    
 
 USER root
 
