@@ -6,7 +6,7 @@
 # ==================================================================
 ARG DEVICE_TYPE=gpu
 ARG VERSION
-FROM sorididim11//mlbasic-lab-$DEVICE_TYPE:$VERSION
+FROM sorididim11/mlbasic-lab-$DEVICE_TYPE:$VERSION
 
 ARG VERSION
 ARG DEVICE_TYPE
