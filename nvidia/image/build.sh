@@ -29,7 +29,7 @@ fi
 
 echo "VERSION = ${VERSION}"
 
-if [ "${TYPE}" == "cpu" || "${TYPE}" == "all" ]; then
+if [ "${TYPE}" == "cpu" -o "${TYPE}" == "all" ]; then
 sudo docker build -t sorididim11/dl-base-cpu:${VERSION} -f Dockerfile.dl-base --build-arg DEVICE_TYPE=cpu --build-arg VERSION=${VERSION} .  && \
 sudo docker build -t sorididim11/mlbasic-lab-cpu:${VERSION} -f Dockerfile.mlbasic-lab --build-arg DEVICE_TYPE=cpu --build-arg VERSION=${VERSION} . && \
 sudo docker build -t sorididim11/bdtf-lab-cpu:${VERSION} -f Dockerfile.bdtf-lab --build-arg DEVICE_TYPE=cpu --build-arg VERSION=${VERSION} . && \
@@ -41,7 +41,7 @@ fi
 
 
 
-if [ "${TYPE}" == "gpu" || "${TYPE}" == "all" ]; then
+if [ "${TYPE}" == "gpu" -o "${TYPE}" == "all" ]; then
 sudo docker build -t sorididim11/dl-base-gpu:${VERSION} -f Dockerfile.dl-base --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${VERSION} . && \
 sudo docker build -t sorididim11/mlbasic-lab-gpu:${VERSION} -f Dockerfile.mlbasic-lab --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${VERSION} .  && \
 sudo docker build -t sorididim11/bdtf-lab-gpu:${VERSION} -f Dockerfile.bdtf-lab --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${VERSION} .  && \
