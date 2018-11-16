@@ -68,7 +68,11 @@ RUN conda install --quiet --yes \
           keras==2.2.4 \
     && conda clean -tipsy \
     && \
-    pip install --quiet --no-cache-dir \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+
+RUN pip install --quiet --no-cache-dir \
         xgboost==0.80 \
         eli5==0.8 \
         datatable==0.6.0 \
@@ -78,7 +82,6 @@ RUN conda install --quiet --yes \
     fix-permissions /home/$NB_USER
 
 
-COPY install-py-pkgs-mini.sh /tmp/install-py-pkgs.sh
 RUN /tmp/install-py-pkgs-mini.sh $DEVICE_TYPE && \
     echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
     fix-permissions $CONDA_DIR && \
