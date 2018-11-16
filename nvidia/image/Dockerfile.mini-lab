@@ -84,7 +84,7 @@ RUN pip install --quiet --no-cache-dir \
     fix-permissions /home/$NB_USER
 
 
-RUN echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \    
+RUN echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc
 
 
 USER root
