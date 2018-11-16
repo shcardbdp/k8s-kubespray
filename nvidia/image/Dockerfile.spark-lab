@@ -80,7 +80,7 @@ USER root
 # Set up our notebook config.
 
 COPY  jupyter_notebook_config.py /etc/jupyter/
-RUN rm -rf /home/$NB_USER/work
+RUN rm -rf /home/$NB_USER/work && rm -rf /home/$NB_USER/.rpmdb
 COPY  notebooks /home/$NB_USER/notebooks/samples/
 COPY  run_jupyter.sh /usr/local/bin/
 RUN chown -R $NB_USER:$NB_UID /home/$NB_USER/notebooks/samples && \

@@ -49,9 +49,9 @@ RUN conda install --quiet --yes \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
-RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.9.0; else conda install --quiet --yes tensorflow==1.9.0 ; fi \
-     &&  fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.9.0; else conda install --quiet --yes tensorflow==1.9.0; fi \
+     && conda clean -tipsy  \
+     && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
 # Install Jupyter Notebook and Hub
 RUN conda install --quiet --yes \
