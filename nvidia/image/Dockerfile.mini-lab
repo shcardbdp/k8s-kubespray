@@ -54,20 +54,20 @@ RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflo
      && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
 # Install Jupyter Notebook and Hub
+# pytorch requires cudatoolkit and cudnn to be installed
 RUN conda install --quiet --yes \
-          seaborn==0.9.0 \  
-          matplotlib==3.0.0 \
-          scikit-learn==0.20.0 \
-          numpy==1.15.2 \
-          pandas==0.23.4 \
-          statsmodels==0.9.0 \ 
-          scipy==1.1.0 \
-         # cython==0.28.5 \
-          pytest==3.8.2 \
-          numba==0.40.0 \
-          pytorch==0.4.0 \
-          tensorboard==1.9.0 \
-          keras==2.2.4 \
+          seaborn \  
+          matplotlib \
+          scikit-learn \
+          numpy \
+          pandas \
+          statsmodels \ 
+          scipy \
+          cython \
+          pytest \
+          numba \
+          pytorch \          
+          keras \
     && conda clean -tipsy \
     && \
     fix-permissions $CONDA_DIR && \
@@ -75,8 +75,8 @@ RUN conda install --quiet --yes \
 
 
 RUN pip install --quiet --no-cache-dir \
-        xgboost==0.80 \
-        eli5==0.8 \        
+        xgboost \
+        eli5 \        
         #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
     && \
     rm -rf /home/$NB_USER/.cache/yarn && \
