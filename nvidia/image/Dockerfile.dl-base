@@ -1,9 +1,13 @@
-ARG  ROOT_IMAGE=nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+# shinhan-os:cpu - ubuntu:16.04
+# shinhan-os:gpu - nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+
+ARG DEVICE_TYPE
 ARG VERSION
-FROM $ROOT_IMAGE
+
+FROM sorididim11/shinhan-os:$DEVICE_TYPE
 
 ARG VERSION
-LABEL version=$VERSION
+LABEL version=$VERSION device_type=$DEVICE_TYPE
 USER root
 # ==================================================================
 # base tools/libs
