@@ -53,6 +53,17 @@ RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflo
      && conda clean -tipsy  \
      && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
+
+RUN pip install --quiet --no-cache-dir \
+        xgboost==0.80 \
+        eli5==0.8 \        
+        https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
+    && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+
 # Install Jupyter Notebook and Hub
 RUN conda install --quiet --yes \
           seaborn==0.9.0 \  
@@ -70,16 +81,6 @@ RUN conda install --quiet --yes \
           keras==2.2.4 \
     && conda clean -tipsy \
     && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-
-
-RUN pip install --quiet --no-cache-dir \
-        xgboost==0.80 \
-        eli5==0.8 \        
-        https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
-    && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
