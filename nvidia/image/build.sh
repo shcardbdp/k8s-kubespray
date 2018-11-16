@@ -28,6 +28,7 @@ if [ -z "${VERSION}" ]; then
 fi
 
 echo "VERSION = ${VERSION}"
+echo "TYPE = ${TYPE}"
 
 if [ "${TYPE}" == "cpu" -o "${TYPE}" == "all" ]; then
 sudo docker build -t sorididim11/dl-base-cpu:${VERSION} -f Dockerfile.dl-base --build-arg DEVICE_TYPE=cpu --build-arg VERSION=${VERSION} .  && \
