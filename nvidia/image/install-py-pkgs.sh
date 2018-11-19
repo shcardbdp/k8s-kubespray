@@ -53,7 +53,7 @@ if [ $1 == "gpu" ]; then
         autopep8 \
         mlxtend \
         lightgbm \
-        ctaboost \
+        catboost \
         plotnine \
         missingno \
         pyLDAvis \
@@ -99,7 +99,7 @@ elif [ $1 == "cpu" ]; then
         autopep8 \
         mlxtend \
         lightgbm \
-        ctaboost \
+        catboost \
         plotnine \
         missingno \
         pyLDAvis \

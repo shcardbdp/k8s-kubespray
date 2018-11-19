@@ -72,7 +72,7 @@ RUN pip install --quiet --no-cache-dir \
         eli5 \ 
         mlxtend \
         lightgbm \
-        ctaboost \
+        catboost \
         plotnine \
         missingno \
         pyLDAvis \
