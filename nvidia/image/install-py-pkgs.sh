@@ -50,7 +50,16 @@ if [ $1 == "gpu" ]; then
         xgboost==0.72.1 \
         jpype1==0.6.3 \
         gensim==3.5.0 \
-        autopep8
+        autopep8 \
+        mlxtend \
+        lightgbm \
+        ctaboost \
+        plotnine \
+        missingno \
+        pyLDAvis \
+        Edward \
+        dfply \
+        dplython
 elif [ $1 == "cpu" ]; then 
 # ==================================================================
 # conda package install
@@ -87,7 +96,16 @@ elif [ $1 == "cpu" ]; then
         xgboost==0.72.1 \
         jpype1==0.6.3 \
         gensim==3.5.0 \
-        autopep8
+        autopep8 \
+        mlxtend \
+        lightgbm \
+        ctaboost \
+        plotnine \
+        missingno \
+        pyLDAvis \
+        Edward \
+        dfply \
+        dplython
 else
   echo "Illegal parameter... the parameter is cpu or gpu"
 fi
