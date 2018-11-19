@@ -22,8 +22,9 @@ def dbGetQuery(query: str, source: str='oracle', sep: str=',', dtype=None):
 
     PREFIX_OUTFILE = '/home/jovyan/notebooks/data/'
     outfile = "temp%d.csv" % random.randint(0, 1e10)    
-    print('cmd: jdbc-cli -t %s -o %s -q "%s" -s %s' %(source, outfile, query, sep) )
-    os.system(command='jdbc-cli -t %s -o %s -q "%s" -s %s' %(source, outfile, query, sep))
+    cmd = 'jdbc-cli -t {} -o {} -q "{}" -s "{}"'.format(source, outfile, query, sep)
+    print('cmd:' + cmd)
+    os.system(command=cmd)
     df = pd.read_csv(PREFIX_OUTFILE + outfile, error_bad_lines=False, encoding='utf-8', sep=sep, dtype=dtype)
     os.system(command='rm %s' % PREFIX_OUTFILE + outfile)
 
