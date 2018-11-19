@@ -4,7 +4,7 @@ set -e
 
 
 
-usage() { echo "Usage: $0 [-v image version -t <cpu/gpu/all> default: all ]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-v image version] [-t <cpu/gpu/all> (default: all)]" 1>&2; exit 1; }
 
 TYPE="all"
 while getopts ":v:t:" flag; do
