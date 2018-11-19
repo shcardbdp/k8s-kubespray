@@ -39,7 +39,7 @@ RUN cd /tmp && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
-ADD connector/dpi.py /opt/conda/lib/python3.6/site-packages/shcard/    
+ADD connector/dbi.py /opt/conda/lib/python3.6/site-packages/shcard/    
 
 RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.9.0 keras pytorch ; conda install --yes --quiet -c lukepfister pycuda scikits.cuda; else conda install --quiet --yes tensorflow==1.9.0 keras pytorch; fi \
      && conda clean -tipsy  \

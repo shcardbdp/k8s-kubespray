@@ -38,7 +38,7 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
-ADD connector/dpi.py /opt/conda/lib/python3.6/site-packages/shcard/
+ADD connector/dbi.py /opt/conda/lib/python3.6/site-packages/shcard/
 
 # ==================================================================
 # Hive/impala, odbc connector
