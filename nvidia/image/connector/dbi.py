@@ -29,6 +29,3 @@ def dbGetQuery(query: str, source: str='oracle', sep: str=',', dtype=None):
     os.system(command='rm %s' % PREFIX_OUTFILE + outfile)
 
     return df
-
-if __name__ == "__main__":
-    dbGetQuery(sys.argv[1], sys.argv[2], sys.argv[3])
