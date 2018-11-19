@@ -102,8 +102,8 @@ RUN pip install --quiet --no-cache-dir \
         pyodbc 
 
 RUN echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
-    echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc && \
-    
+    echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc 
+
 USER root
 
 RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then ln -s /usr/local/cuda-9.0/lib64/libcurand.so.9.0 /usr/local/cuda-9.0/lib64/libcurand.so.8.0 ; fi
