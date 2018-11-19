@@ -97,6 +97,8 @@ RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
 # Setup work directory for backward-compatibility
 USER $NB_UID
 
+ENV SHELL=/bin/bash
+
 RUN mkdir /home/$NB_USER/notebooks && \
     cp $ORACLE_HOME/network/admin/tnsnames.ora /home/$NB_USER/.tnsnames.ora && \
     cp /etc/odbc.ini /home/$NB_USER/.odbc.ini && \
