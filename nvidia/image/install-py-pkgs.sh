@@ -26,7 +26,7 @@ if [ $1 == "gpu" ]; then
         numpy==1.14.3 \
         scikit-learn==0.19.1 \
         pandas==0.23.4 \
-        matplotlib==2.2.2 \
+        matplotlib \
         bokeh==0.13.0 \
         seaborn==0.8.1 \
         beautifulsoup4==4.6.0 \
@@ -74,7 +74,7 @@ elif [ $1 == "cpu" ]; then
         numpy==1.14.3 \
         scikit-learn==0.19.1 \
         pandas==0.23.4 \
-        matplotlib==2.2.2 \
+        matplotlib \
         bokeh==0.13.0 \
         seaborn==0.8.1 \
         beautifulsoup4==4.6.0 \
