@@ -114,6 +114,7 @@ RUN pip install --quiet --no-cache-dir \
         impala \
         pyodbc 
 
+RUN pip uninstall pyzmq && pip --quiet --no-cache-dir install pyzmq
 
 USER root
 
