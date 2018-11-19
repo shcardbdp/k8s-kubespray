@@ -33,6 +33,7 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.
     /bin/bash /tmp/anaconda.sh -f -b -p /opt/conda && \
     rm -f /tmp/anaconda.sh && \    
     echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
+    echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/$NB_USER/.bashrc && \    
     echo "conda activate base" >> /home/$NB_USER/.bashrc && \
     fix-permissions $CONDA_DIR && \
