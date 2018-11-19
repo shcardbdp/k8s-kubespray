@@ -59,6 +59,7 @@ RUN  TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -
 # ==================================================================
 # Connector base
 # ------------------------------------------------------------------
+ENV SHELL /bin/bash
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV ORACLE_HOME /usr/lib/oracle/12.2/client64  
 ENV PATH $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH 

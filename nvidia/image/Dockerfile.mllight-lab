@@ -35,12 +35,27 @@ RUN cd /tmp && \
     $CONDA_DIR/bin/conda config --system --set show_channel_urls true && \
     $CONDA_DIR/bin/conda update --all --quiet --yes && \
     conda clean -tipsy && \
+    echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
+    echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc && \
     rm -rf /home/$NB_USER/.cache/yarn && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
 ADD connector/dbi.py /opt/conda/lib/python3.6/site-packages/shcard/    
 
+# Install Jupyter Notebook and Hub
+RUN conda install --quiet --yes \
+    'notebook=5.2.*' \
+    'jupyterhub=0.8.*' \
+    'jupyterlab=0.31.*' \
+    && conda clean -tipsy && \
+    jupyter labextension install @jupyterlab/hub-extension@^0.8.0 && \
+    npm cache clean && \
+    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+    
 RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.9.0 keras pytorch ; conda install --yes --quiet -c lukepfister pycuda scikits.cuda; else conda install --quiet --yes tensorflow==1.9.0 keras pytorch; fi \
      && conda clean -tipsy  \
      && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
@@ -48,8 +63,6 @@ RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflo
 # Install Jupyter Notebook and Hub
 # pytorch requires cudatoolkit and cudnn to be installed
 RUN conda install --quiet --yes \
-        notebook \    
-        jupyterlab \
         seaborn \  
         matplotlib \
         scikit-learn \
@@ -101,8 +114,6 @@ RUN pip install --quiet --no-cache-dir \
         impala \
         pyodbc 
 
-RUN echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
-    echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc 
 
 USER root
 
