@@ -70,6 +70,7 @@ COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
 COPY connector/datalake.properties /etc/datalake/datalake.properties
 COPY connector/JdbcClient.java /usr/local/bin/
 COPY connector/jdbc-cli /usr/local/bin
+ADD connector/dbi.py /usr/local/lib/python3.6/dist-packages/shcard/   
 
 RUN javac /usr/local/bin/JdbcClient.java && \
     chmod 755 /usr/local/bin/jdbc-cli && \

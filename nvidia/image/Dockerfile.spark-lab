@@ -36,6 +36,7 @@ RUN apt-get install -y -f /data/clouderahiveodbc_2.5.25.1020-2_amd64.deb && \
 COPY connector/datalake.properties /etc/datalake/datalake.properties
 COPY connector/JdbcClient.java /usr/local/bin/
 COPY connector/jdbc-cli /usr/local/bin
+ADD connector/dbi.py /opt/conda/lib/python3.6/site-packages/shcard/
 
 RUN javac /usr/local/bin/JdbcClient.java && \
     chmod 755 /usr/local/bin/jdbc-cli && \
