@@ -43,19 +43,6 @@ RUN cd /tmp && \
 
 ADD connector/dbi.py /opt/conda/lib/python3.6/site-packages/shcard/    
 
-# Install Jupyter Notebook and Hub
-RUN conda install --quiet --yes \
-    'notebook=5.2.*' \
-    'jupyterhub=0.8.*' \
-    'jupyterlab=0.31.*' \
-    && conda clean -tipsy && \
-    jupyter labextension install @jupyterlab/hub-extension@^0.8.0 && \
-    npm cache clean && \
-    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-    
 RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.9.0 keras pytorch ; conda install --yes --quiet -c lukepfister pycuda scikits.cuda; else conda install --quiet --yes tensorflow==1.9.0 keras pytorch; fi \
      && conda clean -tipsy  \
      && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
@@ -63,6 +50,9 @@ RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflo
 # Install Jupyter Notebook and Hub
 # pytorch requires cudatoolkit and cudnn to be installed
 RUN conda install --quiet --yes \
+        jupyter \
+        notebook \    
+        jupyterlab \
         seaborn \  
         matplotlib \
         scikit-learn \
@@ -70,7 +60,7 @@ RUN conda install --quiet --yes \
         pandas \
         statsmodels \ 
         scipy \
-#        cython \
+        cython \
         pytest \
         numba \
     && conda clean -tipsy && \        
