@@ -82,7 +82,7 @@ USER root
 
 COPY  jupyter_notebook_config.py /etc/jupyter/
 COPY  run_jupyter.sh /usr/local/bin/
-RUN rm -rf /home/$NB_USER/work && rm -rf /home/$NB_USER/.rpmdb && chown -R $NB_USER:$NB_UID /home/$NB_USER/notebooks && \
+RUN rm -rf /home/$NB_USER/work && mkdir /home/$NB_USER/notebooks && rm -rf /home/$NB_USER/.rpmdb && chown -R $NB_USER:$NB_UID /home/$NB_USER/notebooks && \
     fix-permissions /etc/jupyter/ && fix-permissions /home/$NB_USER/notebooks/samples && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
