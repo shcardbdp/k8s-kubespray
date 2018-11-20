@@ -10,11 +10,8 @@ USER root
 
 
 # Configure environment
-ENV CONDA_DIR=/opt/conda \
-    SHELL=/bin/bash 
-ENV PATH=$CONDA_DIR/bin:$PATH \
-    HOME=/home/$NB_USER 
-
+ENV CONDA_DIR /opt/conda 
+ENV PATH $CONDA_DIR/bin:$PATH
 ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 
 
