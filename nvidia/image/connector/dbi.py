@@ -5,7 +5,7 @@ import random
 import pandas as pd
 
 
-def dbGetQuery(query: str, source: str='oracle', sep: str=',', dtype=None):
+def dbGetQuery(query: str, source: str='oracle', sep: str=',', clean_outfile: bool=True, dtype=None):
     """
     데이터베이스에서 query 를 실행한 결과물을 DataFrame으로 반환한다. 
 
@@ -26,6 +26,8 @@ def dbGetQuery(query: str, source: str='oracle', sep: str=',', dtype=None):
     print('cmd:' + cmd)
     os.system(command=cmd)
     df = pd.read_csv(PREFIX_OUTFILE + outfile, error_bad_lines=False, encoding='utf-8', sep=sep, dtype=dtype)
-    os.system(command='rm %s' % PREFIX_OUTFILE + outfile)
+    
+    if clean_outfile:
+        os.system(command='rm %s' % PREFIX_OUTFILE + outfile)
 
     return df
