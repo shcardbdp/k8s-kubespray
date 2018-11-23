@@ -344,5 +344,7 @@ RUN conda install --yes -c r \
 
 RUN R -e "install.packages(c('stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org')"
 
-RUN conda install --yes -c conda-forge r-keras 
+RUN conda install --yes -c conda-forge r-keras  && conda install -c anaconda h2o \
+    && \
+    conda clean -tipsy
       
