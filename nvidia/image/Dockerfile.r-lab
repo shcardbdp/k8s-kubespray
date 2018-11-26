@@ -340,11 +340,8 @@ RUN conda install --yes -c r \
         r-aer \
         r-afex \
         && \
+    conda install --yes -c conda-forge r-keras
+    && \
     conda clean -tipsy
 
 RUN R -e "install.packages(c('h2o', 'stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org')"
-
-RUN conda install --yes -c conda-forge r-keras \
-    && \
-    conda clean -tipsy
-      
