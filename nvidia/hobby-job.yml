@@ -11,13 +11,6 @@ spec:
       labels:
         app: hobby-job
     spec:
-      initContainers:
-      - name: connector
-        image: "localhost:5000/hobby-lab:cpu"          
-        args: ["python", "/data/test.py"]
-        volumeMounts:
-          - name: anaconda
-            mountPath: /data
       containers:
         - name: hobby
           image: "localhost:5000/hobby-lab:cpu"          
