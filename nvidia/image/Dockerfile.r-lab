@@ -342,9 +342,10 @@ RUN conda install --yes -c r \
         && \
     conda clean -tipsy
 
-RUN R -e "install.packages(c('stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org')"
+RUN R -e "install.packages(c('stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org'); \
+          install.packages('h2o', type='source', repos=(c('http://h2o-release.s3.amazonaws.com/h2o/latest_stable_R')))"
 
-RUN conda install --yes -c conda-forge r-keras  && install.packages("h2o", type="source", repos=(c("http://h2o-release.s3.amazonaws.com/h2o/latest_stable_R"))) \
+RUN conda install --yes -c conda-forge r-keras \
     && \
     conda clean -tipsy
       
