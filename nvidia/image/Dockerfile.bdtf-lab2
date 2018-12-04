@@ -10,12 +10,6 @@ USER $NB_UID
 
 RUN  conda install memory_profiler==0.54  && \
     conda clean -tipsy && \
-    pip install --quiet --no-cache-dir ipython_memory_usage==1.1 nbresuse==0.3.0 && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER    conda clean -tipsy && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-
+    pip install --quiet --no-cache-dir ipython_memory_usage==1.1 nbresuse==0.3.0 
+    
 USER $NB_UID
