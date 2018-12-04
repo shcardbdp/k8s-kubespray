@@ -10,7 +10,7 @@ LABEL version=$VERSION device-type=$DEVICE_TYPE
 USER root 
 
 # update cmake to 3.10
-RUN conda install --yes --quiet -c anaconda cmake==3.10
+RUN conda install --yes --quiet -c anaconda cmake
 # RUN wget --quiet http://www.cmake.org/files/v3.10/cmake-3.10.1.tar.gz -O  /tmp/cmake-3.10.1.tar.gz && \
 #     cd /tmp && \
 #     tar -xvzf cmake-3.10.1.tar.gz && \
