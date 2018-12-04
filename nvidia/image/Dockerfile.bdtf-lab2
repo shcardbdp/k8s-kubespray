@@ -31,7 +31,9 @@ RUN cd /tmp && git clone https://github.com/kakao/khaiii.git && \
     make install && \
     make package_python && \ 
     cd package_python && pip install  --quiet --no-cache-dir . && \
-    rm -rf /tmp/khaiii
+    rm -rf /tmp/khaiii && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
 
 
 USER $NB_UID
