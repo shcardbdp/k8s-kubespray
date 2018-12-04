@@ -340,7 +340,7 @@ RUN conda install --yes -c r \
         r-aer \
         r-afex \
         && \
-    conda install --yes -c conda-forge r-keras
+    conda install --yes -c conda-forge r-keras \
     && \
     conda clean -tipsy
 
