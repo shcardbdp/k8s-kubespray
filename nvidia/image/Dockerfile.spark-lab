@@ -94,6 +94,7 @@ RUN rm -rf /home/$NB_USER/work && rm -rf /home/$NB_USER/.rpmdb && chown -R $NB_U
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
+COPY entrypoint.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint.sh"]
 CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
 
