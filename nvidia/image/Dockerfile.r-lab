@@ -344,4 +344,4 @@ RUN conda install --yes -c r \
     && \
     conda clean -tipsy
 
-RUN R -e "install.packages(c('h2o', 'stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org')"
+RUN R -e "install.packages(c('h2o', 'stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org', destdir='/opt/conda/pkgs')"
