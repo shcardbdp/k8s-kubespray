@@ -344,7 +344,7 @@ RUN conda install --yes -c r \
     && \
     conda clean -tipsy
 
-RUN R -e "install.packages(c('h2o', 'stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org', lib='/opt/conda/lib/R/library')"
+RUN R -e "install.packages(c('h2o', 'stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org',lib='/opt/conda/lib/R/library')"
 
 USER root
 EXPOSE 54321
