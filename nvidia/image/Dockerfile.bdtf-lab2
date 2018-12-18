@@ -1,6 +1,6 @@
 ARG DEVICE_TYPE=gpu
 ARG VERSION
-FROM sorididim11/bdtf-lab-$DEVICE_TYPE:$VERSION
+FROM shcardbdp/bdtf-lab-$DEVICE_TYPE:$VERSION
 
 ARG VERSION
 ARG DEVICE_TYPE
@@ -30,17 +30,18 @@ RUN cd /tmp && git clone https://github.com/kakao/khaiii.git && \
     make large_resource && \
     make install && \
     make package_python && \ 
-    cd package_python && pip install  --quiet --no-cache-dir . && \
+    cd package_python && pip install --quiet --no-cache-dir . && \
     rm -rf /tmp/khaiii && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
-
 
 USER $NB_UID
 
 RUN  conda install memory_profiler==0.54  && \
     conda clean -tipsy && \
-    pip install --quiet --no-cache-dir ipython_memory_usage==1.1 nbresuse==0.3.0 
-
+    pip install --quiet --no-cache-dir ipython_memory_usage==1.1 nbresuse==0.3.0 xgboost==0.81 tensorboard_logger==0.1.0
 
 USER $NB_UID
+
+# Add fonts for NHN fonts
+COPY fonts/ /usr/share/fonts/
