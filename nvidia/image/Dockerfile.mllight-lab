@@ -40,7 +40,7 @@ RUN cd /tmp && \
 
 ADD connector/dbi.py /opt/conda/lib/python3.6/site-packages/shcard/    
 
-RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.9.0 keras pytorch ; conda install --yes --quiet -c lukepfister pycuda scikits.cuda; else conda install --quiet --yes tensorflow==1.9.0 keras pytorch; fi \
+RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.12.0 keras pytorch torchvision -c pytorch ; conda install --yes --quiet -c lukepfister pycuda scikits.cuda; else conda install --quiet --yes tensorflow==1.9.0 keras pytorch; fi \
      && conda clean -tipsy  \
      && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
@@ -51,15 +51,28 @@ RUN conda install --quiet --yes \
         notebook \    
         jupyterlab \
         seaborn \  
-        matplotlib \
-        scikit-learn \
-        numpy \
+        matplotlib==3.0.2 \
+        scikit-learn==0.19 \
+        numpy==1.14.5 \
         pandas \
         statsmodels \ 
         scipy \
         cython \
         pytest \
         numba \
+        bokeh \
+        gensim \
+        nltk \
+        fasttext \
+        implicit \
+        lightfm \
+        imbalanced-learn \
+        beautifulsoup4 \
+        autopep8 \
+        cx_oracle \
+        feather-format \
+        swig \
+        openmpi \
     && conda clean -tipsy && \        
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -78,7 +91,21 @@ RUN pip install --quiet --no-cache-dir \
         pyLDAvis \
         Edward \
         dfply \
-        dplython \      
+        dplython \
+        auto-sklearn \   
+        #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
+    && \
+    rm -rf /home/$NB_USER/.cache/yarn 
+
+RUN pip install --quiet --no-cache-dir \
+        surprise \
+        tensorflowonspark \
+        tensorboard_logger \
+        tensorboard_pytorch \
+        horovod \
+        ipython-memory-usage \
+        jupyter_contrib_nbextensions \
+        nbresuse \      
         #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
     && \
     rm -rf /home/$NB_USER/.cache/yarn 
@@ -89,6 +116,7 @@ RUN pip install --quiet --no-cache-dir \
 RUN conda install --yes --quiet  \
         thrift \
         thrift_sasl \
+        impyla \
         && \
     conda clean -tipsy && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -98,7 +126,7 @@ RUN conda install --yes --quiet  \
 RUN pip install --quiet --no-cache-dir \
         thriftpy \
         PyHive \
-        impala \
+        #impala \
         pyodbc 
 
 RUN pip uninstall --yes pyzmq && pip  install --quiet --no-cache-dir pyzmq
@@ -121,3 +149,6 @@ CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
+
+# Add fonts for NHN fonts
+COPY fonts/ /usr/share/fonts/
