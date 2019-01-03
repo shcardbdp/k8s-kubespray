@@ -1,5 +1,5 @@
 ARG VERSION
-FROM sorididim11/spark-lab-cpu:$VERSION
+FROM shcardbdp/spark-lab-cpu:$VERSION
 
 ARG VERSION
 LABEL version=$VERSION device-type=cpu

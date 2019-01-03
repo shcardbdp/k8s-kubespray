@@ -1,6 +1,6 @@
 ARG  DEVICE_TYPE=gpu
 ARG VERSION
-FROM sorididim11/dl-base-$DEVICE_TYPE:$VERSION
+FROM shcardbdp/dl-base-$DEVICE_TYPE:$VERSION
 
 ARG VERSION
 ARG  DEVICE_TYPE
@@ -10,6 +10,7 @@ USER root
 
 
 # Configure environment
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV CONDA_DIR /opt/conda 
 ENV PATH $CONDA_DIR/bin:$PATH
 ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH
@@ -61,9 +62,9 @@ RUN conda install --quiet --yes \
         pytest \
         numba \
         bokeh \
-        gensim \
+        # gensim \ Install using pip by request from Song G 
         nltk \
-        fasttext \
+        # fasttext \ Install using pip by request from Song G 
         implicit \
         lightfm \
         imbalanced-learn \
@@ -105,7 +106,10 @@ RUN pip install --quiet --no-cache-dir \
         horovod \
         ipython-memory-usage \
         jupyter_contrib_nbextensions \
-        nbresuse \      
+        nbresuse \   
+        gensim \
+        fasttext \
+        konlpy \
         #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
     && \
     rm -rf /home/$NB_USER/.cache/yarn 
@@ -146,9 +150,9 @@ EXPOSE 8888 6006
 
 CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
 
+# Add fonts for NHN fonts
+COPY fonts/ /usr/share/fonts/
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
-# Add fonts for NHN fonts
-COPY fonts/ /usr/share/fonts/

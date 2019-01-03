@@ -4,7 +4,7 @@
 ARG DEVICE_TYPE
 ARG VERSION
 
-FROM sorididim11/shinhan-os:$DEVICE_TYPE
+FROM shcardbdp/shinhan-os:$DEVICE_TYPE
 
 ARG VERSION
 LABEL version=$VERSION device_type=$DEVICE_TYPE
