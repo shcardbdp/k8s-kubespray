@@ -110,6 +110,7 @@ RUN pip install --quiet --no-cache-dir \
         gensim \
         fasttext \
         konlpy \
+        pycm \
         #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
     && \
     rm -rf /home/$NB_USER/.cache/yarn 
@@ -139,7 +140,7 @@ USER root
 
 RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then ln -s /usr/local/cuda-9.0/lib64/libcurand.so.9.0 /usr/local/cuda-9.0/lib64/libcurand.so.8.0 ; fi
 # Set up our notebook config.
-COPY  jupyter_notebook_config.py /etc/jupyter/
+COPY  jupyter/mllight/jupyter_notebook_config.py /etc/jupyter/
 COPY  notebooks /home/$NB_USER/notebooks/samples/
 COPY  run_jupyter.sh /usr/local/bin/
 RUN rm -rf /home/$NB_USER/work && chown -R $NB_USER:$NB_UID /home/$NB_USER/notebooks && \
