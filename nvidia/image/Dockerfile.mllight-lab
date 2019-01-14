@@ -74,6 +74,8 @@ RUN conda install --quiet --yes \
         feather-format \
         swig \
         openmpi \
+        pydotplus \
+        networkx \
     && conda clean -tipsy && \        
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -111,6 +113,7 @@ RUN pip install --quiet --no-cache-dir \
         fasttext \
         konlpy \
         pycm \
+        apyori \
         #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
     && \
     rm -rf /home/$NB_USER/.cache/yarn 
