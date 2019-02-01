@@ -76,6 +76,20 @@ RUN pip install --quiet --no-cache-dir \
         impala \
         pyodbc
 
+# request by Song :: equal to mllight lib
+##################################################
+
+
+
+
+
+
+
+
+
+
+
+##################################################
 
 USER root
 # Set up our notebook config.
@@ -87,7 +101,7 @@ RUN  TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -
 
 
 COPY  jupyter_notebook_config.py /etc/jupyter/
-COPY  notebooks/*spark-*.ipynb /home/$NB_USER/notebooks/samples/
+COPY  notebooks/ /home/$NB_USER/notebooks/samples/
 COPY  run_jupyter.sh /usr/local/bin/
 RUN rm -rf /home/$NB_USER/work && rm -rf /home/$NB_USER/.rpmdb && chown -R $NB_USER:$NB_UID /home/$NB_USER/notebooks && \
     fix-permissions /etc/jupyter/ && fix-permissions /home/$NB_USER/notebooks/samples && \
@@ -98,4 +112,5 @@ COPY entrypoint.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint.sh"]
 CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
 
+EXPOSE 30735 30736 30737 30738 30739
 USER $NB_UID

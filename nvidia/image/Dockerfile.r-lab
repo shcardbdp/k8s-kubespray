@@ -1,5 +1,6 @@
 ARG VERSION
 FROM shcardbdp/spark-lab-cpu:$VERSION
+# 최근 1.0.1로 처리 
 
 ARG VERSION
 LABEL version=$VERSION device-type=cpu

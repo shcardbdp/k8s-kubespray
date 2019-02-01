@@ -21,6 +21,13 @@ c.NotebookApp.port = int(os.getenv('PORT', 8888))
 c.NotebookApp.open_browser = False
 c.Spawner.env_keep.append('LD_LIBRARY_PATH')  # setting to connect oracle using up
 
+# cull action 
+c.MappingKernelManager.cull_busy = False
+c.MappingKernelManager.cull_connected = False
+c.MappingKernelManager.cull_idle_timeout = 300
+#c.NotebookApp.shutdown_no_activity_timeout = 300
+c.MappingKernelManager.cull_interval = 300
+
 # sets a password if PASSWORD is set in the environment
 if 'PASSWORD' in os.environ:
   password = os.environ['PASSWORD']

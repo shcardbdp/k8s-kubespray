@@ -41,7 +41,7 @@ RUN cd /tmp && \
 
 ADD connector/dbi.py /opt/conda/lib/python3.6/site-packages/shcard/    
 
-RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.12.0 keras pytorch torchvision -c pytorch ; conda install --yes --quiet -c lukepfister pycuda scikits.cuda; else conda install --quiet --yes tensorflow==1.9.0 keras pytorch; fi \
+RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.12.0 keras==2.2.4 pytorch torchvision -c pytorch ; conda install --yes --quiet -c lukepfister pycuda==2017.1 scikits.cuda; else conda install --quiet --yes tensorflow==1.12.0 keras==2.2.4 pytorch; fi \
      && conda clean -tipsy  \
      && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
@@ -51,31 +51,32 @@ RUN conda install --quiet --yes \
         jupyter \
         notebook \    
         jupyterlab \
-        seaborn \  
+        seaborn==0.9.0 \  
         matplotlib==3.0.2 \
-        scikit-learn==0.19 \
-        numpy==1.14.5 \
-        pandas \
-        statsmodels \ 
-        scipy \
-        cython \
-        pytest \
-        numba \
-        bokeh \
+        scikit-learn==0.20.2 \
+        numpy==1.16.0 \
+        pandas==0.23.4 \
+        pyspark==2.3 \
+        statsmodels==0.9.0 \ 
+        scipy==1.1.0 \
+        cython==0.29.3 \
+        pytest==4.1.1 \
+        numba==0.42.0 \
+        bokeh==1.0.4 \
         # gensim \ Install using pip by request from Song G 
-        nltk \
+        nltk==3.4 \
         # fasttext \ Install using pip by request from Song G 
-        implicit \
-        lightfm \
-        imbalanced-learn \
-        beautifulsoup4 \
-        autopep8 \
-        cx_oracle \
+        implicit==0.3.7 \
+        lightfm==1.15 \
+        imbalanced-learn==0.4.3 \
+        beautifulsoup4==4.7.1 \
+        autopep8==1.4.3 \
+        cx_oracle==7.0.0 \
         feather-format \
         swig \
         openmpi \
-        pydotplus \
-        networkx \
+        pydotplus==2.0.2 \
+        networkx==2.2 \
     && conda clean -tipsy && \        
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -84,36 +85,38 @@ RUN conda install --quiet --yes \
 
 
 RUN pip install --quiet --no-cache-dir \
-        xgboost \
-        eli5 \ 
-        mlxtend \
-        lightgbm \
-        catboost \
-        plotnine \
-        missingno \
-        pyLDAvis \
+        xgboost==0.81 \
+        eli5==0.8.1 \ 
+        mlxtend==0.15.0.0 \
+        lightgbm==2.2.2 \
+        catboost==0.12.2 \
+        plotnine==0.5.1 \
+        missingno==0.4.1 \
+        pyLDAvis==2.1.2 \
         Edward \
         dfply \
         dplython \
-        auto-sklearn \   
+        #auto-sklearn \  # when it's compatible with numpy  
         #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
     && \
     rm -rf /home/$NB_USER/.cache/yarn 
 
 RUN pip install --quiet --no-cache-dir \
-        surprise \
-        tensorflowonspark \
-        tensorboard_logger \
-        tensorboard_pytorch \
-        horovod \
-        ipython-memory-usage \
+        surprise==0.1 \
+        tensorboard==1.12.2 \
+        tensorflowonspark==1.4.2 \
+        tensorboard_logger==0.1.0 \
+        tensorboard_pytorch==0.7.1 \
+        tensorboardX==1.6 \
+        horovod==0.15.2 \
+        ipython-memory-usage==1.1 \
         #jupyter_contrib_nbextensions \ # Because of ImportError, change to install by conda
-        nbresuse \   
-        gensim \
-        fasttext \
-        konlpy \
-        pycm \
-        apyori \
+        nbresuse==0.3.0 \   
+        gensim==3.7.0 \
+        fasttext==0.8.3 \
+        konlpy==0.5.1 \
+        pycm==1.8 \
+        apyori==1.1.1 \
         #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
     && \
     rm -rf /home/$NB_USER/.cache/yarn 
@@ -124,7 +127,8 @@ RUN pip install --quiet --no-cache-dir \
 RUN conda install --yes --quiet  \
         thrift \
         thrift_sasl \
-        impyla \
+        impyla==0.14.1 \
+        plotly==3.5.0 \
         && \
     conda clean -tipsy && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -133,15 +137,18 @@ RUN conda install --yes --quiet  \
 
 RUN pip install --quiet --no-cache-dir \
         thriftpy \
-        PyHive \
+        #PyHive \ #request by Song G
         #impala \
-        pyodbc 
+        pyodbc==4.0.25 \
+        cufflinks==0.14.6 \
+    && \
+    rm -rf /home/$NB_USER/.cache/yarn 
 
 RUN pip uninstall --yes pyzmq && pip  install --quiet --no-cache-dir pyzmq
 
 # Cuz of zmq. Next time, Check the reason where pyzmq is installed  
 RUN conda install --quiet --yes \
-        jupyter_contrib_nbextensions \
+        jupyter_contrib_nbextensions==0.5.1 \
     && conda clean -tipsy && \        
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
