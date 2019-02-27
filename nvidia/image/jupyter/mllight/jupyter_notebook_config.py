@@ -28,6 +28,9 @@ c.MappingKernelManager.cull_idle_timeout = 300
 #c.NotebookApp.shutdown_no_activity_timeout = 300
 c.MappingKernelManager.cull_interval = 300
 
+# jupyter setting [hide quit button]
+c.NotebookApp.quit_button = False
+
 # sets a password if PASSWORD is set in the environment
 if 'PASSWORD' in os.environ:
   password = os.environ['PASSWORD']

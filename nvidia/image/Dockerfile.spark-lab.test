@@ -236,8 +236,6 @@ RUN rm -rf /home/$NB_USER/work && rm -rf /home/$NB_USER/.rpmdb && chown -R $NB_U
 
 COPY entrypoint.sh /usr/local/bin/
 
-RUN jupyter notebook
-
 ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint.sh"]
 CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
 

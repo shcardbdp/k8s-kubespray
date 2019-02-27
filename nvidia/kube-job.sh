@@ -19,15 +19,15 @@ parse_yaml() {
 }
 
 
-usage() { echo "Usage: $0 [-f job yml file] [-i interval for polling job status (default: 30s like 30m 30h )]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-f job yml file] [-t sleep time (default: 30s)]" 1>&2; exit 1; }
 
 t=1m
-while getopts ":f:i:" flag; do
+while getopts ":f:t:" flag; do
     case "${flag}" in
         f)
             f=${OPTARG}
             ;;
-        i)
+        t)
             t=${OPTARG}
             ;;       
         *)
@@ -63,6 +63,7 @@ while :; do
     echo "the job failed"
     exit 1
   else 
-    sleep ${i}
+    echo -e ".\c"
+    sleep ${t}
   fi
 done 
