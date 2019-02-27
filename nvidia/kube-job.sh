@@ -19,7 +19,7 @@ parse_yaml() {
 }
 
 
-usage() { echo "Usage: $0 [-f job yml file] [-t sleep time (default: 30s)]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-f job yml file] [-t sleep time (default: 30s)] [-d work day(default D-1)]" 1>&2; exit 1; }
 
 t=1m
 while getopts ":f:t:" flag; do
@@ -29,7 +29,10 @@ while getopts ":f:t:" flag; do
             ;;
         t)
             t=${OPTARG}
-            ;;       
+            ;;
+        d)
+            d=${OPTARG}
+            ;;                   
         *)
             usage
             ;;
@@ -50,8 +53,14 @@ n=$config_metadata_name
 echo "f = ${f}"
 echo "n = ${n}"
 echo "i = ${i}"
+echo "d = ${d}"
 
-kubectl apply -f ${f}
+# change JOBMIND_K8S_DATE_VAR_01  in YAML
+cat $f |sed -e "s/JOBMIND_K8S_DATE_VAR_01/${d}/g" > tmp_$n
+
+kubectl delete -f tmp_$n
+kubectl apply -f tmp_$n
+#kubectl apply -f ${f}
 
 while :; do
   if  kubectl get jobs ${n} -o jsonpath='{.status.conditions[?(@.type=="Complete")].status}' | grep -q 'True'
