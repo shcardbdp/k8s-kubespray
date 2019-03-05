@@ -10,9 +10,11 @@ COPY --from=nvidia/cuda:9.2-cudnn7-devel-ubuntu18.04 /usr/local/cuda-9.2/ /usr/l
 RUN ln -s /usr/local/cuda-9.2 /usr/local/cuda &&\
 	rm -rf /var/lib/apt/lists/*
 
-ENV PATH /usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
-ENV LD_LIBRARY_PATH /usr/local/cuda/lib:/usr/local/cuda/lib64
-ENV LIBRARY_PATH /usr/local/cuda/lib64/stubs:${LIBRARY_PATH}
+USER $NB_UID  
+
+ENV PATH "/usr/local/nvidia/bin:/usr/local/cuda/bin:$PATH"
+ENV LD_LIBRARY_PATH "/usr/local/cuda/lib:/usr/local/cuda/lib64"
+ENV LIBRARY_PATH "/usr/local/cuda/lib64/stubs:$LIBRARY_PATH"
 
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES all
@@ -26,6 +28,7 @@ ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD
 
 ADD fix-permissions /usr/local/bin/fix-permissions
 
+USER root
 # ==================================================================
 # Unixodbc & clouder hive/impla odbc 
 # ------------------------------------------------------------------
@@ -73,8 +76,8 @@ USER $NB_UID
 
 ENV JAVA_HOME       /usr/lib/jvm/java-8-openjdk-amd64
 ENV ORACLE_HOME     /usr/lib/oracle/12.2/client64
-ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH
-ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib:$LD_LIBRARY_PATH
+ENV PATH            $JAVA_HOME/bin:$ORACLE_HOME/bin:${PATH}
+ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:${ORACLE_HOME}/lib:${LD_LIBRARY_PATH}
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so
 
 RUN conda install --yes --quiet  \
@@ -200,7 +203,7 @@ ENV YARN_CONF_DIR /opt/conf.cloudera.yarn
 
 
 ENV SPARK_HOME /usr/local/spark
-ENV PATH $SPARK_HOME/bin:$PATH
+ENV PATH $SPARK_HOME/bin:${PATH}
 
 ENV SPARK_CONF_DIR $SPARK_HOME/conf
 
@@ -234,13 +237,15 @@ RUN rm -rf /home/$NB_USER/work && rm -rf /home/$NB_USER/.rpmdb && chown -R $NB_U
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
-COPY entrypoint.sh /usr/local/bin/
+EXPOSE 32747 32748 32749 32750 32751 32752 32753 32754 32755 32756 32757 32758 32759 32760 32761 32762 32763 32764 32765 32766 32767
 
-RUN jupyter notebook
+# Add fonts for NHN fonts
+COPY fonts/ /usr/share/fonts/
 
-ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint.sh"]
+USER $NB_UID
+
+COPY entrypoint_spark.sh /usr/local/bin/
+ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint_spark.sh"]
 CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
 
-ENV HADOOP_USER_NAME='shd_010'
-EXPOSE 32747 32748 32749 32750 32751 32752 32753 32754 32755 32756 32757 32758 32759 32760 32761 32762 32763 32764 32765 32766 32767
 USER $NB_UID

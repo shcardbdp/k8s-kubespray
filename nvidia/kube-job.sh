@@ -22,6 +22,7 @@ parse_yaml() {
 usage() { echo "Usage: $0 [-f job yml file] [-t sleep time (default: 30s)] [-d work day(default D-1)]" 1>&2; exit 1; }
 
 t=1m
+d=$(date +%Y%m%d -d '1 day ago')
 while getopts ":f:t:" flag; do
     case "${flag}" in
         f)
@@ -58,6 +59,7 @@ echo "d = ${d}"
 # change JOBMIND_K8S_DATE_VAR_01  in YAML
 cat $f |sed -e "s/JOBMIND_K8S_DATE_VAR_01/${d}/g" > tmp_$n
 
+# 신규 프로세스의 경우 처리할 수 있도록 수정해야 함.
 kubectl delete -f tmp_$n
 kubectl apply -f tmp_$n
 #kubectl apply -f ${f}
