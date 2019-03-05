@@ -1,0 +1,81 @@
+# Kubernetes-managed hosts file.
+127.0.0.1	localhost
+::1	localhost ip6-localhost ip6-loopback
+fe00::0	ip6-localnet
+fe00::0	ip6-mcastprefix
+fe00::1	ip6-allnodes
+fe00::2	ip6-allrouters
+
+# You have to change this part to communicate the data nodes
+# 10.233.124.167	spark-lab-cpu-20190123133635-f4647b7d-gqx6l prmlrg01
+
+# Do Not Change Host Entry!!!#
+127.0.0.1    localhost
+
+# NTP
+10.129.13.239   shcws01
+172.26.12.142   shcws02
+
+# text server
+10.111.51.59    prsmsap1
+
+10.112.11.30 prbdnm01.shinhancard.com prbdnm01
+10.112.11.31 prbdnm02.shinhancard.com prbdnm02
+10.112.11.16 prbdwb01.shinhancard.com prbdwb01
+
+10.112.11.20 prbddt01.shinhancard.com prbddt01
+10.112.11.21 prbddt02.shinhancard.com prbddt02
+10.112.11.22 prbddt03.shinhancard.com prbddt03
+10.112.11.23 prbddt04.shinhancard.com prbddt04
+10.112.11.24 prbddt05.shinhancard.com prbddt05
+10.112.11.25 prbddt06.shinhancard.com prbddt06
+10.112.11.26 prbddt07.shinhancard.com prbddt07
+10.112.11.27 prbddt08.shinhancard.com prbddt08
+10.112.11.28 prbddt09.shinhancard.com prbddt09
+10.112.11.29 prbddt10.shinhancard.com prbddt10
+
+10.112.11.11 prmlma01
+#10.112.11.12 prmlrg01
+10.112.11.13 prmlwk01
+10.112.11.14 prmlwk02 prmlwk02.shinhancard.com
+10.112.11.15 prbdva01
+10.112.12.19 prbdns01
+
+# CA ControlMinder Server
+191.241.12.31   PREMSV01
+191.240.20.74   prelmap2
+
+### NetBackup Server ###
+10.113.11.31    pr_nbumaster    prigbk02
+::1 localhost6 localhost6.localdomain
+# Ansible inventory hosts BEGIN
+10.112.11.11 prmlma01 prmlma01.cluster.local
+#10.112.11.12 prmlrg01 prmlrg01.cluster.local
+10.112.11.13 prmlwk01 prmlwk01.cluster.local
+10.112.11.14 prmlwk02 prmlwk02.cluster.local
+
+# CA ControlMinder Server
+191.241.12.31   PREMSV01
+191.240.20.74   prelmap2
+
+### JOBMIND #####
+10.111.51.65   prjsmap1
+### NetBackup Server ###
+10.113.11.31    pr_nbumaster    prigbk02
+
+# EAI
+10.113.34.11    preaap01
+10.113.34.12    preaap02
+10.113.31.11    preaap03
+10.113.31.12    preaap04
+10.113.31.13    preaap05
+10.113.31.14    preaap06
+
+# TAS
+10.111.41.61                    tetaan01
+10.111.41.62                    tetaan02
+10.111.41.63                    tetaan03
+10.111.41.64                    tetaan04
+
+# Add
+10.111.42.211   edw-oracle-svc
