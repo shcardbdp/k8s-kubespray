@@ -118,6 +118,7 @@ RUN conda install --quiet --yes \
         autopep8==1.4.3 \
         pytest==4.1.1 \
         pycrypto \
+        hyperopt==0.1.2 \
     && conda clean -tipsy && \        
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -229,7 +230,7 @@ RUN  TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -
 # Add gpu setting 
 # RUN  ln -s /usr/local/cuda-9.0/lib64/libcurand.so.9.0 /usr/local/cuda-9.0/lib64/libcurand.so.8.0
 
-COPY  jupyter/mllight/jupyter_notebook_config.py /etc/jupyter/
+COPY  jupyter/spark/jupyter_notebook_config.py /etc/jupyter/
 COPY  notebooks/ /home/$NB_USER/notebooks/samples/
 COPY  run_jupyter.sh /usr/local/bin/
 RUN rm -rf /home/$NB_USER/work && rm -rf /home/$NB_USER/.rpmdb && chown -R $NB_USER:$NB_UID /home/$NB_USER/notebooks && \
@@ -241,8 +242,6 @@ EXPOSE 32747 32748 32749 32750 32751 32752 32753 32754 32755 32756 32757 32758 3
 
 # Add fonts for NHN fonts
 COPY fonts/ /usr/share/fonts/
-
-USER $NB_UID
 
 COPY entrypoint_spark.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint_spark.sh"]

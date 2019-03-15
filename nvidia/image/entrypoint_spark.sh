@@ -81,7 +81,7 @@ if [ $(id -u) == 0 ] || [ $(id -u) == 4001 ]; then
     echo "Executing the command: $cmd"
     echo "exec sudo -E -H -u $NB_USER PATH=$PATH XDG_CACHE_HOME=/home/$NB_USER/.cache PYTHONPATH=$PYTHONPATH $cmd"
 
-    exec sudo -E -H -u $NB_USER PATH=$PATH XDG_CACHE_HOME=/home/$NB_USER/.cache PYTHONPATH=$PYTHONPATH $cmd
+    exec sudo -E -H -u $NB_USER LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=$PATH XDG_CACHE_HOME=/home/$NB_USER/.cache PYTHONPATH=$PYTHONPATH $cmd
     
 else
     if [[ "$NB_UID" == "$(id -u jovyan)" && "$NB_GID" == "$(id -g jovyan)" ]]; then
