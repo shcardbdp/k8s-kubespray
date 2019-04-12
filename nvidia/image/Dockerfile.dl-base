@@ -26,6 +26,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         ca-certificates \
         cmake \
         unzip grep sed dpkg bzip2 rsync \
+        zip \
         libglib2.0-0 libxext6 libsm6 libxrender1 \
         libfreetype6-dev libhdf5-serial-dev libpng12-dev libzmq3-dev pkg-config \
         curl \
@@ -42,6 +43,8 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         default-jdk \ 
         sudo \
         locales \
+        net-tools \
+        telnet \
           && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*

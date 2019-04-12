@@ -1,9 +1,8 @@
-ARG  DEVICE_TYPE=gpu
+ARG DEVICE_TYPE=gpu
 ARG VERSION
-FROM shcardbdp/dl-base-$DEVICE_TYPE:$VERSION
+ARG BASE_VERSION
+FROM shcardbdp/dl-base-$DEVICE_TYPE:$BASE_VERSION
 
-ARG VERSION
-ARG  DEVICE_TYPE
 LABEL version=$VERSION device-type=$DEVICE_TYPE
 
 USER root
@@ -77,6 +76,9 @@ RUN conda install --quiet --yes \
         openmpi \
         pydotplus==2.0.2 \
         networkx==2.2 \
+        hyperopt==0.1.2 \
+        apscheduler==3.6.0 \
+
     && conda clean -tipsy && \        
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -96,6 +98,7 @@ RUN pip install --quiet --no-cache-dir \
         Edward \
         dfply \
         dplython \
+        schedule==0.6.0 \
         #auto-sklearn \  # when it's compatible with numpy  
         #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
     && \

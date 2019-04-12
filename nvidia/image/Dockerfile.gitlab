@@ -1,44 +1,16 @@
-ARG  DEVICE_TYPE=gpu
-ARG VERSION
-FROM shcardbdp/dl-base-$DEVICE_TYPE:$VERSION
-
-ARG VERSION
-ARG  DEVICE_TYPE
-LABEL version=$VERSION device-type=$DEVICE_TYPE
-
-USER root
-
+FROM gitlab/gitlab-ce:11.9.4-ce.0
 
 # Configure environment
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-
-USER $NB_UID
-
-#Install gitlab
-# Download & Install GitLab 
-# If you run GitLab Enterprise Edition point it to a location where you have downloaded it. 
-# RUN cd /tmp
-# RUN curl -LO https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh
-# RUN /tmp/script.deb.sh
-USER root
-
-RUN cd /tmp && \
-    wget --quiet https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh && \
-    /bin/bash script.deb.sh && \
-    rm script.deb.sh  
-
-RUN apt-get install -y \
-    gitlab-ce \
+RUN apt-get update && \
+    apt-get install -y \
+        net-tools \
     && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-USER root
-
 EXPOSE 443 80 22
-
-CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
 
 # Add fonts for NHN fonts
 COPY fonts/ /usr/share/fonts/

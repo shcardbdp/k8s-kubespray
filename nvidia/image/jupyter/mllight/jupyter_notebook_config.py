@@ -19,7 +19,7 @@ c = c  # pylint:disable=undefined-variable
 c.NotebookApp.ip = '*'
 c.NotebookApp.port = int(os.getenv('PORT', 8888))
 c.NotebookApp.open_browser = False
-c.Spawner.env_keep.append('LD_LIBRARY_PATH')  # setting to connect oracle using up
+# c.Spawner.env_keep.append('LD_LIBRARY_PATH')  # setting to connect oracle using up
 
 # cull action 
 c.MappingKernelManager.cull_busy = False
