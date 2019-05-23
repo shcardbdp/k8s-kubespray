@@ -67,15 +67,15 @@ ENV SHELL /bin/bash
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV ORACLE_HOME /usr/lib/oracle/12.2/client64  
 ENV PATH $JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH 
-ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib 
+ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib:/home/jovyan/notebooks/src/shcPython 
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libodbcinst.so 
 
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
 COPY cloudera/ /data/
 COPY connector/datalake.properties /etc/datalake/datalake.properties
-COPY connector/JdbcClient.java /usr/local/bin/
-COPY connector/jdbc-cli /usr/local/bin
+# COPY connector/JdbcClient.java /usr/local/bin/
+# COPY connector/jdbc-cli /usr/local/bin
 COPY oracle/ /data/
 COPY oracle/tnsnames.ora $ORACLE_HOME/network/admin/
 
@@ -104,9 +104,10 @@ RUN alien -i /data/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm && \
 # ==================================================================
 # Hive JDBC CLI client
 # ------------------------------------------------------------------
-RUN javac /usr/local/bin/JdbcClient.java && \
-    chmod 755 /usr/local/bin/jdbc-cli && \
-    chmod -R 777 /etc/datalake
+# RUN javac /usr/local/bin/JdbcClient.java && \
+#     chmod 755 /usr/local/bin/jdbc-cli && \
+#     chmod -R 777 /etc/datalake
+RUN chmod -R 777 /etc/datalake
 
 # ==================================================================
 # User, Home, UID/GID
