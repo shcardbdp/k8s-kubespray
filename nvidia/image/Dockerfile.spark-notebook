@@ -13,7 +13,7 @@ USER root
 # ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 # ENV CONDA_DIR /opt/conda 
 # ENV PATH $CONDA_DIR/bin:$PATH
-ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib:/home/jovyan/notebooks/src/shcPython:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib:$LD_LIBRARY_PATH
 
 # Spark dependencies
 ENV APACHE_SPARK_VERSION 2.4.3
@@ -55,7 +55,7 @@ USER $NB_UID
 #     rm -rf /home/$NB_USER/.cache/yarn && \
 #     fix-permissions $CONDA_DIR && \
 #     fix-permissions /home/$NB_USER
-RUN echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib:/home/jovyan/notebooks/src/shcPython:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc
+
 # ADD connector/dbi.py /opt/conda/lib/python3.6/site-packages/shcard/    
 
 # RUN echo "DEVICE_TYPE : $DEVICE_TYPE"
@@ -100,6 +100,7 @@ RUN conda install --quiet --yes \
         pycrypto \
         # hyperopt==0.1.2 \
         # dask \
+        geopandas \
     && conda clean -tipsy && \        
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -143,6 +144,11 @@ RUN conda install --quiet --yes \
 #         #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
 #     && \
 #     rm -rf /home/$NB_USER/.cache/yarn 
+
+RUN pip install --quiet --no-cache-dir \
+        folium==0.9.1 \
+    && \    
+    rm -rf /home/$NB_USER/.cache/yarn 
 
 # ==================================================================
 # Hive/impala, odbc connector
@@ -202,6 +208,12 @@ ENV PYSPARK_PYTHON /shcsw/anaconda3/bin/python
 # Add fonts for NHN fonts
 COPY fonts/ /usr/share/fonts/
 
+# PATH Setting
+ENV PATH /home/$NB_USER/notebooks/src/shcPython/jdbc:/home/$NB_USER/notebooks/src/common:${PATH}
+
+RUN echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
+    echo "export PATH=$PATH" >> /home/$NB_USER/.bashrc
+
 USER root
 
 # replace 가능하도록 권한 변경.
@@ -225,7 +237,9 @@ COPY  jupyter/spark/jupyter_notebook_config.py /etc/jupyter/
 # # For Analysis (현재구조로는 이미지 생성때마다 만들어야 함) from 31300
 # EXPOSE 31300 31301 31302 31303 31304 31305 31306 31307 31308 31309
 
-COPY entrypoint.sh /usr/local/bin/
+# 1.0.6 entrypoint_spark
+# 1.0.5 entrypoint
+COPY entrypoint_spark.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint_spark.sh"]
 CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
 
