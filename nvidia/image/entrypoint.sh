@@ -9,8 +9,6 @@ else
     cmd=$*
 fi
 
-
-
 # Handle special flags if we're root
 if [ $(id -u) == 0 ] ; then
 
