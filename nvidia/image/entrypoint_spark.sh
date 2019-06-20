@@ -13,13 +13,20 @@ echo "1"
 echo $(id -u)
 
 # Handle special flags if we're root
-if [ $(id -u) == 0 ] || [ $(id -u) == 4001 ]; then
+# if [ $(id -u) == 0 ] || [ $(id -u) == 4001 ]; then
+if [ $(id -u) == 0 ]; then
+
+    #LD_LIBRARY_PATH
+    echo "LD_LIBRARY_PATH1_1: $LD_LIBRARY_PATH"
 
     # Only attempt to change the jovyan username if it exists
     if id jovyan &> /dev/null ; then
         echo "Set username to: $NB_USER"
         usermod -d /home/$NB_USER -l $NB_USER jovyan
     fi
+
+    #LD_LIBRARY_PATH
+    # echo "LD_LIBRARY_PATH1_2: $LD_LIBRARY_PATH"    
 
     # Handle case where provisioned storage does not have the correct permissions by default
     # Ex: default NFS/EFS (no auto-uid/gid)
@@ -32,6 +39,9 @@ if [ $(id -u) == 0 ] || [ $(id -u) == 4001 ]; then
             chown $CHOWN_EXTRA_OPTS $NB_UID:$NB_GID $extra_dir
         done
     fi
+
+    #LD_LIBRARY_PATH
+    # echo "LD_LIBRARY_PATH1_3: $LD_LIBRARY_PATH"  
 
     # handle home and working directory if the username changed
     if [[ "$NB_USER" != "jovyan" ]]; then
@@ -49,11 +59,17 @@ if [ $(id -u) == 0 ] || [ $(id -u) == 4001 ]; then
         fi
     fi
 
+    #LD_LIBRARY_PATH
+    # echo "LD_LIBRARY_PATH1_4: $LD_LIBRARY_PATH"     
+
     # Change UID of NB_USER to NB_UID if it does not match
     if [ "$NB_UID" != $(id -u $NB_USER) ] ; then
         echo "Set $NB_USER UID to: $NB_UID"
         usermod -u $NB_UID $NB_USER
     fi
+
+    #LD_LIBRARY_PATH
+    # echo "LD_LIBRARY_PATH1_5: $LD_LIBRARY_PATH"     
 
     # Set NB_USER primary gid to NB_GID (after making the group).  Set
     # supplementary gids to NB_GID and 100.
@@ -63,11 +79,17 @@ if [ $(id -u) == 0 ] || [ $(id -u) == 4001 ]; then
         usermod -g $NB_GID -a -G $NB_GID,100 $NB_USER
     fi
 
+    #LD_LIBRARY_PATH
+    # echo "LD_LIBRARY_PATH1_6: $LD_LIBRARY_PATH"   
+
     # Enable sudo if requested
     if [[ "$GRANT_SUDO" == "1" || "$GRANT_SUDO" == 'yes' ]]; then
         echo "Granting $NB_USER sudo access and appending $CONDA_DIR/bin to sudo PATH"
         echo "$NB_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/notebook
     fi
+
+    #LD_LIBRARY_PATH
+    # echo "LD_LIBRARY_PATH1_7: $LD_LIBRARY_PATH"  
 
     # Add $CONDA_DIR/bin to sudo secure_path
     sed -r "s#Defaults\s+secure_path=\"([^\"]+)\"#Defaults secure_path=\"\1:$CONDA_DIR/bin\"#" /etc/sudoers | grep secure_path > /etc/sudoers.d/path
@@ -77,13 +99,20 @@ if [ $(id -u) == 0 ] || [ $(id -u) == 4001 ]; then
 
     echo "NB_USER: $NB_USER"
     echo "PATH1: $PATH"
-    echo "PYTHONPATH: $PYTHONPATH"
-    echo "Executing the command: $cmd"
-    echo "exec sudo -E -H -u $NB_USER PATH=$PATH XDG_CACHE_HOME=/home/$NB_USER/.cache PYTHONPATH=$PYTHONPATH $cmd"
+    # echo "PYTHONPATH: $PYTHONPATH"
+    # echo "Executing the command: $cmd"
+    # echo "exec sudo -E -H -u $NB_USER PATH=$PATH XDG_CACHE_HOME=/home/$NB_USER/.cache PYTHONPATH=$PYTHONPATH $cmd"
 
     exec sudo -E -H -u $NB_USER LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=$PATH XDG_CACHE_HOME=/home/$NB_USER/.cache PYTHONPATH=$PYTHONPATH $cmd
+
+    #LD_LIBRARY_PATH
+    echo "LD_LIBRARY_PATH1_8: $LD_LIBRARY_PATH"      
     
 else
+
+    #LD_LIBRARY_PATH
+    echo "LD_LIBRARY_PATH2_1: $LD_LIBRARY_PATH"  
+
     if [[ "$NB_UID" == "$(id -u jovyan)" && "$NB_GID" == "$(id -g jovyan)" ]]; then
         # User is not attempting to override user/group via environment
         # variables, but they could still have overridden the uid/gid that
@@ -117,14 +146,23 @@ else
         fi
     fi
 
+    #LD_LIBRARY_PATH
+    # echo "LD_LIBRARY_PATH2_2: $LD_LIBRARY_PATH"  
+
     # Warn if looks like user want to run in sudo mode but hasn't run
     # the container as root.
     if [[ "$GRANT_SUDO" == "1" || "$GRANT_SUDO" == 'yes' ]]; then
         echo 'Container must be run as root to grant sudo permissions'
     fi
 
+    #LD_LIBRARY_PATH
+    echo "LD_LIBRARY_PATH2_3: $LD_LIBRARY_PATH"  
+
     # Execute the command    
     echo "Executing the command: $cmd"
     echo "PATH2: $PATH <<<<<<<<<<<<<"
     exec $cmd
 fi
+
+#LD_LIBRARY_PATH
+echo "LD_LIBRARY_PATH3_1: $LD_LIBRARY_PATH"
