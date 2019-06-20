@@ -1,7 +1,8 @@
 ARG DEVICE_TYPE=gpu
 ARG VERSION
 ARG BASE_VERSION
-FROM shcardbdp/mllight-lab-$DEVICE_TYPE:$BASE_VERSION
+FROM shcardbdp/spark-notebook:$BASE_VERSION
+# FROM shcardbdp/mllight-lab-$DEVICE_TYPE:$BASE_VERSION
 
 ARG DEVICE_TYPE=gpu
 ARG VERSION
@@ -91,6 +92,13 @@ RUN pip install --quiet --no-cache-dir \
     rm -rf /home/$NB_USER/.cache/yarn         
 
 EXPOSE 8888 6006
+
+USER root
+
+COPY  jupyter/spark/jupyter_notebook_config.py /etc/jupyter/
+COPY entrypoint_spark.sh /usr/local/bin/
+ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint_spark.sh"]
+CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID

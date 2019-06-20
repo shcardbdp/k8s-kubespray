@@ -1,77 +1,14 @@
 ARG  DEVICE_TYPE=gpu
 ARG  BASE_VERSION
-FROM shcardbdp/mllight-lab-$DEVICE_TYPE:$BASE_VERSION
+FROM shcardbdp/spark-notebook:$BASE_VERSION
+# FROM shcardbdp/mllight-lab-$DEVICE_TYPE:$BASE_VERSION
 # FROM shcardbdp/dl-base-$DEVICE_TYPE:$BASE_VERSION
 
 ARG   VERSION
 ARG   DEVICE_TYPE
 LABEL version=$VERSION device-type=$DEVICE_TYPE
 
-# USER root
-
-# # Configure environment
-# ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-# ENV CONDA_DIR /opt/conda 
-# ENV PATH $CONDA_DIR/bin:$PATH
-# ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH
-
 USER $NB_UID
-
-# Install conda as jovyan and check the md5 sum provided on the download site
-# ENV MINICONDA_VERSION 4.3.30
-# LABEL MINICONDA=$MINICONDA_VERSION
-# RUN cd /tmp && \
-#     wget --quiet https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
-#     echo "0b80a152332a4ce5250f3c09589c7a81 *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
-#     /bin/bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
-#     rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
-#     $CONDA_DIR/bin/conda config --system --prepend channels conda-forge && \
-#     $CONDA_DIR/bin/conda config --system --set auto_update_conda false && \
-#     $CONDA_DIR/bin/conda config --system --set show_channel_urls true && \
-#     $CONDA_DIR/bin/conda update --all --quiet --yes && \
-#     conda clean -tipsy && \
-#     echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
-#     echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc && \
-#     rm -rf /home/$NB_USER/.cache/yarn && \
-#     fix-permissions $CONDA_DIR && \
-#     fix-permissions /home/$NB_USER
-
-# ADD connector/dbi.py /opt/conda/lib/python3.6/site-packages/shcard/    
-
-# Install Jupyter Notebook and Hub
-# pytorch requires cudatoolkit and cudnn to be installed
-# RUN conda install --quiet --yes \
-#         jupyter \
-#         notebook \    
-#         jupyterlab \
-#     && conda clean -tipsy && \        
-#     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-#     rm -rf /home/$NB_USER/.cache/yarn && \
-#     fix-permissions $CONDA_DIR && \
-#     fix-permissions /home/$NB_USER
-
-# ==================================================================
-# Hive/impala, odbc connector
-# ------------------------------------------------------------------
-# RUN conda install --yes --quiet  \
-#         thrift \
-#         thrift_sasl \
-#         impyla==0.14.1 \
-#         && \
-#     conda clean -tipsy && \
-#     rm -rf /home/$NB_USER/.cache/yarn && \
-#     fix-permissions $CONDA_DIR && \
-#     fix-permissions /home/$NB_USER
-
-# RUN pip install --quiet --no-cache-dir \
-#         thriftpy \
-#         pyodbc==4.0.25 \
-#         cufflinks==0.14.6 \
-#     && \
-#     rm -rf /home/$NB_USER/.cache/yarn 
-
-# # Add fonts for NHN fonts
-# COPY fonts/ /usr/share/fonts/
 
 # R-NOTEBOOK 
 RUN conda install --yes -c r \
@@ -420,7 +357,7 @@ USER root
 # RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then ln -s /usr/local/cuda-9.0/lib64/libcurand.so.9.0 /usr/local/cuda-9.0/lib64/libcurand.so.8.0 ; fi
 # # Set up our notebook config.
 # # COPY  jupyter/mllight/jupyter_notebook_config.py /etc/jupyter/
-# COPY  jupyter/spark/jupyter_notebook_config.py /etc/jupyter/
+COPY  jupyter/spark/jupyter_notebook_config.py /etc/jupyter/
 # COPY  notebooks /home/$NB_USER/notebooks/samples/
 # COPY  run_jupyter.sh /usr/local/bin/
 # RUN rm -rf /home/$NB_USER/work && chown -R $NB_USER:$NB_UID /home/$NB_USER/notebooks && \
@@ -428,6 +365,8 @@ USER root
 
 EXPOSE 54321
 
+COPY entrypoint_spark.sh /usr/local/bin/
+ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint_spark.sh"]
 CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
 
 # Switch back to jovyan to avoid accidental container runs as root
