@@ -72,69 +72,11 @@ RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-di
 
 USER $NB_UID
 
-# Install conda as jovyan and check the md5 sum provided on the download site
-# ENV MINICONDA_VERSION 4.3.30
-# LABEL MINICONDA=$MINICONDA_VERSION
-# RUN cd /tmp && \
-#     wget --quiet https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
-#     echo "0b80a152332a4ce5250f3c09589c7a81 *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
-#     /bin/bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
-#     rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
-#     $CONDA_DIR/bin/conda config --system --prepend channels conda-forge && \
-#     $CONDA_DIR/bin/conda config --system --set auto_update_conda false && \
-#     $CONDA_DIR/bin/conda config --system --set show_channel_urls true && \
-#     $CONDA_DIR/bin/conda update --all --quiet --yes && \
-#     conda clean -tipsy && \
-#     echo "export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
-#     echo "export PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH" >> /home/$NB_USER/.bashrc && \
-#     rm -rf /home/$NB_USER/.cache/yarn && \
-#     fix-permissions $CONDA_DIR && \
-#     fix-permissions /home/$NB_USER
-
-# ADD connector/dbi.py /opt/conda/lib/python3.6/site-packages/shcard/    
-
-# RUN echo "DEVICE_TYPE : $DEVICE_TYPE"
-# RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.12.0 keras==2.2.4 pytorch torchvision -c pytorch ; conda install --yes --quiet -c lukepfister pycuda==2017.1 scikits.cuda; else conda install --quiet --yes tensorflow==1.12.0 keras==2.2.4 pytorch; fi \
-#      && conda clean -tipsy  \
-#      && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
-
-# Install Jupyter Notebook and Hub
-# pytorch requires cudatoolkit and cudnn to be installed
+# Install python lib by conda
 RUN conda install --quiet --yes \
-        # jupyter \
-        # notebook \    
-        # jupyterlab \
         pyarrow==0.11.1 \
-        # seaborn==0.9.0 \  
-        # matplotlib==3.0.2 \
-        # scikit-learn==0.20.2 \
-        # numpy==1.16.0 \
-        # pandas==0.23.4 \
-        # pyspark==2.3 \
-        # statsmodels==0.9.0 \ 
-        # scipy==1.1.0 \
-        # cython==0.29.3 \
-        # pytest==4.1.1 \
-        # numba==0.42.0 \
-        # bokeh==1.0.4 \
-        # gensim \ Install using pip by request from Song G 
-        # nltk==3.4 \
-        # fasttext \ Install using pip by request from Song G 
-        # implicit==0.3.7 \
-        # lightfm==1.15 \
-        # imbalanced-learn==0.4.3 \
-        # beautifulsoup4==4.7.1 \
-        # autopep8==1.4.3 \
-        # cx_oracle==7.0.0 \
-        # feather-format \
-        # swig \
-        # openmpi \
-        # pydotplus==2.0.2 \
-        # networkx==2.2 \
         plotly==3.5.0 \
         pycrypto \
-        # hyperopt==0.1.2 \
-        # dask \
         geopandas \
     && conda clean -tipsy && \        
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
@@ -142,6 +84,7 @@ RUN conda install --quiet --yes \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
+# Install python lib by pip3
 RUN pip install --quiet --no-cache-dir \
         folium==0.9.1 \
         mecab-python3==0.7  \
@@ -154,7 +97,8 @@ RUN pip install --quiet --no-cache-dir \
 COPY spark/hosts /tmp/
 COPY spark/conf.cloudera.yarn/ /opt/conf.cloudera.yarn/
 COPY spark/hive/hive-site.xml /usr/local/spark/conf/
-# 통합 포털에서 생성하는 것으로 변경. (2019-05-13)
+
+# volume attach 방식으로 변경 (2019-05-13)
 # COPY spark/spark-defaults.conf /usr/local/spark/conf/ 
 
 COPY spark/DbInterface.py /opt/conda/lib/python3.6/
@@ -183,9 +127,6 @@ RUN echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && 
 
 USER root
 
-# replace 가능하도록 권한 변경.
-# RUN chmod 666 /usr/local/spark/conf/spark-defaults.conf 
-# RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then ln -s /usr/local/cuda-9.0/lib64/libcurand.so.9.0 /usr/local/cuda-9.0/lib64/libcurand.so.8.0 ; fi
 # Set up our notebook config.
 # COPY  jupyter/mllight/jupyter_notebook_config.py /etc/jupyter/
 COPY  jupyter/spark/jupyter_notebook_config.py /etc/jupyter/
@@ -194,18 +135,6 @@ COPY  jupyter/spark/jupyter_notebook_config.py /etc/jupyter/
 # RUN rm -rf /home/$NB_USER/work && chown -R $NB_USER:$NB_UID /home/$NB_USER/notebooks && \
 #     fix-permissions /etc/jupyter/ && fix-permissions /home/$NB_USER/notebooks/samples
 
-# # [check 대상]
-# # For Jobs
-# EXPOSE 31600 31601 31602 31603 31604 31605 31606 31607 31608 31609 31610 31611 31612 31613 31614 31615 31616 31617 31618 31619 31620 31621 \
-#         31622 31623 31624 31625 31626 31627 31628 31629 31630 31631 31632 31633 31634 31635 31636 31637 31638 31639 31640 31641 31642 31643 \
-#         31644 31645 31646 31647 31648 31649 31650 31651 31652 31653 31654 31655 31656 31657 31658 31659 31660 31661 31662 31663 31664 31665 \
-#         31666 31667 31668 31669 31670 31671 31672 31673 31674 31675 31676 31677 31678 31679 31680 31681 31682 31683 31684 31685 31686 31687 \
-#         31688 31689 31690 31691 31692 31693 31694 31695 31696 31697 31698 31699
-# # For Analysis (현재구조로는 이미지 생성때마다 만들어야 함) from 31300
-# EXPOSE 31300 31301 31302 31303 31304 31305 31306 31307 31308 31309
-
-# 1.0.6 entrypoint_spark
-# 1.0.5 entrypoint
 COPY entrypoint_spark.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint_spark.sh"]
 CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
