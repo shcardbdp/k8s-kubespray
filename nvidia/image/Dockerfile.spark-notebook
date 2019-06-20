@@ -35,6 +35,41 @@ ENV SPARK_HOME /usr/local/spark
 ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip
 ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info
 
+# ==================================================================
+# mecab analyzer from bitbucket
+# ------------------------------------------------------------------
+RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko/downloads/mecab-0.996-ko-0.9.2.tar.gz -O mecab.tar.gz && \
+    tar -zxf mecab.tar.gz && \
+    cd mecab-0.996-ko-0.9.2 && \
+    ./configure && \
+    make && \ 
+    make check && \
+    make install && \
+    ldconfig && \
+    rm -rf ../mecab.tar.gz ../mecab-0.996-ko-0.9.2
+
+# ==================================================================
+# install automake 1.11 for mecab dictionary
+# ------------------------------------------------------------------
+RUN apt-get update && apt-get install -y automake1.11 \
+          && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*    
+
+# ==================================================================
+# mecab dictionary from bitbucket 
+# ------------------------------------------------------------------
+RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.1.1-20180720.tar.gz -O mecab-dic.tar.gz && \
+    tar -zxf mecab-dic.tar.gz && \
+    cd mecab-ko-dic-2.1.1-20180720 && \
+    ./autogen.sh  && \
+    ./configure && \
+    make && \
+    make check && \
+    make install && \
+    ldconfig && \
+    rm -rf ../mecab-dic.tar.gz ../mecab-ko-dic-2.1.1-20180720
+
 USER $NB_UID
 
 # Install conda as jovyan and check the md5 sum provided on the download site
@@ -107,79 +142,11 @@ RUN conda install --quiet --yes \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
-# RUN pip install --quiet --no-cache-dir \
-#         xgboost==0.81 \
-#         eli5==0.8.1 \ 
-#         mlxtend==0.15.0.0 \
-#         lightgbm==2.2.2 \
-#         catboost==0.12.2 \
-#         plotnine==0.5.1 \
-#         missingno==0.4.1 \
-#         pyLDAvis==2.1.2 \
-#         Edward \
-#         dfply \
-#         dplython \
-#         #auto-sklearn \  # when it's compatible with numpy  
-#         #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
-#     && \
-#     rm -rf /home/$NB_USER/.cache/yarn 
-
-# RUN pip install --quiet --no-cache-dir \
-#         surprise==0.1 \
-#         tensorboard==1.12.2 \
-#         tensorflowonspark==1.4.2 \
-#         tensorboard_logger==0.1.0 \
-#         tensorboard_pytorch==0.7.1 \
-#         tensorboardX==1.6 \
-#         horovod==0.16.1 \
-#         ipython-memory-usage==1.1 \
-#         #jupyter_contrib_nbextensions \ # Because of ImportError, change to install by conda
-#         nbresuse==0.3.0 \   
-#         gensim==3.7.0 \
-#         fasttext==0.8.3 \
-#         konlpy==0.5.1 \
-#         pycm==1.8 \
-#         apyori==1.1.1 \
-#         # toree==0.3.0 \
-#         #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
-#     && \
-#     rm -rf /home/$NB_USER/.cache/yarn 
-
 RUN pip install --quiet --no-cache-dir \
         folium==0.9.1 \
+        mecab-python3==0.7  \
     && \    
     rm -rf /home/$NB_USER/.cache/yarn 
-
-# ==================================================================
-# Hive/impala, odbc connector
-# ------------------------------------------------------------------
-# RUN conda install --yes --quiet  \
-#         thrift \
-#         thrift_sasl \
-#         impyla==0.14.1 \
-#         && \
-#     conda clean -tipsy && \
-#     rm -rf /home/$NB_USER/.cache/yarn && \
-#     fix-permissions $CONDA_DIR && \
-#     fix-permissions /home/$NB_USER
-
-# RUN pip install --quiet --no-cache-dir \
-#         thriftpy \
-#         pyodbc==4.0.25 \
-#         cufflinks==0.14.6 \
-#     && \
-#     rm -rf /home/$NB_USER/.cache/yarn 
-
-# RUN pip uninstall --yes pyzmq && pip  install --quiet --no-cache-dir pyzmq
-
-# # Cuz of zmq. Next time, Check the reason where pyzmq is installed  
-# RUN conda install --quiet --yes \
-#         jupyter_contrib_nbextensions==0.5.1 \
-#     && conda clean -tipsy && \        
-#     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-#     rm -rf /home/$NB_USER/.cache/yarn && \
-#     fix-permissions $CONDA_DIR && \
-#     fix-permissions /home/$NB_USER
 
 # ==================================================================
 # Spark Setting
