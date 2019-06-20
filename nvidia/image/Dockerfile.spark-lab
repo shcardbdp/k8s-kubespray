@@ -245,7 +245,13 @@ RUN rm -rf /home/$NB_USER/work && rm -rf /home/$NB_USER/.rpmdb && chown -R $NB_U
 # EXPOSE 30820 30821
 
 # 통합추천 랩(일) 1.0.11 Port 30822-30823
-EXPOSE 30822 30823
+# EXPOSE 30822 30823
+
+# 일반모델 spark-notebook-20190515125720 1.0.12
+# EXPOSE 31103 31104 31105
+
+# 타켓필터링 spark-notebook20190515125958 1.0.13
+EXPOSE 31106 31107 31108
 
 # Add fonts for NHN fonts
 COPY fonts/ /usr/share/fonts/
