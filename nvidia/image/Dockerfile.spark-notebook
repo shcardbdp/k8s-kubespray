@@ -32,7 +32,7 @@ RUN cd /usr/local && ln -s spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERS
 
 # Spark and Mesos config
 ENV SPARK_HOME /usr/local/spark
-ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip
+ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip:/home/$NB_USER/notebooks/src/shcPython/common
 ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info
 
 USER $NB_UID
@@ -52,6 +52,7 @@ RUN conda install --quiet --yes \
 # Install python lib by pip3
 RUN pip install --quiet --no-cache-dir \
         folium==0.9.1 \
+        openpyxl==2.6.2 \
     && \    
     rm -rf /home/$NB_USER/.cache/yarn 
 
@@ -84,7 +85,7 @@ ENV PYSPARK_PYTHON /shcsw/anaconda3/bin/python
 COPY fonts/ /usr/share/fonts/
 
 # PATH Setting
-ENV PATH /home/$NB_USER/notebooks/src/shcPython/jdbc:/home/$NB_USER/notebooks/src/shcPython/common:${PATH}
+ENV PATH /home/$NB_USER/notebooks/src/shcPython/jdbc:${PATH}
 
 RUN echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
     echo "export PATH=$PATH" >> /home/$NB_USER/.bashrc

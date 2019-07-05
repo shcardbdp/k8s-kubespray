@@ -1,7 +1,7 @@
 # shinhan-os:cpu - ubuntu:16.04
-# shinhan-os:gpu - nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+# shinhan-os:gpu - nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04 # docker pull nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 
-ARG DEVICE_TYPE
+ARG DEVICE_TYPE=gpu
 ARG VERSION
 
 FROM shcardbdp/shinhan-os:$DEVICE_TYPE
@@ -18,6 +18,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     rm -rf /var/lib/apt/lists/* \
            /etc/apt/sources.list.d/cuda.list \
            /etc/apt/sources.list.d/nvidia-ml.list && \
+    sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
     apt-get update && \
 # ==================================================================
 # tools
@@ -46,8 +47,8 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         locales \
         net-tools \
         telnet \
-          && \
-    apt-get clean && \
+        convmv \
+            && \
     rm -rf /var/lib/apt/lists/*
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \

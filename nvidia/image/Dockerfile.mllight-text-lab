@@ -88,6 +88,7 @@ RUN pip install --quiet --no-cache-dir \
         keras-bert==0.55.1 \
         bert-tensorflow==1.0.1 \
         tensorflow-hub==0.4.0 \
+        pytorch-pretrained-bert \        
     && \
     rm -rf /home/$NB_USER/.cache/yarn         
 
