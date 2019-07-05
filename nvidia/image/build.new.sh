@@ -6,11 +6,11 @@ set -e
 usage() { echo "Usage: $0 [-h help] [-b base image version (defaul DL_BASE_VERSION)] [-s build scope (all, p, ml, sp, r, mt, 4)]" 1>&2; exit 1; }
 
 # image version
-DL_BASE_VERSION="1.0.3"
-MLLIGHT_VERSION="1.0.9"
-SPARK_VERSION="1.0.8"
+DL_BASE_VERSION="1.0.4"
+MLLIGHT_VERSION="1.0.10"
+SPARK_VERSION="1.0.10"
 R_VERSION="1.0.3"
-TEXT_VERSION="1.0.4"
+TEXT_VERSION="1.0.6"
 VERSION=${DL_BASE_VERSION}
 
 # TYPE="all"
