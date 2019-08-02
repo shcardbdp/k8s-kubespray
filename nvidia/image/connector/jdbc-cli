@@ -2,9 +2,9 @@
 
 set -e
 
-usage() { echo "Usage: $0 [-t {oracle|hive}]  [-q <query> must be in a quote.] [-o <csv file name> ex) mytable.csv] [-s separator. must be in a quote. default: \",\"]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-t {oracle|hive}]  [-q <query> must be in a quote.] [-o <csv file name> ex) mytable.csv] [-s separator. must be in a quote. default: \",\"] [-d <dir_to_write> default: .] [-a {true|false} to append. default: false]" 1>&2; exit 1; }
 
-while getopts ":t:q:o:s:h:" flag; do
+while getopts ":t:q:o:s:d:a:h:" flag; do
     case "${flag}" in
         t)
             t=${OPTARG}
@@ -18,6 +18,12 @@ while getopts ":t:q:o:s:h:" flag; do
         s)
             s=${OPTARG}
             ;;
+        d)
+            d=${OPTARG}
+            ;;
+        a)
+            a=${OPTARG}
+            ;;                    
         h)
             usage
             ;;                
@@ -40,6 +46,8 @@ echo "t = ${t}"
 echo "q = ${q}"
 echo "o = ${o}"
 echo "s = ${s}"
+echo "d = ${d}"
+echo "a = ${a}"
 
 
-java -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -cp /usr/local/bin JdbcClient "${t}" "${q}" "${o}" "${s}"
+java -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -cp /usr/local/bin JdbcClient "${t}" "${q}" "${o}" "${s}" "${d}" "${a}"

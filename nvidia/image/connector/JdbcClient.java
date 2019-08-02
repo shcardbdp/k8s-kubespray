@@ -26,11 +26,15 @@ public class JdbcClient {
 		String sql = args[1];
 		String filename = args[2];
 		String separator = args[3];
+		String targetDir = args[4];
+		String append = args[5];
 
 		System.out.println("[JdbcClient] type : " + type);
 		System.out.println("[JdbcClient] sql : " + sql);
 		System.out.println("[JdbcClient] filename : " + filename);
 		System.out.println("[JdbcClient] separator : " + separator);
+		System.out.println("[JdbcClient] target directory : " + targetDir);
+		System.out.println("[JdbcClient] append : " + append);
 
 		Properties prop = new Properties();
 		InputStream input = null;
@@ -67,11 +71,15 @@ public class JdbcClient {
 			input.close();
 		}
 
-		outDir = (outDir != null) ? (outDir + "/") : "./";
+		//outDir = (outDir != null) ? (outDir + "/") : "./";
+		outDir = (targetDir != null) ? (targetDir + "/") : "./";
+		boolean isAppend = "true".equals(append) ? true : false;
+
 		System.out.println("[JdbcClient] dirver : " + driverName);
 		System.out.println("[JdbcClient] url : " + url);
 		System.out.println("[JdbcClient] username : " + username);
 		System.out.println("[JdbcClient] outdir : " + outDir);
+		System.out.println("[JdbcClient] append : " + append);
 
 		try {
 			Class.forName(driverName);
@@ -89,7 +97,9 @@ public class JdbcClient {
 		FileOutputStream fos = null;
 		Writer out = null;
 		try {
-			fos = new FileOutputStream(new File(outDir + filename), false);
+			File file = new File(outDir + filename);
+			boolean isExists = file.exists();
+			fos = new FileOutputStream(new File(outDir + filename), isAppend); //false);
 			out = new OutputStreamWriter(new BufferedOutputStream(fos), "UTF-8");
 
 			for (int j = 1; j < (ncols + 1); j++) {
@@ -110,6 +120,7 @@ public class JdbcClient {
 				}
 				m++;
 			}
+			System.out.println(String.format("{'status':'200 OK', 'rows':%d}", m));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {

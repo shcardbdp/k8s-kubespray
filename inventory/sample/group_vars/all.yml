@@ -1,14 +1,15 @@
 # Valid bootstrap options (required): ubuntu, coreos, centos, none
 bootstrap_os: centos
 
-redhat_subscription_user: sorididim11
-redhat_subscription_pwd: c1!DG#HJ6kWD!xwh
+redhat_subscription_user: realspoon
+redhat_subscription_pwd: love0507
 docker_container_storage_setup: false
 #Directory where etcd data stored
 etcd_data_dir: /var/lib/etcd
 
 # Directory where the binaries will be installed
 bin_dir: /usr/local/bin
+docker_dns_servers_strict: False
 
 ## The access_ip variable is used to define how other nodes should access
 ## the node.  This is used in flannel to allow other flannel nodes to see
