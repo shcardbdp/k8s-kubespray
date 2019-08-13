@@ -98,6 +98,9 @@ RUN pip install --quiet --no-cache-dir \
         tensorwatch \      
         sacred \
         pytorch-transformers \
+        mxnet \
+        mxnet-cu90 \
+        gluonnlp \
     && \
     rm -rf /home/$NB_USER/.cache/yarn         
 
