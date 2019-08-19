@@ -86,12 +86,11 @@ RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-di
 
 RUN echo "DEVICE_TYPE : $DEVICE_TYPE"
 
-RUN conda install --quiet --yes tensorflow-gpu=1.13.1 \
+RUN conda install --quiet --yes tensorflow-gpu==1.14.0 \
     && conda clean -tipsy \
     && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
 RUN pip install --quiet --no-cache-dir \        
-        tensorboard==1.13.1 \
         mecab-python3==0.7  \
         bert-pytorch==0.0.1a4 \
         keras-bert==0.55.1 \
