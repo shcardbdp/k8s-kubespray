@@ -169,33 +169,61 @@ RUN conda install --quiet --yes \
         jupyter \
         notebook \    
         jupyterlab \
-        seaborn==0.9.0 \  
-        matplotlib==3.0.2 \
+        # seaborn==0.9.0 \  
+        seaborn \
+        # matplotlib==3.0.2 \
+        matplotlib \
         scikit-learn==0.21.2 \
         numpy==1.16.4 \
-        pandas==0.24.2 \
-        pyspark==2.3 \
-        statsmodels==0.9.0 \ 
-        scipy==1.3.0 \
-        cython==0.29.3 \
-        pytest==4.1.1 \
-        numba==0.42.0 \
-        bokeh==1.0.4 \        
-        nltk==3.4 \
-        implicit==0.3.7 \
+        pandas==0.24.2 \        
+        # statsmodels==0.9.0 \ 
+        statsmodels \
+        scipy==1.3.1 \
+        # cython==0.29.3 \
+        cython \
+        # pytest==4.1.1 \
+        pytest \
+        # numba==0.42.0 \
+        numba \
+        # bokeh==1.0.4 \        
+        bokeh \
+        # nltk==3.4 \
+        nltk \
+        # implicit==0.3.7 \
+        implicit \
         lightfm==1.15 \
-        imbalanced-learn==0.4.3 \
-        beautifulsoup4==4.7.1 \
-        autopep8==1.4.3 \
-        cx_oracle==7.0.0 \
+        # imbalanced-learn==0.4.3 \
+        imbalanced-learn \
+        # beautifulsoup4==4.7.1 \
+        beautifulsoup4 \
+        # autopep8==1.4.3 \
+        autopep8 \
+        # cx_oracle==7.0.0 \
+        cx_oracle \
         feather-format \
         swig \
         openmpi \
-        pydotplus==2.0.2 \
-        networkx==2.2 \
-        hyperopt==0.1.2 \
-        apscheduler==3.6.0 \
-        dask==1.2.0 \
+        # pydotplus==2.0.2 \
+        pydotplus \
+        # networkx==2.2 \
+        networkx \
+        # hyperopt==0.1.2 \
+        hyperopt \
+        # apscheduler==3.6.0 \
+        apscheduler \
+        # dask==1.2.0 \
+        dask \
+        thrift \
+        thrift_sasl \
+        # impyla==0.14.1 \
+        impyla \
+        # plotly==3.5.0 \        
+        plotly==3.10.0 \ 
+        pycrypto \
+        geopandas \
+        fire \
+        watchdog \
+        pymongo \
     && conda clean -tipsy && \        
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -204,55 +232,80 @@ RUN conda install --quiet --yes \
 
 RUN pip install --quiet --no-cache-dir \
         xgboost==0.90 \
-        eli5==0.8.1 \ 
-        mlxtend==0.15.0.0 \
-        lightgbm==2.2.3 \
-        catboost==0.14.2 \
-        plotnine==0.5.1 \
-        missingno==0.4.1 \
-        pyLDAvis==2.1.2 \
+        # eli5==0.8.1 \ 
+        eli5 \
+        # mlxtend==0.15.0.0 \
+        mlxtend \
+        lightgbm==2.2.3 \        
+        catboost==0.16.4 \        
+        # plotnine==0.5.1 \
+        plotnine \
+        # missingno==0.4.1 \
+        missingno \ 
+        # pyLDAvis==2.1.2 \
+        pyLDAvis \
         Edward \
         dfply \
         dplython \
-        schedule==0.6.0 \
-        surprise==0.1 \
+        # schedule==0.6.0 \
+        schedule \
+        # surprise==0.1 \
+        surprise \
         # tensorflowonspark==1.4.2 \        #tensorflow 설치 이후 설치
         # tensorboard_logger==0.1.0 \       #tensorflow 설치 이후 설치
         # tensorboard_pytorch==0.7.1 \      #tensorflow 설치 이후 설치
         # tensorboardX==1.6 \               #tensorflow 설치 이후 설치
         # horovod==0.16.2 \                 #tensorflow 설치 이후 설치
-        ipython-memory-usage==1.1 \
-        nbresuse==0.3.0 \   
-        gensim==3.7.0 \
-        fasttext==0.8.3 \
-        konlpy==0.5.1 \
-        pycm==1.8 \
-        apyori==1.1.1 \
+        # ipython-memory-usage==1.1 \
+        ipython-memory-usage \
+        # nbresuse==0.3.0 \   
+        nbresuse \   
+        # gensim==3.7.0 \
+        gensim \
+        # fasttext==0.8.3 \
+        fasttext \
+        # konlpy==0.5.1 \
+        konlpy \
+        # pycm==1.8 \
+        pycm \
+        # apyori==1.1.1 \
+        apyori \
         pySnooper \
-        #https://s3.amazonaws.com/h2o-release/datatable/stable/datatable-0.6.0/datatable-0.6.0-cp36-cp36m-linux_x86_64.whl \
+        thriftpy \
+        # pyodbc==4.0.25 \
+        pyodbc \
+        # cufflinks==0.14.6 \        
+        cufflinks \    
+        # folium==0.9.1 \
+        folium \
+        # openpyxl==2.6.2 \  
+        openpyxl \  
+        sacred \
+        gluonnlp \
+        chatspace \
     && \
     rm -rf /home/$NB_USER/.cache/yarn 
 
 # ==================================================================
 # Hive/impala, odbc connector
 # ------------------------------------------------------------------
-RUN conda install --yes --quiet  \
-        thrift \
-        thrift_sasl \
-        impyla==0.14.1 \
-        plotly==3.5.0 \
-        && \
-    conda clean -tipsy && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+# RUN conda install --yes --quiet  \
+#         thrift \
+#         thrift_sasl \
+#         impyla==0.14.1 \
+#         plotly==3.5.0 \
+#         && \
+#     conda clean -tipsy && \
+#     rm -rf /home/$NB_USER/.cache/yarn && \
+#     fix-permissions $CONDA_DIR && \
+#     fix-permissions /home/$NB_USER
 
-RUN pip install --quiet --no-cache-dir \
-        thriftpy \
-        pyodbc==4.0.25 \
-        cufflinks==0.14.6 \
-    && \
-    rm -rf /home/$NB_USER/.cache/yarn 
+# RUN pip install --quiet --no-cache-dir \
+#         thriftpy \
+#         pyodbc==4.0.25 \
+#         cufflinks==0.14.6 \
+#     && \
+#     rm -rf /home/$NB_USER/.cache/yarn 
 
 USER root
 WORKDIR /home/$NB_USER
