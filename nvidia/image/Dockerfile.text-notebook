@@ -1,0 +1,63 @@
+ARG DEVICE_TYPE=gpu
+ARG VERSION
+ARG BASE_VERSION
+FROM shcardbdp/spark-notebook:$BASE_VERSION
+# FROM shcardbdp/mllight-lab-$DEVICE_TYPE:$BASE_VERSION
+
+ARG DEVICE_TYPE=gpu
+ARG VERSION
+LABEL version=$VERSION device-type=$DEVICE_TYPE
+
+USER $NB_UID
+
+USER root
+
+# khaii install
+RUN conda install --yes --quiet -c anaconda cmake
+
+RUN cd /tmp && git clone https://github.com/kakao/khaiii.git && \
+    cd khaiii && \
+    pip install -r requirements.txt && \
+    mkdir build && cd build && \
+    cmake .. && \
+    make all && \
+    make resource && \
+    make large_resource && \
+    make install && \
+    make package_python && \ 
+    cd package_python && pip install --quiet --no-cache-dir . && \
+    rm -rf /tmp/khaiii && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+RUN echo "DEVICE_TYPE : $DEVICE_TYPE"
+
+RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.14.0 keras==2.2.4 pytorch torchvision -c pytorch ; conda install --yes --quiet -c lukepfister pycuda==2017.1 scikits.cuda; else conda install --quiet --yes tensorflow==1.14.0 keras==2.2.4 pytorch; fi \
+     && conda clean -tipsy  \
+     && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
+
+RUN pip install --quiet --no-cache-dir \        
+        # bert-pytorch==0.0.1a4 \
+        bert-pytorch \
+        # keras-bert==0.55.1 \
+        keras-bert \
+        # bert-tensorflow==1.0.1 \
+        bert-tensorflow \
+        pytorch-transformers \
+        mxnet \
+        mxnet-cu90 \
+    && \
+    rm -rf /home/$NB_USER/.cache/yarn         
+
+EXPOSE 8888 6006
+
+USER root
+
+COPY  jupyter/spark/jupyter_notebook_config.py /etc/jupyter/
+COPY entrypoint_spark.sh /usr/local/bin/
+ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint_spark.sh"]
+CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
+
+# Switch back to jovyan to avoid accidental container runs as root
+USER $NB_UID
+
