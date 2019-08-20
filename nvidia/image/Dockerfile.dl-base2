@@ -309,18 +309,18 @@ RUN pip install --quiet --no-cache-dir \
 
 USER root
 WORKDIR /home/$NB_USER
-COPY entrypoint.sh /usr/local/bin/
+COPY entrypoint_spark.sh /usr/local/bin/
 
 RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then ln -s /usr/local/cuda-9.0/lib64/libcurand.so.9.0 /usr/local/cuda-9.0/lib64/libcurand.so.8.0 ; fi
 # Set up our notebook config.
-COPY  jupyter/mllight/jupyter_notebook_config.py /etc/jupyter/
+COPY  jupyter/spark/jupyter_notebook_config.py /etc/jupyter/
 COPY  run_jupyter.sh /usr/local/bin/
 RUN rm -rf /home/$NB_USER/work && \
     fix-permissions /etc/jupyter/
 
 EXPOSE 8888 6006
 
-ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint.sh"]
+ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint_spark.sh"]
 CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
 
 # Add fonts for NHN fonts
