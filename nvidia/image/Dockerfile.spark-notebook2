@@ -1,0 +1,151 @@
+ARG  DEVICE_TYPE=gpu
+ARG  BASE_VERSION
+FROM shcardbdp/datalab-base-$DEVICE_TYPE:$BASE_VERSION
+
+ARG   VERSION
+ARG   DEVICE_TYPE
+LABEL version=$VERSION device-type=$DEVICE_TYPE
+
+USER $NB_UID
+
+RUN echo "DEVICE_TYPE : $DEVICE_TYPE"
+RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.12.0 keras==2.2.4 pytorch torchvision -c pytorch ; conda install --yes --quiet -c lukepfister pycuda==2017.1 scikits.cuda; else conda install --quiet --yes tensorflow==1.12.0 keras==2.2.4 pytorch; fi \
+     && conda clean -tipsy  \
+     && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
+
+USER root
+
+# Spark dependencies
+ENV APACHE_SPARK_VERSION 2.4.3
+ENV HADOOP_VERSION 2.7
+
+RUN apt-get -y update && \
+    apt-get install --no-install-recommends -y openjdk-8-jre-headless ca-certificates-java && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN cd /tmp && \
+    wget -q http://mirrors.ukfast.co.uk/sites/ftp.apache.org/spark/spark-${APACHE_SPARK_VERSION}/spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
+    echo "E8B7F9E1DEC868282CADCAD81599038A22F48FB597D44AF1B13FCC76B7DACD2A1CAF431F95E394E1227066087E3CE6C2137C4ABAF60C60076B78F959074FF2AD *spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" | sha512sum -c - && \
+    tar xzf spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz -C /usr/local --owner root --group root --no-same-owner && \
+    rm spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
+RUN cd /usr/local && ln -s spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark
+
+# Spark and Mesos config
+ENV SPARK_HOME /usr/local/spark
+ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip:/home/$NB_USER/notebooks/src/shcPython/common
+ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info
+
+# wisenut module
+ENV PYTHONPATH /home/$NB_USER/notebooks/src/shcPython/wisenut:${PYTHONPATH}
+
+# ==================================================================
+# mecab analyzer from bitbucket
+# ------------------------------------------------------------------
+RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko/downloads/mecab-0.996-ko-0.9.2.tar.gz -O mecab.tar.gz && \
+    tar -zxf mecab.tar.gz && \
+    cd mecab-0.996-ko-0.9.2 && \
+    ./configure && \
+    make && \ 
+    make check && \
+    make install && \
+    ldconfig && \
+    rm -rf ../mecab.tar.gz ../mecab-0.996-ko-0.9.2
+
+# ==================================================================
+# install automake 1.11 for mecab dictionary
+# ------------------------------------------------------------------
+RUN apt-get update && apt-get install -y automake1.11 \
+          && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*    
+
+# ==================================================================
+# mecab dictionary from bitbucket 
+# ------------------------------------------------------------------
+RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.1.1-20180720.tar.gz -O mecab-dic.tar.gz && \
+    tar -zxf mecab-dic.tar.gz && \
+    chown -R root:root mecab-ko-dic-2.1.1-20180720 && \ 
+    cd mecab-ko-dic-2.1.1-20180720 && \
+    ./autogen.sh  && \
+    ./configure && \
+    make && \
+    make check && \
+    make install && \
+    ldconfig && \
+    rm -rf ../mecab-dic.tar.gz
+
+USER $NB_UID
+
+# Install python lib by conda
+RUN conda install --quiet --yes \
+        # pyarrow==0.13.0 \
+        pyarrow \
+    && conda clean -tipsy && \        
+    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+RUN pip install --quiet --no-cache-dir \
+        # tensorflowonspark==1.4.2 \        
+        tensorflowonspark \        
+        # tensorboard_logger==0.1.0 \       
+        tensorboard_logger \       
+        # tensorboard_pytorch==0.7.1 \      
+        tensorboard_pytorch \      
+        # tensorboardX==1.6 \               
+        tensorboardX \               
+        # horovod==0.16.2 \       
+        horovod \       
+        mecab-python3==0.7 \        
+        # tensorflow-hub==0.4.0 \
+        tensorflow-hub \
+        keras-tuner \
+        tensorwatch \
+        torchtext \
+        torchaudio \
+    && \
+    rm -rf /home/$NB_USER/.cache/yarn 
+
+# ==================================================================
+# Spark Setting
+# ------------------------------------------------------------------
+COPY spark/conf.cloudera.yarn/ /opt/conf.cloudera.yarn/
+COPY spark/hive/hive-site.xml /usr/local/spark/conf/
+
+# volume attach 방식으로 변경 (2019-05-13)
+# COPY spark/spark-defaults.conf /usr/local/spark/conf/ 
+
+COPY spark/DbInterface.py /opt/conda/lib/python3.6/
+COPY spark/log4j.properties /usr/local/spark/conf/
+# Setting env value
+ENV HADOOP_CONF_DIR /opt/conf.cloudera.yarn
+ENV YARN_CONF_DIR /opt/conf.cloudera.yarn
+
+ENV SPARK_HOME /usr/local/spark
+ENV PATH $SPARK_HOME/bin:${PATH}
+
+ENV SPARK_CONF_DIR $SPARK_HOME/conf
+
+ENV SPARK_YARN_USER_ENV='PYSPARK_PYTHON=/shcsw/anaconda3/bin/python'
+ENV PYSPARK_DRIVER_PYTHON /opt/conda/bin/python
+ENV PYSPARK_PYTHON /shcsw/anaconda3/bin/python    
+
+# Add fonts for NHN fonts
+COPY fonts/ /usr/share/fonts/
+
+# PATH Setting
+ENV PATH /home/$NB_USER/notebooks/src/shcPython/jdbc:${PATH}
+
+RUN echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
+    echo "export PATH=$PATH" >> /home/$NB_USER/.bashrc
+
+USER root
+
+COPY entrypoint_spark.sh /usr/local/bin/
+ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint_spark.sh"]
+CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
+
+# Switch back to jovyan to avoid accidental container runs as root
+USER $NB_UID
+

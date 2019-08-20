@@ -158,11 +158,6 @@ RUN cd /tmp && \
 
 ADD connector/dbi.py /opt/conda/lib/python3.6/site-packages/shcard/    
 
-# RUN echo "DEVICE_TYPE : $DEVICE_TYPE"
-# RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.12.0 keras==2.2.4 pytorch torchvision -c pytorch ; conda install --yes --quiet -c lukepfister pycuda==2017.1 scikits.cuda; else conda install --quiet --yes tensorflow==1.12.0 keras==2.2.4 pytorch; fi \
-#      && conda clean -tipsy  \
-#      && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
-
 # Install Jupyter Notebook and Hub
 # pytorch requires cudatoolkit and cudnn to be installed
 RUN conda install --quiet --yes \
@@ -251,11 +246,6 @@ RUN pip install --quiet --no-cache-dir \
         schedule \
         # surprise==0.1 \
         surprise \
-        # tensorflowonspark==1.4.2 \        #tensorflow 설치 이후 설치
-        # tensorboard_logger==0.1.0 \       #tensorflow 설치 이후 설치
-        # tensorboard_pytorch==0.7.1 \      #tensorflow 설치 이후 설치
-        # tensorboardX==1.6 \               #tensorflow 설치 이후 설치
-        # horovod==0.16.2 \                 #tensorflow 설치 이후 설치
         # ipython-memory-usage==1.1 \
         ipython-memory-usage \
         # nbresuse==0.3.0 \   
