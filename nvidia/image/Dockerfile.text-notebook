@@ -26,15 +26,18 @@ RUN cd /tmp && git clone https://github.com/kakao/khaiii.git && \
     make install && \
     make package_python && \ 
     cd package_python && pip install --quiet --no-cache-dir . && \
-    rm -rf /tmp/khaiii && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+    rm -rf /tmp/khaiii
 
 RUN echo "DEVICE_TYPE : $DEVICE_TYPE"
 
 RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.14.0 keras==2.2.4 pytorch torchvision -c pytorch ; conda install --yes --quiet -c lukepfister pycuda==2017.1 scikits.cuda; else conda install --quiet --yes tensorflow==1.14.0 keras==2.2.4 pytorch; fi \
-     && conda clean -tipsy  \
-     && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
+        # && conda clean -tipsy  \
+        && conda clean -afy \
+        && find /opt/conda/ -follow -type f -name '*.a' -delete \
+        && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+        && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
+        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' \
+        && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
 RUN pip install --quiet --no-cache-dir \        
         # bert-pytorch==0.0.1a4 \
