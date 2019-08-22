@@ -10,14 +10,14 @@ USER $NB_UID
 
 RUN echo "DEVICE_TYPE : $DEVICE_TYPE"
 RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.12.0 keras==2.2.4 pytorch torchvision -c pytorch ; conda install --yes --quiet -c lukepfister pycuda==2017.1 scikits.cuda; else conda install --quiet --yes tensorflow==1.12.0 keras==2.2.4 pytorch; fi \
-     && conda clean -tipsy  \
+     && conda clean -afy \
      && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
 USER root
 
 # Spark dependencies
-ENV APACHE_SPARK_VERSION 2.4.3
-ENV HADOOP_VERSION 2.7
+ENV APACHE_SPARK_VERSION=2.4.3 \
+    HADOOP_VERSION=2.7
 
 RUN apt-get -y update && \
     apt-get install --no-install-recommends -y openjdk-8-jre-headless ca-certificates-java && \
@@ -31,12 +31,11 @@ RUN cd /tmp && \
 RUN cd /usr/local && ln -s spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark
 
 # Spark and Mesos config
-ENV SPARK_HOME /usr/local/spark
-ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip:/home/$NB_USER/notebooks/src/shcPython/common
-ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info
-
+ENV SPARK_HOME=/usr/local/spark \
+    PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip:/home/$NB_USER/notebooks/src/shcPython/common \
+    SPARK_OPTS=--driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info \
 # wisenut module
-ENV PYTHONPATH /home/$NB_USER/notebooks/src/shcPython/wisenut:${PYTHONPATH}
+    PYTHONPATH=/home/$NB_USER/notebooks/src/shcPython/wisenut:${PYTHONPATH} 
 
 # ==================================================================
 # mecab analyzer from bitbucket
@@ -80,11 +79,16 @@ USER $NB_UID
 RUN conda install --quiet --yes \
         # pyarrow==0.13.0 \
         pyarrow \
-    && conda clean -tipsy && \        
+    # && conda clean -tipsy && \  
+    && conda clean -afy && \       
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
     fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+    fix-permissions /home/$NB_USER \
+    && find /opt/conda/ -follow -type f -name '*.a' -delete \
+    && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+    && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
+    && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js'       
 
 RUN pip install --quiet --no-cache-dir \
         # tensorflowonspark==1.4.2 \        
@@ -119,23 +123,16 @@ COPY spark/hive/hive-site.xml /usr/local/spark/conf/
 COPY spark/DbInterface.py /opt/conda/lib/python3.6/
 COPY spark/log4j.properties /usr/local/spark/conf/
 # Setting env value
-ENV HADOOP_CONF_DIR /opt/conf.cloudera.yarn
-ENV YARN_CONF_DIR /opt/conf.cloudera.yarn
-
-ENV SPARK_HOME /usr/local/spark
-ENV PATH $SPARK_HOME/bin:${PATH}
-
-ENV SPARK_CONF_DIR $SPARK_HOME/conf
-
-ENV SPARK_YARN_USER_ENV='PYSPARK_PYTHON=/shcsw/anaconda3/bin/python'
-ENV PYSPARK_DRIVER_PYTHON /opt/conda/bin/python
-ENV PYSPARK_PYTHON /shcsw/anaconda3/bin/python    
-
-# Add fonts for NHN fonts
-COPY fonts/ /usr/share/fonts/
-
+ENV HADOOP_CONF_DIR=/opt/conf.cloudera.yarn \
+    YARN_CONF_DIR=/opt/conf.cloudera.yarn \
+    SPARK_HOME=/usr/local/spark
+ENV PATH=$SPARK_HOME/bin:${PATH} \
+    SPARK_CONF_DIR=$SPARK_HOME/conf \
+    SPARK_YARN_USER_ENV='PYSPARK_PYTHON=/shcsw/anaconda3/bin/python' \
+    PYSPARK_DRIVER_PYTHON=/opt/conda/bin/python \
+    PYSPARK_PYTHON=/shcsw/anaconda3/bin/python \   
 # PATH Setting
-ENV PATH /home/$NB_USER/notebooks/src/shcPython/jdbc:${PATH}
+    PATH=/home/$NB_USER/notebooks/src/shcPython/jdbc:${PATH}
 
 RUN echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
     echo "export PATH=$PATH" >> /home/$NB_USER/.bashrc
