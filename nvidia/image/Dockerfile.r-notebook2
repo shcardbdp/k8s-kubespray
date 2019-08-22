@@ -196,7 +196,7 @@ RUN conda install --yes -c r \
     && find /opt/conda/ -follow -type f -name '*.a' -delete \
     && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
     && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
-    && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js'        
+    && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete       
 
 RUN Rscript -e "install.packages(c('h2o', 'stargazer', 'DataExplorer', 'scorecard'), repos='http://cran.us.r-project.org',  lib='/opt/conda/lib/R/library')"
 # RUN Rscript -e "install.packages(c('scorecard', 'stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org',  lib='/opt/conda/lib/R/library')"

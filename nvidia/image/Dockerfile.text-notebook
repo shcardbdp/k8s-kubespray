@@ -36,7 +36,7 @@ RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflo
         && find /opt/conda/ -follow -type f -name '*.a' -delete \
         && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
         && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
-        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' \
+        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete \
         && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
 RUN pip install --quiet --no-cache-dir \        
