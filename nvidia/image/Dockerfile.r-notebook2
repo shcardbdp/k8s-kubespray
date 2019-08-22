@@ -1,0 +1,223 @@
+ARG  DEVICE_TYPE=gpu
+ARG  BASE_VERSION
+FROM shcardbdp/spark-notebook:$BASE_VERSION
+# FROM shcardbdp/mllight-lab-$DEVICE_TYPE:$BASE_VERSION
+# FROM shcardbdp/dl-base-$DEVICE_TYPE:$BASE_VERSION
+
+ARG   VERSION
+ARG   DEVICE_TYPE
+LABEL version=$VERSION device-type=$DEVICE_TYPE
+
+USER $NB_UID
+
+# R-NOTEBOOK 
+RUN conda install --yes -c r \
+        r-essentials \
+        r-suppdists \        
+        r-zip \
+        r-webshot \
+        r-uroot \
+        r-tkrplot \
+        r-tkrgl \
+        r-timeseries \
+        r-x13binary \
+        r-acepack \
+        r-adgoftest \
+        r-anomalydetection \
+        r-ape \
+        r-argparse \
+        r-bcp \
+        r-bdsmatrix \
+        r-bestglm \
+        r-bindr \
+        r-bindrcpp \
+        r-bit \
+        r-bit64 \
+        r-bitops \
+        r-blob \
+        r-bradleyterry2	\
+        r-brew \
+        r-brglm	\
+        r-cairo \
+        r-car \
+        r-catools \
+        r-checkmate	\
+        r-chron \
+        r-coda \
+        r-coin \
+        r-commonmark \
+        r-config \
+        r-copula \
+        r-crosstalk \
+        r-ctv \
+        r-cvst \
+        r-cvtools \
+        r-ddalpha \
+        r-debugme \
+        r-deoptimr \
+        r-desc \
+        r-devtools \
+        r-diagrammer \
+        r-dichromat \
+        r-dimred \
+        r-domc \
+        r-doparallel \
+        r-downloader \
+        r-drr \
+        r-dygraphs \
+        r-e1071	\     
+        r-estimability \   
+        r-feather \
+        r-findpython \
+        r-forecast \
+        r-formattable \
+        r-formula	\
+        r-fracdiff	\
+        r-functional	\
+        r-fwdselect	\
+        r-gdata	\
+        r-getopt	\
+        r-ggvis	\
+        r-gistr \
+        r-git2r \
+        r-gmp	\
+        r-gplots	\
+        r-gridbase	\
+        r-gridextra	\
+        r-grpreg	\
+        r-gsl	\
+        r-gsw	\
+        r-gtools	\
+        r-highcharter	\
+        r-hmisc	\
+        r-htmltable	\
+        r-hunspell \
+        r-igraph	\
+        r-influencer	\
+        r-inline	\
+        r-irlba	\
+        r-janeaustenr	\
+        r-jpeg	\
+        r-kernlab	\
+        r-kohonen	\
+        r-lahman	\
+        r-lars	\
+        r-leaflet	\
+        r-lintr	\
+        r-lmertest	\
+        r-logging	\
+        r-lsmeans	\
+        r-mapproj	\
+        r-microbenchmark	\
+        r-mlmrev	\
+        r-mnormt	\
+        r-mongolite	\
+        r-networkd3	\
+        r-nlp	\
+        r-nmf	\
+        r-nycflights13	\
+        r-oce	\
+        r-odbc	\
+        r-packrat	\
+        r-pbkrtest	\
+        r-perm	\
+        r-pkgmaker	\
+        r-pki	\
+        r-plm	\
+        r-png	\
+        r-polspline	\
+        r-proc	\
+        r-profvis	\
+        r-pryr	\
+        r-psych	\
+        r-r.methodss3	\
+        r-r.oo	\
+        r-r.utils	\
+        r-rappdirs	\
+        r-raster	\
+        r-rcurl	\
+        r-registry	\
+        r-reshape	\
+        r-rex \
+        r-rhive	\
+        r-rjava	\
+        r-rjdbc	\
+        r-rjson	\
+        r-rjsonio	\
+        r-rms	\
+        r-rngtools	\
+        r-rocr	\
+        r-rodbc	\
+        r-roxygen2	\
+        r-rsconnect	\
+        r-rserve	\
+        r-rsqlite	\
+        r-rstan	\
+        r-rversions	\
+        r-rzmq	\
+        r-seacarb	\
+        r-sf	\
+        r-shinybs	\
+        r-shinycssloaders	\
+        r-shinydashboard	\
+        r-shinyjs	\
+        r-shinysky	\
+        r-shinythemes	\
+        r-slam	\
+        r-snowballc	\
+        r-sparklyr	\
+        r-stanheaders	\
+        r-stringdist	\
+        r-strucchange	\
+        r-testit	\
+        r-threejs	\
+        r-tidytext	\
+        r-tilegramsr	\
+        r-tm	\
+        r-tokenizers	\
+        r-udunits2	\
+        r-units	\
+        r-vars	\
+        r-vgam	\
+        r-weatherdata	\
+        r-xlsx	\
+        r-xlsxjars	\
+        # rpy2	\
+        r-aer \
+        r-afex \
+        && \
+    conda install --yes -c conda-forge r-keras \
+    && \
+    conda clean -afy \
+    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+    rm -rf /home/$NB_USER/.cache/yarn && \    
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER \
+    && find /opt/conda/ -follow -type f -name '*.a' -delete \
+    && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+    && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
+    && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js'        
+
+RUN Rscript -e "install.packages(c('h2o', 'stargazer', 'DataExplorer', 'scorecard'), repos='http://cran.us.r-project.org',  lib='/opt/conda/lib/R/library')"
+# RUN Rscript -e "install.packages(c('scorecard', 'stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org',  lib='/opt/conda/lib/R/library')"
+
+USER root
+
+# RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then ln -s /usr/local/cuda-9.0/lib64/libcurand.so.9.0 /usr/local/cuda-9.0/lib64/libcurand.so.8.0 ; fi
+# # Set up our notebook config.
+# # COPY  jupyter/mllight/jupyter_notebook_config.py /etc/jupyter/
+# COPY  jupyter/spark/jupyter_notebook_config.py /etc/jupyter/
+# COPY  notebooks /home/$NB_USER/notebooks/samples/
+# COPY  run_jupyter.sh /usr/local/bin/
+# RUN rm -rf /home/$NB_USER/work && chown -R $NB_USER:$NB_UID /home/$NB_USER/notebooks && \
+#     fix-permissions /etc/jupyter/ && fix-permissions /home/$NB_USER/notebooks/samples
+
+EXPOSE 54321
+
+COPY entrypoint_spark.sh /usr/local/bin/
+ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint_spark.sh"]
+CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
+
+# Switch back to jovyan to avoid accidental container runs as root
+USER $NB_UID
+
