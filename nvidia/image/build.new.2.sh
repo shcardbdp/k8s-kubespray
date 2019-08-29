@@ -7,9 +7,9 @@ usage() { echo "Usage: $0 [-h help] [-s build scope (a[ll], b[ase], sp[ark], t[e
 
 # image version
 DATALAB_BASE_VERSION="1.0.1"
-SPARK_VERSION="2.0.1"
-TEXT_VERSION="1.0.1"
-R_VERSION="2.0.1"
+SPARK_VERSION="2.0.2"
+TEXT_VERSION="1.0.2"
+R_VERSION="2.0.2"
 
 # TYPE="all"
 while getopts ":s:h:" flag; do
