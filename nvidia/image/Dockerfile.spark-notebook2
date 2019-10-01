@@ -16,7 +16,7 @@ RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflo
 USER root
 
 # Spark dependencies
-ENV APACHE_SPARK_VERSION=2.4.3 \
+ENV APACHE_SPARK_VERSION=2.4.4 \
     HADOOP_VERSION=2.7
 
 RUN apt-get -y update && \
@@ -25,17 +25,16 @@ RUN apt-get -y update && \
 
 RUN cd /tmp && \
     wget -q http://mirrors.ukfast.co.uk/sites/ftp.apache.org/spark/spark-${APACHE_SPARK_VERSION}/spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
-    echo "E8B7F9E1DEC868282CADCAD81599038A22F48FB597D44AF1B13FCC76B7DACD2A1CAF431F95E394E1227066087E3CE6C2137C4ABAF60C60076B78F959074FF2AD *spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" | sha512sum -c - && \
+    echo "2E3A5C853B9F28C7D4525C0ADCB0D971B73AD47D5CCE138C85335B9F53A6519540D3923CB0B5CEE41E386E49AE8A409A51AB7194BA11A254E037A848D0C4A9E5 *spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" | sha512sum -c - && \
     tar xzf spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz -C /usr/local --owner root --group root --no-same-owner && \
     rm spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 RUN cd /usr/local && ln -s spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark
 
 # Spark and Mesos config
 ENV SPARK_HOME=/usr/local/spark \
-    PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip:/home/$NB_USER/notebooks/src/shcPython/common \
-    SPARK_OPTS=--driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info \
-# wisenut module
-    PYTHONPATH=/home/$NB_USER/notebooks/src/shcPython/wisenut:${PYTHONPATH} 
+    PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip:/home/$NB_USER/notebooks/src/shcPython/common:/home/$NB_USER/notebooks/src/shcPython/wisenut \
+    # PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip:/home/$NB_USER/notebooks/src/shcPython-prd:/home/$NB_USER/notebooks/src/shcPython/wisenut \
+    SPARK_OPTS=--driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info
 
 # ==================================================================
 # mecab analyzer from bitbucket
@@ -53,8 +52,9 @@ RUN wget --quiet http://bitbucket.org/eunjeon/mecab-ko/downloads/mecab-0.996-ko-
 # ==================================================================
 # install automake 1.11 for mecab dictionary
 # ------------------------------------------------------------------
-RUN apt-get update && apt-get install -y automake1.11 \
-          && \
+RUN sed -i 's/archive.ubuntu.com/kr.archive.ubuntu.com/g' /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y automake1.11 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*    
 
@@ -78,10 +78,8 @@ USER $NB_UID
 
 # Install python lib by conda
 RUN conda install --quiet --yes \
-        # pyarrow==0.13.0 \
-        pyspark==2.4.3 \
+        pyspark==2.4.4 \
         pyarrow \
-    # && conda clean -tipsy && \  
     && conda clean -afy && \       
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -93,21 +91,21 @@ RUN conda install --quiet --yes \
     && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete       
 
 RUN pip install --quiet --no-cache-dir \
-        # tensorflowonspark==1.4.2 \        
-        tensorflowonspark \        
-        # tensorboard_logger==0.1.0 \       
-        tensorboard_logger \       
-        # tensorboard_pytorch==0.7.1 \      
-        tensorboard_pytorch \      
-        # tensorboardX==1.6 \               
-        tensorboardX \               
-        # horovod==0.16.2 \       
-        horovod \       
+        tensorflowonspark==1.4.3 \        
+        # tensorflowonspark \        
+        tensorboard_logger==0.1.0 \       
+        # tensorboard_logger \       
+        tensorboard_pytorch==0.7.1 \      
+        # tensorboard_pytorch \      
+        tensorboardX==1.8 \               
+        # tensorboardX \               
+        horovod==0.16.4 \       
+        # 0.16.4, 0.18.0, 0.18.1
+        # horovod \       
         mecab-python3==0.7 \        
-        # tensorflow-hub==0.4.0 \
-        tensorflow-hub \
-        keras-tuner \
-        tensorwatch \
+        tensorflow-hub==0.5.0 \
+        # keras-tuner \ # Cuz it's need to upgrade tensorflow 2.0.0, it's out.
+        tensorwatch==0.8.5 \
         torchtext \
         torchaudio \
     && \
@@ -134,6 +132,7 @@ ENV PATH=$SPARK_HOME/bin:${PATH} \
     PYSPARK_DRIVER_PYTHON=/opt/conda/bin/python \
     PYSPARK_PYTHON=/shcsw/anaconda3/bin/python \   
 # PATH Setting
+    # PATH=/home/$NB_USER/notebooks/data/share/gitlab-runner/shcPython-prd/jdbc:${PATH}
     PATH=/home/$NB_USER/notebooks/src/shcPython/jdbc:${PATH}
 
 RUN echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \

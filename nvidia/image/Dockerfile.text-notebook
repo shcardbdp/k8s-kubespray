@@ -8,8 +8,6 @@ ARG DEVICE_TYPE=gpu
 ARG VERSION
 LABEL version=$VERSION device-type=$DEVICE_TYPE
 
-USER $NB_UID
-
 USER root
 
 # khaii install
@@ -50,11 +48,11 @@ RUN pip install --quiet --no-cache-dir \
         mxnet \
         mxnet-cu90 \
     && \
-    rm -rf /home/$NB_USER/.cache/yarn         
+    rm -rf /home/$NB_USER/.cache/yarn     
+
+RUN python -m nltk.downloader popular    
 
 EXPOSE 8888 6006
-
-USER root
 
 COPY  jupyter/spark/jupyter_notebook_config.py /etc/jupyter/
 COPY entrypoint_spark.sh /usr/local/bin/

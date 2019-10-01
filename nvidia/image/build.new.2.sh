@@ -3,13 +3,13 @@
 set -e
 
 # usage() { echo "Usage: $0 [-v image version] [-t <cpu/gpu/all> (default: all)]" 1>&2; exit 1; }
-usage() { echo "Usage: $0 [-h help] [-s build scope (a[ll], b[ase], sp[ark], t[ext])]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-h help] [-s build scope (a[ll], a[ll] u[se], b[ase], sp[ark], t[ext])]" 1>&2; exit 1; }
 
 # image version
-DATALAB_BASE_VERSION="1.0.1"
-SPARK_VERSION="2.0.2"
-TEXT_VERSION="1.0.2"
-R_VERSION="2.0.2"
+DATALAB_BASE_VERSION="1.0.2"
+SPARK_VERSION="2.0.6"
+TEXT_VERSION="1.0.4"
+R_VERSION="2.0.5"
 
 # TYPE="all"
 while getopts ":s:h:" flag; do
@@ -45,6 +45,12 @@ echo "R_VERSION = ${R_VERSION}"
 
 if [ "${SCOPE}" == "a" ]; then
 sudo docker build -t shcardbdp/datalab-base-gpu:${DATALAB_BASE_VERSION} -f Dockerfile.dl-base2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${DATALAB_BASE_VERSION} . && \
+sudo docker build -t shcardbdp/spark-notebook:${SPARK_VERSION} -f Dockerfile.spark-notebook2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${SPARK_VERSION} --build-arg BASE_VERSION=${DATALAB_BASE_VERSION} . && \
+sudo docker build -t shcardbdp/text-notebook:${TEXT_VERSION} -f Dockerfile.text-notebook --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${TEXT_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} . && \
+sudo docker build -t shcardbdp/r-notebook:${R_VERSION} -f Dockerfile.r-notebook2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${R_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} .
+fi
+
+if [ "${SCOPE}" == "au" ]; then
 sudo docker build -t shcardbdp/spark-notebook:${SPARK_VERSION} -f Dockerfile.spark-notebook2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${SPARK_VERSION} --build-arg BASE_VERSION=${DATALAB_BASE_VERSION} . && \
 sudo docker build -t shcardbdp/text-notebook:${TEXT_VERSION} -f Dockerfile.text-notebook --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${TEXT_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} . && \
 sudo docker build -t shcardbdp/r-notebook:${R_VERSION} -f Dockerfile.r-notebook2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${R_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} .

@@ -10,6 +10,10 @@ LABEL version=$VERSION device-type=$DEVICE_TYPE
 
 USER $NB_UID
 
+
+RUN conda remove zeromq
+RUN conda install zeromq
+
 # R-NOTEBOOK 
 RUN conda install --yes -c r \
         r-essentials \
