@@ -73,7 +73,7 @@ ENV SHELL=/bin/bash \
     # JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 \
     # ORACLE_HOME=/usr/lib/oracle/12.2/client64 \
     PATH=$JAVA_HOME/bin:$ORACLE_HOME/bin:$PATH \
-    LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib:/home/jovyan/notebooks/src/shcPython \
+    LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$ORACLE_HOME/lib:/home/jovyan/notebooks/src/shcPython/wisenut \
     LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libodbcinst.so 
 
 COPY odbcinst.ini /etc/odbcinst.ini
