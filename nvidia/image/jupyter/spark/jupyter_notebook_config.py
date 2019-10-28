@@ -19,6 +19,7 @@ c = c  # pylint:disable=undefined-variable
 c.NotebookApp.ip = '*'
 c.NotebookApp.port = int(os.getenv('PORT', 8888))
 c.NotebookApp.open_browser = False
+
 os.environ['LD_LIBRARY_PATH']='/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:/usr/lib/oracle/12.2/client64/lib:/home/jovyan/notebooks/src/shcPython'
 c.Spawner.env_keep.append('LD_LIBRARY_PATH')  # setting to connect oracle using up
 
@@ -26,7 +27,7 @@ c.Spawner.env_keep.append('LD_LIBRARY_PATH')  # setting to connect oracle using 
 c.MappingKernelManager.cull_busy = False
 c.MappingKernelManager.cull_connected = False
 c.MappingKernelManager.cull_idle_timeout = 300
-#c.NotebookApp.shutdown_no_activity_timeout = 300
+c.NotebookApp.shutdown_no_activity_timeout = 300
 c.MappingKernelManager.cull_interval = 300
 
 # jupyter setting [hide quit button]

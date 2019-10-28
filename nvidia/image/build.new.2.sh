@@ -6,10 +6,10 @@ set -e
 usage() { echo "Usage: $0 [-h help] [-s build scope (a[ll], a[ll] u[se], b[ase], sp[ark], t[ext])]" 1>&2; exit 1; }
 
 # image version
-DATALAB_BASE_VERSION="1.0.2"
-SPARK_VERSION="2.0.6"
-TEXT_VERSION="1.0.4"
-R_VERSION="2.0.5"
+DATALAB_BASE_VERSION="1.0.3"
+SPARK_VERSION="2.0.7"
+TEXT_VERSION="1.0.5"
+R_VERSION="2.0.6"
 
 # TYPE="all"
 while getopts ":s:h:" flag; do

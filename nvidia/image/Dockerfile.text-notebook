@@ -45,8 +45,6 @@ RUN pip install --quiet --no-cache-dir \
         # bert-tensorflow==1.0.1 \
         bert-tensorflow \
         pytorch-transformers \
-        mxnet \
-        mxnet-cu90 \
     && \
     rm -rf /home/$NB_USER/.cache/yarn     
 
