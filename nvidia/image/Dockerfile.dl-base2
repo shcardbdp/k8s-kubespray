@@ -225,6 +225,7 @@ RUN conda install --quiet --yes \
         fire==0.2.1 \
         watchdog==0.9.0 \
         pymongo==3.8.0 \
+        nodejs \
     # && conda clean -tipsy && \        
     && conda clean -afy && \        
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
