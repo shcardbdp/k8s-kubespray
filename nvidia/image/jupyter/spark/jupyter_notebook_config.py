@@ -27,7 +27,7 @@ c.Spawner.env_keep.append('LD_LIBRARY_PATH')  # setting to connect oracle using 
 c.MappingKernelManager.cull_busy = False
 c.MappingKernelManager.cull_connected = False
 c.MappingKernelManager.cull_idle_timeout = 300
-c.NotebookApp.shutdown_no_activity_timeout = 300
+# c.NotebookApp.shutdown_no_activity_timeout = 300
 c.MappingKernelManager.cull_interval = 300
 
 # jupyter setting [hide quit button]
