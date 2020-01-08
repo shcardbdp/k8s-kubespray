@@ -284,6 +284,7 @@ RUN pip install --quiet --no-cache-dir \
         sacred==0.7.5 \
         gluonnlp==0.8.1 \
         chatspace==1.0.1 \
+        tables==3.6.1 \
     && \
     rm -rf /home/$NB_USER/.cache/yarn 
 
