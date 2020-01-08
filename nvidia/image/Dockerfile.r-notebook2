@@ -10,11 +10,20 @@ LABEL version=$VERSION device-type=$DEVICE_TYPE
 
 USER $NB_UID
 
-
 RUN conda remove zeromq
 RUN conda install zeromq
 
 # R-NOTEBOOK 
+RUN conda install --yes -c conda-forge r-tidyverse && \
+        conda install -c conda-forge/label/gcc7 r-tidyverse && \
+        conda install -c conda-forge/label/cf201901 r-tidyverse && \
+        rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+        rm -rf /home/$NB_USER/.cache/yarn \    
+        && find /opt/conda/ -follow -type f -name '*.a' -delete \
+        && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+        && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
+        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete    
+
 RUN conda install --yes -c r \
         r-essentials \
         r-suppdists \        
@@ -188,14 +197,19 @@ RUN conda install --yes -c r \
         r-xlsxjars	\
         # rpy2	\
         r-aer \
-        r-afex \
+        r-afex \       
+        r-rlang \ 
+        r-farver \
+        r-lifecycle \
+        r-scales \
+        r-tidyverse \
         && \
         rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
         rm -rf /home/$NB_USER/.cache/yarn \    
         && find /opt/conda/ -follow -type f -name '*.a' -delete \
         && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
         && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
-        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete && \        
+        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete && \
     conda install --yes -c conda-forge r-keras && \
         conda clean -afy && \
         rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
@@ -203,10 +217,26 @@ RUN conda install --yes -c r \
         && find /opt/conda/ -follow -type f -name '*.a' -delete \
         && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
         && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
-        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete       
+        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete        
 
-RUN Rscript -e "install.packages(c('h2o', 'stargazer', 'DataExplorer', 'scorecard'), repos='http://cran.us.r-project.org',  lib='/opt/conda/lib/R/library')"
-# RUN Rscript -e "install.packages(c('scorecard', 'stargazer', 'DataExplorer'), repos='http://cran.us.r-project.org',  lib='/opt/conda/lib/R/library')"
+RUN conda install --yes -c r \     
+        r-clustertend==1.4 \
+        r-corrplot==0.84 \
+        r-factoextra==1.0.5 \
+        r-flexclust==1.4_0 \
+        r-GPArotation==2014.11_1 \
+        r-NbClust==3.0 \        
+        && \
+        rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+        rm -rf /home/$NB_USER/.cache/yarn \    
+        && find /opt/conda/ -follow -type f -name '*.a' -delete \
+        && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+        && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
+        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete        
+
+RUN Rscript -e "install.packages(c('h2o', 'stargazer', 'scorecard'), repos='http://cran.us.r-project.org',  lib='/opt/conda/lib/R/library')"
+# package ‘DataExplorer’ is not available (for R version 3.6.2)
+# RUN Rscript -e "install.packages(c('DataExplorer'), repos='https://r.anaconda.org/silviage',  lib='/opt/conda/lib/R/library')" 
 
 USER root
 
