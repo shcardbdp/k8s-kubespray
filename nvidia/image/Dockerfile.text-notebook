@@ -44,7 +44,7 @@ RUN pip install --quiet --no-cache-dir \
         keras-bert \
         # bert-tensorflow==1.0.1 \
         bert-tensorflow \
-        pytorch-transformers \
+        transformers \
     && \
     rm -rf /home/$NB_USER/.cache/yarn     
 
