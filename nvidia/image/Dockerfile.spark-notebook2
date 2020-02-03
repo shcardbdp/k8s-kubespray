@@ -113,7 +113,16 @@ RUN pip install --quiet --no-cache-dir \
         torchaudio==0.3.0 \
         pyclustering==0.9.2 \
     && \
-    rm -rf /home/$NB_USER/.cache/yarn 
+    rm -rf /home/$NB_USER/.cache/yarn
+
+# Apache Toree kernel
+RUN pip install --no-cache-dir \
+    https://dist.apache.org/repos/dist/release/incubator/toree/0.3.0-incubating/toree-pip/toree-0.3.0.tar.gz \
+    && \
+    jupyter toree install --sys-prefix && \
+    rm -rf /home/$NB_USER/.local && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
 
 # ==================================================================
 # Spark Setting
@@ -140,7 +149,8 @@ ENV PATH=$SPARK_HOME/bin:${PATH} \
     PATH=/home/$NB_USER/notebooks/src/shcPython/jdbc:${PATH}
 
 RUN echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
-    echo "export PATH=$PATH" >> /home/$NB_USER/.bashrc
+    echo "export PATH=$PATH" >> /home/$NB_USER/.bashrc && \
+    echo "export TMOUT=300" >> /home/$NB_USER/.bashrc
 
 USER root
 
