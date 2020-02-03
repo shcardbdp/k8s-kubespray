@@ -8,11 +8,11 @@ usage() { echo "Usage: $0 [-h help] [-s build scope (a[ll], a[ll] u[se], b[ase],
 echo "Declare Version"
 
 # image version
-DATALAB_BASE_VERSION="1.0.5"
-SPARK_VERSION="2.0.9"
-TEXT_VERSION="1.0.7"
-R_VERSION="2.0.8"
-TF2_VERSION="1.0.2"
+DATALAB_BASE_VERSION="1.0.6"
+SPARK_VERSION="2.0.13"
+TEXT_VERSION="1.0.9"
+R_VERSION="2.0.12"
+TF2_VERSION="1.0.3"
 
 echo "Assign Scope"
 
@@ -55,40 +55,40 @@ sudo docker build -t shcardbdp/text-notebook:${TEXT_VERSION} -f Dockerfile.text-
 sudo docker build -t shcardbdp/r-notebook:${R_VERSION} -f Dockerfile.r-notebook2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${R_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} .
 fi
 
-echo "1"
-
 if [ "${SCOPE}" == "au" ]; then
 sudo docker build -t shcardbdp/spark-notebook:${SPARK_VERSION} -f Dockerfile.spark-notebook2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${SPARK_VERSION} --build-arg BASE_VERSION=${DATALAB_BASE_VERSION} . && \
 sudo docker build -t shcardbdp/text-notebook:${TEXT_VERSION} -f Dockerfile.text-notebook --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${TEXT_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} . && \
 sudo docker build -t shcardbdp/r-notebook:${R_VERSION} -f Dockerfile.r-notebook2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${R_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} .
 fi
 
-echo "2"
-
 if [ "${SCOPE}" == "b" ]; then
 sudo docker build -t shcardbdp/datalab-base-gpu:${DATALAB_BASE_VERSION} -f Dockerfile.dl-base2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${DATALAB_BASE_VERSION} .
 fi
-
-echo "3"
 
 if [ "${SCOPE}" == "sp" ]; then
 sudo docker build -t shcardbdp/spark-notebook:${SPARK_VERSION} -f Dockerfile.spark-notebook2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${SPARK_VERSION} --build-arg BASE_VERSION=${DATALAB_BASE_VERSION} .
 fi
 
-echo "4"
-
 if [ "${SCOPE}" == "t" ]; then
 sudo docker build -t shcardbdp/text-notebook:${TEXT_VERSION} -f Dockerfile.text-notebook --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${TEXT_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} .
 fi
-
-echo "5"
 
 if [ "${SCOPE}" == "r" ]; then
 sudo docker build -t shcardbdp/r-notebook:${R_VERSION} -f Dockerfile.r-notebook2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${R_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} .
 fi
 
-echo "6"
-
 if [ "${SCOPE}" == "tf" ]; then
 sudo docker build -t shcardbdp/text-notebook.tf2:${TF2_VERSION} -f Dockerfile.text-notebook.t2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${TF2_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} .
+fi
+
+if [ "${SCOPE}" == "bc" ]; then
+sudo docker build -t shcardbdp/datalab-base-cpu:${DATALAB_BASE_VERSION} -f Dockerfile.dl-base2.all --build-arg DEVICE_TYPE=cpu --build-arg VERSION=${DATALAB_BASE_VERSION} .
+fi
+
+if [ "${SCOPE}" == "spc" ]; then
+sudo docker build -t shcardbdp/spark-notebook-cpu:${SPARK_VERSION} -f Dockerfile.spark-notebook2.all --build-arg DEVICE_TYPE=cpu --build-arg VERSION=${SPARK_VERSION} --build-arg BASE_VERSION=${DATALAB_BASE_VERSION} .
+fi
+
+if [ "${SCOPE}" == "tfc" ]; then
+sudo docker build -t shcardbdp/text-notebook.tf2.cpu:${TF2_VERSION} -f Dockerfile.text-notebook.t2 --build-arg DEVICE_TYPE=cpu --build-arg VERSION=${TF2_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} .
 fi
