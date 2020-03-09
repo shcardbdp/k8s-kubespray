@@ -203,13 +203,19 @@ RUN conda install --yes -c r \
         r-lifecycle \
         r-scales \
         r-tidyverse \
+        r-clustertend==1.4 \
+        r-corrplot==0.84 \
+        r-factoextra==1.0.5 \
+        r-flexclust==1.4_0 \
+        r-GPArotation==2014.11_1 \
+        r-NbClust==3.0 \            
         && \
-        rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-        rm -rf /home/$NB_USER/.cache/yarn \    
-        && find /opt/conda/ -follow -type f -name '*.a' -delete \
-        && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
-        && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
-        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete && \
+        # rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+        # rm -rf /home/$NB_USER/.cache/yarn \    
+        # && find /opt/conda/ -follow -type f -name '*.a' -delete \
+        # && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+        # && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
+        # && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete && \
     conda install --yes -c conda-forge r-keras && \
         conda clean -afy && \
         rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
@@ -219,24 +225,21 @@ RUN conda install --yes -c r \
         && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
         && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete        
 
-RUN conda install --yes -c r \     
-        r-clustertend==1.4 \
-        r-corrplot==0.84 \
-        r-factoextra==1.0.5 \
-        r-flexclust==1.4_0 \
-        r-GPArotation==2014.11_1 \
-        r-NbClust==3.0 \        
-        && \
-        rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-        rm -rf /home/$NB_USER/.cache/yarn \    
-        && find /opt/conda/ -follow -type f -name '*.a' -delete \
-        && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
-        && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
-        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete        
+RUN pip install --quiet --no-cache-dir \
+        h2o==3.28.0.2 \
+    && \
+    rm -rf /home/$NB_USER/.cache/yarn 
 
-RUN Rscript -e "install.packages(c('h2o', 'stargazer', 'scorecard'), repos='http://cran.us.r-project.org',  lib='/opt/conda/lib/R/library')"
+# 2020.02.20 PATH 수정 요청
+RUN sed -i 's/:\/opt\/conda\/bin:\/usr\/lib\/jvm\/java-8-openjdk-amd64\/bin/:\/usr\/lib\/jvm\/java-8-openjdk-amd64\/bin:\/opt\/conda\/bin/g' /home/$NB_USER/.bashrc
+
+# RUN Rscript -e "install.packages(c('h2o', 'stargazer', 'scorecard'), repos='http://cran.us.r-project.org',  lib='/opt/conda/lib/R/library')"
+RUN Rscript -e "install.packages(c('h2o', 'stargazer', 'scorecard'), repos='http://cran.r-project.org',  lib='/opt/conda/lib/R/library')"
 # package ‘DataExplorer’ is not available (for R version 3.6.2)
 # RUN Rscript -e "install.packages(c('DataExplorer'), repos='https://r.anaconda.org/silviage',  lib='/opt/conda/lib/R/library')" 
+
+# PYTHON PATH 추가 요청
+ENV PYTHONPATH=/home/$NB_USER/notebooks/src/packages:${PYTHONPATH}
 
 USER root
 

@@ -8,11 +8,11 @@ usage() { echo "Usage: $0 [-h help] [-s build scope (a[ll], a[ll] u[se], b[ase],
 echo "Declare Version"
 
 # image version
-DATALAB_BASE_VERSION="1.0.6"
-SPARK_VERSION="2.0.13"
-TEXT_VERSION="1.0.9"
-R_VERSION="2.0.12"
-TF2_VERSION="1.0.3"
+DATALAB_BASE_VERSION="1.0.7"
+SPARK_VERSION="2.0.15"
+TEXT_VERSION="1.0.12"
+R_VERSION="2.0.17"
+TF2_VERSION="1.0.4"
 
 echo "Assign Scope"
 

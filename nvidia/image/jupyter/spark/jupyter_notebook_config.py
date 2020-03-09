@@ -35,6 +35,8 @@ c.NotebookApp.quit_button = False
 
 # Test for downloading on jupyter by el
 c.NotebookApp.allow_remote_access = True
+c.NotebookApp.disable_check_xsrf = True
+
 
 # sets a password if PASSWORD is set in the environment
 if 'PASSWORD' in os.environ:

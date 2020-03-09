@@ -45,10 +45,13 @@ RUN pip install --quiet --no-cache-dir \
         # bert-tensorflow==1.0.1 \
         bert-tensorflow \
         transformers \
+        soynlp \
+        soyspacing \
+        kss \
     && \
     rm -rf /home/$NB_USER/.cache/yarn     
 
-RUN python -m nltk.downloader popular    
+RUN python -m nltk.downloader -d /data/nltk_data popular    
 
 EXPOSE 8888 6006
 
