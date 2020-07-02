@@ -1,8 +1,8 @@
 ARG  DEVICE_TYPE=gpu
 ARG  BASE_VERSION
 FROM shcardbdp/spark-notebook:$BASE_VERSION
-# FROM shcardbdp/mllight-lab-$DEVICE_TYPE:$BASE_VERSION
-# FROM shcardbdp/dl-base-$DEVICE_TYPE:$BASE_VERSION
+
+RUN echo $BASE_VERSION
 
 ARG   VERSION
 ARG   DEVICE_TYPE
@@ -10,13 +10,17 @@ LABEL version=$VERSION device-type=$DEVICE_TYPE
 
 USER $NB_UID
 
-RUN conda remove zeromq
-RUN conda install zeromq
+# RUN conda remove zeromq
+# RUN conda install zeromq
 
 # R-NOTEBOOK 
-RUN conda install --yes -c conda-forge r-tidyverse && \
-        conda install -c conda-forge/label/gcc7 r-tidyverse && \
-        conda install -c conda-forge/label/cf201901 r-tidyverse && \
+RUN conda install --yes -c conda-forge \
+        r-tidyverse \
+        r-keras \
+        ngboost==0.2.0 \
+        r-ranger==0.12.1 \
+        && \
+        conda install --yes jupyter && \
         rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
         rm -rf /home/$NB_USER/.cache/yarn \    
         && find /opt/conda/ -follow -type f -name '*.a' -delete \
@@ -195,7 +199,6 @@ RUN conda install --yes -c r \
         r-weatherdata	\
         r-xlsx	\
         r-xlsxjars	\
-        # rpy2	\
         r-aer \
         r-afex \       
         r-rlang \ 
@@ -208,15 +211,10 @@ RUN conda install --yes -c r \
         r-factoextra==1.0.5 \
         r-flexclust==1.4_0 \
         r-GPArotation==2014.11_1 \
-        r-NbClust==3.0 \            
+        r-NbClust==3.0 \  
+        r-rgf==1.0.6 \          
         && \
-        # rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-        # rm -rf /home/$NB_USER/.cache/yarn \    
-        # && find /opt/conda/ -follow -type f -name '*.a' -delete \
-        # && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
-        # && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
-        # && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete && \
-    conda install --yes -c conda-forge r-keras && \
+#     conda install --yes -c conda-forge r-keras && \
         conda clean -afy && \
         rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
         rm -rf /home/$NB_USER/.cache/yarn \    
@@ -227,32 +225,25 @@ RUN conda install --yes -c r \
 
 RUN pip install --quiet --no-cache-dir \
         h2o==3.28.0.2 \
+        rgf_python==3.8.0 \
     && \
     rm -rf /home/$NB_USER/.cache/yarn 
 
 # 2020.02.20 PATH 수정 요청
 RUN sed -i 's/:\/opt\/conda\/bin:\/usr\/lib\/jvm\/java-8-openjdk-amd64\/bin/:\/usr\/lib\/jvm\/java-8-openjdk-amd64\/bin:\/opt\/conda\/bin/g' /home/$NB_USER/.bashrc
 
-# RUN Rscript -e "install.packages(c('h2o', 'stargazer', 'scorecard'), repos='http://cran.us.r-project.org',  lib='/opt/conda/lib/R/library')"
+# # RUN Rscript -e "install.packages(c('h2o', 'stargazer', 'scorecard'), repos='http://cran.us.r-project.org',  lib='/opt/conda/lib/R/library')"
+# RUN Rscript -e "install.packages(c('h2o', 'stargazer'), repos='http://cran.r-project.org',  lib='/opt/conda/lib/R/library')"
 RUN Rscript -e "install.packages(c('h2o', 'stargazer', 'scorecard'), repos='http://cran.r-project.org',  lib='/opt/conda/lib/R/library')"
-# package ‘DataExplorer’ is not available (for R version 3.6.2)
-# RUN Rscript -e "install.packages(c('DataExplorer'), repos='https://r.anaconda.org/silviage',  lib='/opt/conda/lib/R/library')" 
+# # package ‘DataExplorer’ is not available (for R version 3.6.2)
+# # RUN Rscript -e "install.packages(c('DataExplorer'), repos='https://r.anaconda.org/silviage',  lib='/opt/conda/lib/R/library')" 
 
 # PYTHON PATH 추가 요청
 ENV PYTHONPATH=/home/$NB_USER/notebooks/src/packages:${PYTHONPATH}
 
 USER root
 
-# RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then ln -s /usr/local/cuda-9.0/lib64/libcurand.so.9.0 /usr/local/cuda-9.0/lib64/libcurand.so.8.0 ; fi
-# # Set up our notebook config.
-# # COPY  jupyter/mllight/jupyter_notebook_config.py /etc/jupyter/
-# COPY  jupyter/spark/jupyter_notebook_config.py /etc/jupyter/
-# COPY  notebooks /home/$NB_USER/notebooks/samples/
-# COPY  run_jupyter.sh /usr/local/bin/
-# RUN rm -rf /home/$NB_USER/work && chown -R $NB_USER:$NB_UID /home/$NB_USER/notebooks && \
-#     fix-permissions /etc/jupyter/ && fix-permissions /home/$NB_USER/notebooks/samples
-
-EXPOSE 54321
+EXPOSE 54321 8888
 
 COPY entrypoint_spark.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint_spark.sh"]

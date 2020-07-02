@@ -9,9 +9,9 @@ echo "Declare Version"
 
 # image version
 DATALAB_BASE_VERSION="1.0.7"
-SPARK_VERSION="2.0.15"
-TEXT_VERSION="1.0.12"
-R_VERSION="2.0.17"
+SPARK_VERSION="2.0.16"
+TEXT_VERSION="1.0.14"
+R_VERSION="2.0.19"
 TF2_VERSION="1.0.4"
 
 echo "Assign Scope"

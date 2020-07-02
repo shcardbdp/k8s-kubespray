@@ -48,6 +48,7 @@ RUN pip install --quiet --no-cache-dir \
         soynlp \
         soyspacing \
         kss \
+        sentence-transformers \
     && \
     rm -rf /home/$NB_USER/.cache/yarn     
 
