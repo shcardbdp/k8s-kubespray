@@ -11,7 +11,18 @@ LABEL version=$VERSION device-type=$DEVICE_TYPE
 USER root
 
 # khaii install
-RUN conda install --yes --quiet -c anaconda cmake
+RUN conda install --yes --quiet -c anaconda cmake && \
+    conda install --yes --quiet tensorflow-gpu==1.12.0 keras==2.2.4 && \
+    conda install --yes --quiet pytorch==1.1.0 torchvision==0.3.0 cudatoolkit=9.0 -c pytorch && \
+    conda install --yes --quiet -c lukepfister pycuda==2017.1 scikits.cuda && \
+    conda install --yes --quiet -c conda-forge sentence-transformers \
+        # && conda clean -tipsy  \
+        && conda clean -afy \
+        && find /opt/conda/ -follow -type f -name '*.a' -delete \
+        && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+        && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
+        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete \
+        && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
 RUN cd /tmp && git clone https://github.com/kakao/khaiii.git && \
     cd khaiii && \
@@ -26,29 +37,14 @@ RUN cd /tmp && git clone https://github.com/kakao/khaiii.git && \
     cd package_python && pip install --quiet --no-cache-dir . && \
     rm -rf /tmp/khaiii
 
-RUN echo "DEVICE_TYPE : $DEVICE_TYPE"
-
-RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.14.0 keras==2.2.4 pytorch torchvision -c pytorch ; conda install --yes --quiet -c lukepfister pycuda==2017.1 scikits.cuda; else conda install --quiet --yes tensorflow==1.14.0 keras==2.2.4 pytorch; fi \
-        # && conda clean -tipsy  \
-        && conda clean -afy \
-        && find /opt/conda/ -follow -type f -name '*.a' -delete \
-        && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
-        && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
-        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete \
-        && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
-
 RUN pip install --quiet --no-cache-dir \        
-        # bert-pytorch==0.0.1a4 \
         bert-pytorch \
-        # keras-bert==0.55.1 \
-        keras-bert \
-        # bert-tensorflow==1.0.1 \
+        keras-bert==0.84.0 \
         bert-tensorflow \
         transformers \
         soynlp \
         soyspacing \
         kss \
-        sentence-transformers \
     && \
     rm -rf /home/$NB_USER/.cache/yarn     
 

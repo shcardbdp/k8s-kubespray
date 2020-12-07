@@ -8,11 +8,13 @@ usage() { echo "Usage: $0 [-h help] [-s build scope (a[ll], a[ll] u[se], b[ase],
 echo "Declare Version"
 
 # image version
-DATALAB_BASE_VERSION="1.0.7"
-SPARK_VERSION="2.0.16"
-TEXT_VERSION="1.0.14"
-R_VERSION="2.0.19"
+DATALAB_BASE_VERSION="1.0.11"
+SPARK_VERSION="2.0.21"
+TEXT_VERSION="1.0.20"
+R_VERSION="2.0.25"
 TF2_VERSION="1.0.4"
+DATALAB_FOR_EX_BASE_VERSION="1.0.2"
+EX_VERSION="1.0.2"
 
 echo "Assign Scope"
 
@@ -47,6 +49,8 @@ echo "SPARK_VERSION = ${SPARK_VERSION}"
 echo "TEXT_VERSION = ${TEXT_VERSION}"
 echo "R_VERSION = ${R_VERSION}"
 echo "TF2_VERSION = ${TF2_VERSION}"
+echo "DATALAB_FOR_EX_BASE_VERSION = ${DATALAB_FOR_EX_BASE_VERSION}"
+echo "EX_VERSION = ${EX_VERSION}"
 
 if [ "${SCOPE}" == "a" ]; then
 sudo docker build -t shcardbdp/datalab-base-gpu:${DATALAB_BASE_VERSION} -f Dockerfile.dl-base2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${DATALAB_BASE_VERSION} . && \
@@ -76,7 +80,9 @@ fi
 if [ "${SCOPE}" == "r" ]; then
 sudo docker build -t shcardbdp/r-notebook:${R_VERSION} -f Dockerfile.r-notebook2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${R_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} .
 fi
-
+################################################
+# tensorflow 2.0 cpu image test
+################################################
 if [ "${SCOPE}" == "tf" ]; then
 sudo docker build -t shcardbdp/text-notebook.tf2:${TF2_VERSION} -f Dockerfile.text-notebook.t2 --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${TF2_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} .
 fi
@@ -91,4 +97,15 @@ fi
 
 if [ "${SCOPE}" == "tfc" ]; then
 sudo docker build -t shcardbdp/text-notebook.tf2.cpu:${TF2_VERSION} -f Dockerfile.text-notebook.t2 --build-arg DEVICE_TYPE=cpu --build-arg VERSION=${TF2_VERSION} --build-arg BASE_VERSION=${SPARK_VERSION} .
+fi
+
+################################################
+# external data customer
+################################################
+if [ "${SCOPE}" == "be" ]; then
+sudo docker build -t shcardbdp/datalab-base-ex-gpu:${DATALAB_FOR_EX_BASE_VERSION} -f Dockerfile.dl-base2.ex --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${DATALAB_FOR_EX_BASE_VERSION} .
+fi
+
+if [ "${SCOPE}" == "ex" ]; then
+sudo docker build -t shcardbdp/ex-notebook:${EX_VERSION} -f Dockerfile.ex-notebook --build-arg DEVICE_TYPE=gpu --build-arg VERSION=${EX_VERSION} --build-arg BASE_VERSION=${DATALAB_FOR_EX_BASE_VERSION} .
 fi
