@@ -45,16 +45,14 @@ RUN pip install --quiet --no-cache-dir torch==1.7.1+cu92 torchvision==0.8.2+cu92
     rm -rf /home/$NB_USER/.cache/yarn
 
 RUN conda install --quiet --yes -c lukepfister pycuda==2017.1 scikits.cuda \
-     && conda clean -afy \
-    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER \
+    && conda clean -afy \
+    && rm -rf $CONDA_DIR/share/jupyter/lab/staging  \
+    && rm -rf /home/$NB_USER/.cache/yarn \
+    && fix-permissions $CONDA_DIR \
+    && fix-permissions /home/$NB_USER \
     && find /opt/conda/ -follow -type f -name '*.a' -delete \
     && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
     && find /opt/conda/ -follow -type f -name '*.js.map' -delete 
-    # \
-    # && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete   
 
 # # Install python lib by conda
 RUN conda install --quiet --yes \
@@ -67,6 +65,18 @@ RUN conda install --quiet --yes \
         implicit==0.4.4 \
         lightfm==1.16 \
         imbalanced-learn==0.7.0 \
+        bokeh==2.2.3 \
+        beautifulsoup4==4.9.3 \
+        autopep8==1.5.4 \
+        cx_oracle==8.1.0 \
+        feather-format==0.4.1 \
+        swig==4.0.2 \
+        openmpi==4.0.5 \
+        pydotplus==2.0.2 \
+        networkx==2.5 \
+        hyperopt==0.2.5 \     
+        apscheduler==3.6.3 \
+        dask==2020.12.0 \           
     && conda clean -afy && \       
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -78,20 +88,9 @@ RUN conda install --quiet --yes \
     && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete  
 # RUN conda install --quiet --yes \    
 
-#         bokeh \        
 
-#         imbalanced-learn \
-#         beautifulsoup4 \
-#         autopep8 \
-#         cx_oracle \
-#         feather-format \
-#         swig \
-#         openmpi \
-#         pydotplus \
-#         networkx \
-#         hyperopt \
-#         apscheduler \
-#         dask \
+
+
 #         thrift \
 #         thrift_sasl \
 #         impyla \     
@@ -100,7 +99,7 @@ RUN conda install --quiet --yes \
 #         geopandas \
 #         fire \
 #         watchdog \
-#         pymongo \
+
 #         nodejs \  
 #     && conda clean -afy && \    
 #     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
