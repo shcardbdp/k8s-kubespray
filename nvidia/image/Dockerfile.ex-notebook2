@@ -1,0 +1,410 @@
+ARG  DEVICE_TYPE=gpu
+ARG  BASE_VERSION
+FROM shcardbdp/datalab-base-ex-$DEVICE_TYPE:$BASE_VERSION
+
+ARG   VERSION
+ARG   DEVICE_TYPE
+LABEL version=$VERSION device-type=$DEVICE_TYPE
+
+USER $NB_UID
+
+RUN echo "DEVICE_TYPE : $DEVICE_TYPE"
+RUN  if [ "$DEVICE_TYPE" = "gpu" ] ; then  conda install --quiet --yes tensorflow-gpu==1.12.0 keras==2.2.4 pytorch torchvision -c pytorch ; conda install --yes --quiet -c lukepfister pycuda==2017.1 scikits.cuda; else conda install --quiet --yes tensorflow==1.12.0 keras==2.2.4 pytorch; fi \
+     && conda clean -afy \
+     && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
+
+USER root
+
+USER $NB_UID
+
+# Install python lib by conda
+RUN conda install --quiet --yes \
+        nomkl==1.0 \
+        numpy==1.19.4 \
+        pandas==1.1.4 \        
+        scikit-learn==0.23.2 \
+        scipy==1.5.3 \
+        cython==0.29.21 \
+    && conda clean -afy && \    
+    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER \
+    && find /opt/conda/ -follow -type f -name '*.a' -delete \
+    && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+    && find /opt/conda/ -follow -type f -name '*.js.map' -delete 
+
+RUN conda install --quiet --yes tensorflow-gpu==1.12.0 keras==2.2.4 \
+    && conda clean -afy \
+    && rm -rf $CONDA_DIR/share/jupyter/lab/staging \
+    && rm -rf /home/$NB_USER/.cache/yarn \
+    && fix-permissions $CONDA_DIR \
+    && fix-permissions /home/$NB_USER \
+    && find /opt/conda/ -follow -type f -name '*.a' -delete \
+    && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+    && find /opt/conda/ -follow -type f -name '*.js.map' -delete     
+
+RUN pip install --quiet --no-cache-dir torch==1.7.1+cu92 torchvision==0.8.2+cu92 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html \
+    && \
+    rm -rf /home/$NB_USER/.cache/yarn
+
+RUN conda install --quiet --yes -c lukepfister pycuda==2017.1 scikits.cuda \
+    && conda clean -afy \
+    && rm -rf $CONDA_DIR/share/jupyter/lab/staging  \
+    && rm -rf /home/$NB_USER/.cache/yarn \
+    && fix-permissions $CONDA_DIR \
+    && fix-permissions /home/$NB_USER \
+    && find /opt/conda/ -follow -type f -name '*.a' -delete \
+    && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+    && find /opt/conda/ -follow -type f -name '*.js.map' -delete         
+
+# # Install python lib by conda
+RUN conda install --quiet --yes \
+        pyspark==2.4.4 \
+        pyarrow==0.11.1 \
+        shap==0.36.0 \
+        scikit-plot==0.3.7 \
+        pandas-profiling==2.9.0 \
+        nltk==3.4.4 \
+        implicit==0.4.4 \
+        lightfm==1.16 \
+        imbalanced-learn==0.7.0 \
+        bokeh==2.2.3 \
+        beautifulsoup4==4.9.3 \
+        autopep8==1.5.4 \
+        cx_oracle==8.1.0 \
+        feather-format==0.4.1 \
+        swig==4.0.2 \
+        openmpi==4.0.5 \
+        pydotplus==2.0.2 \
+        networkx==2.5 \
+        hyperopt==0.2.5 \     
+        apscheduler==3.6.3 \
+        dask==2020.12.0 \    
+        thrift==0.13.0 \
+        thrift_sasl==0.4.2 \
+        impyla==0.16.3 \     
+        plotly==4.14.1 \ 
+        pycrypto==2.6.1 \
+        geopandas==0.6.3 \
+        fire==0.3.1 \
+        watchdog==1.0.1 \  
+        nodejs==6.13.1 \                      
+    && conda clean -afy && \       
+    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER \
+    && find /opt/conda/ -follow -type f -name '*.a' -delete \
+    && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+    && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
+    && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete  
+
+RUN pip install --quiet --no-cache-dir \
+        tensorflowonspark==2.2.1 \              
+        tensorboard_logger==0.1.0 \           
+        tensorboard_pytorch==0.7.1 \         
+        tensorboardX==2.1 \        
+        mecab-python3==1.0.3 \        
+        tensorflow-hub==0.10.0 \
+        kmodes==0.10.2 \     
+        xgboost==1.3.0.post0 \
+        eli5==0.10.1 \ 
+        mlxtend==0.18.0 \
+        lightgbm==3.1.1 \        
+        catboost==0.24.3 \    
+        plotnine==0.7.1 \        
+        pyLDAvis==2.1.2 \
+        Edward==1.3.5 \
+        dfply==0.3.3 \
+        dplython==0.0.7 \   
+        schedule==0.6.0 \
+        surprise==0.1 \
+        ipython-memory-usage==1.2 \
+        nbresuse==0.4.0 \   
+        fasttext==0.9.2 \
+        pycm==3.0 \
+        apyori==1.1.2 \
+        pySnooper==0.4.2 \
+        pyodbc==4.0.30 \
+        cufflinks==0.17.3 \          
+        folium==0.11.0 \
+        openpyxl==3.0.5 \   
+        sacred==0.8.2 \
+        gluonnlp==0.10.0 \    
+        chatspace==1.0.1 \
+        tables==3.6.1 \                                          
+    && \
+    rm -rf /home/$NB_USER/.cache/yarn  
+
+# # Apache Toree kernel
+# RUN pip install --no-cache-dir \
+#     https://dist.apache.org/repos/dist/release/incubator/toree/0.3.0-incubating/toree-pip/toree-0.3.0.tar.gz \
+#     && \
+#     jupyter toree install --sys-prefix && \
+#     rm -rf /home/$NB_USER/.local && \
+#     fix-permissions $CONDA_DIR && \
+#     fix-permissions /home/$NB_USER
+
+# # ==================================================================
+# # Spark Setting
+# # ------------------------------------------------------------------
+# COPY spark/conf.cloudera.yarn/ /opt/conf.cloudera.yarn/
+# COPY spark/hive/hive-site.xml /usr/local/spark/conf/
+
+# # volume attach 방식으로 변경 (2019-05-13)
+# # COPY spark/spark-defaults.conf /usr/local/spark/conf/ 
+
+# COPY spark/DbInterface.py /opt/conda/lib/python3.6/
+# COPY spark/log4j.properties /usr/local/spark/conf/
+# # Setting env value
+# ENV HADOOP_CONF_DIR=/opt/conf.cloudera.yarn \
+#     YARN_CONF_DIR=/opt/conf.cloudera.yarn \
+#     SPARK_HOME=/usr/local/spark
+# ENV PATH=$SPARK_HOME/bin:${PATH} \
+#     SPARK_CONF_DIR=$SPARK_HOME/conf \
+#     SPARK_YARN_USER_ENV='PYSPARK_PYTHON=/shcsw/anaconda3/bin/python' \
+#     PYSPARK_DRIVER_PYTHON=/opt/conda/bin/python \
+#     PYSPARK_PYTHON=/shcsw/anaconda3/bin/python \   
+# # PATH Setting
+#     # PATH=/home/$NB_USER/notebooks/data/share/gitlab-runner/shcPython-prd/jdbc:${PATH}
+#     PATH=/home/$NB_USER/notebooks/src/shcPython/jdbc:${PATH}
+
+# RUN echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> /home/$NB_USER/.bashrc && \
+#     echo "export PATH=$PATH" >> /home/$NB_USER/.bashrc && \
+#     echo "export TMOUT=3600" >> /home/$NB_USER/.bashrc
+
+# ==================================================================
+# R-NOTEBOOK 
+# ==================================================================
+RUN conda install --yes -c r \
+        r-essentials \
+        r-suppdists \        
+        r-zip \
+        r-webshot \
+        r-uroot \
+        r-tkrplot \
+        r-tkrgl \
+        r-timeseries \
+        r-x13binary \
+        r-acepack \
+        r-adgoftest \
+        r-anomalydetection \
+        r-ape \
+        r-argparse \
+        r-bcp \
+        r-bdsmatrix \
+        r-bestglm \
+        r-bindr \
+        r-bindrcpp \
+        r-bit \
+        r-bit64 \
+        r-bitops \
+        r-blob \
+        r-bradleyterry2	\
+        r-brew \
+        r-brglm	\
+        r-cairo \
+        r-car \
+        r-catools \
+        r-checkmate	\
+        r-chron \
+        r-coda \
+        r-coin \
+        r-commonmark \
+        r-config \
+        r-copula \
+        r-crosstalk \
+        r-ctv \
+        r-cvst \
+        r-cvtools \
+        r-ddalpha \
+        r-debugme \
+        r-deoptimr \
+        r-desc \
+        r-devtools \
+        r-diagrammer \
+        r-dichromat \
+        r-dimred \
+        r-domc \
+        r-doparallel \
+        r-downloader \
+        r-drr \
+        r-dygraphs \
+        r-e1071	\     
+        r-estimability \   
+        r-feather \
+        r-findpython \
+        r-forecast \
+        r-formattable \
+        r-formula	\
+        r-fracdiff	\
+        r-functional	\
+        r-fwdselect	\
+        r-gdata	\
+        r-getopt	\
+        r-ggvis	\
+        r-gistr \
+        r-git2r \
+        r-gmp	\
+        r-gplots	\
+        r-gridbase	\
+        r-gridextra	\
+        r-grpreg	\
+        r-gsl	\
+        r-gsw	\
+        r-gtools	\
+        r-highcharter	\
+        r-hmisc	\
+        r-htmltable	\
+        r-hunspell \
+        r-igraph	\
+        r-influencer	\
+        r-inline	\
+        r-irlba	\
+        r-janeaustenr	\
+        r-jpeg	\
+        r-kernlab	\
+        r-kohonen	\
+        r-lahman	\
+        r-lars	\
+        r-leaflet	\
+        r-lintr	\
+        r-lmertest	\
+        r-logging	\
+        r-lsmeans	\
+        r-mapproj	\
+        r-microbenchmark	\
+        r-mlmrev	\
+        r-mnormt	\
+        r-mongolite	\
+        r-networkd3	\
+        r-nlp	\
+        r-nmf	\
+        r-nycflights13	\
+        r-oce	\
+        r-odbc	\
+        r-packrat	\
+        r-pbkrtest	\
+        r-perm	\
+        r-pkgmaker	\
+        r-pki	\
+        r-plm	\
+        r-png	\
+        r-polspline	\
+        r-proc	\
+        r-profvis	\
+        r-pryr	\
+        r-psych	\
+        r-r.methodss3	\
+        r-r.oo	\
+        r-r.utils	\
+        r-rappdirs	\
+        r-raster	\
+        r-rcurl	\
+        r-registry	\
+        r-reshape	\
+        r-rex \
+        r-rhive	\
+        r-rjava	\
+        r-rjdbc	\
+        r-rjson	\
+        r-rjsonio	\
+        r-rms	\
+        r-rngtools	\
+        r-rocr	\
+        r-rodbc	\
+        r-roxygen2	\
+        r-rsconnect	\
+        r-rserve	\
+        r-rsqlite	\
+        r-rstan	\
+        r-rversions	\
+        r-rzmq	\
+        r-seacarb	\
+        r-sf	\
+        r-shinybs	\
+        r-shinycssloaders	\
+        r-shinydashboard	\
+        r-shinyjs	\
+        r-shinysky	\
+        r-shinythemes	\
+        r-slam	\
+        r-snowballc	\
+        r-sparklyr	\
+        r-stanheaders	\
+        r-stringdist	\
+        r-strucchange	\
+        r-testit	\
+        r-threejs	\
+        r-tidytext	\
+        r-tilegramsr	\
+        r-tm	\
+        r-tokenizers	\
+        r-udunits2	\
+        r-units	\
+        r-vars	\
+        r-vgam	\
+        r-weatherdata	\
+        r-xlsx	\
+        r-xlsxjars	\
+        r-aer \
+        r-afex \       
+        r-rlang \ 
+        r-farver \
+        r-lifecycle \
+        r-scales \
+        r-tidyverse \
+        r-clustertend==1.4 \
+        r-corrplot==0.84 \
+        r-factoextra==1.0.5 \
+        r-flexclust==1.4_0 \
+        r-GPArotation==2014.11_1 \
+        r-NbClust==3.0 \  
+        r-rgf==1.0.6 \          
+        && \
+        conda clean -afy && \
+        rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+        rm -rf /home/$NB_USER/.cache/yarn \    
+        && find /opt/conda/ -follow -type f -name '*.a' -delete \
+        && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+        && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
+        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete        
+
+RUN conda install --yes -c conda-forge \
+        r-keras \
+        ngboost==0.2.0 \
+        r-ranger==0.12.1 \
+        && \
+        conda install --yes jupyter && \
+        rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+        rm -rf /home/$NB_USER/.cache/yarn \    
+        && find /opt/conda/ -follow -type f -name '*.a' -delete \
+        && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
+        && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
+        && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' -delete    
+
+RUN pip install --quiet --no-cache-dir \
+        h2o==3.28.0.2 \
+        rgf_python==3.8.0 \
+    && \
+    rm -rf /home/$NB_USER/.cache/yarn 
+
+# 2020.02.20 PATH 수정 요청
+RUN sed -i 's/:\/opt\/conda\/bin:\/usr\/lib\/jvm\/java-8-openjdk-amd64\/bin/:\/usr\/lib\/jvm\/java-8-openjdk-amd64\/bin:\/opt\/conda\/bin/g' /home/$NB_USER/.bashrc
+RUN Rscript -e "install.packages(c('h2o', 'stargazer', 'scorecard'), repos='http://cran.r-project.org',  lib='/opt/conda/lib/R/library')"
+
+# PYTHON PATH 추가 요청
+ENV PYTHONPATH=/home/$NB_USER/notebooks/src/packages:${PYTHONPATH}
+
+USER root
+
+EXPOSE 54321 8888
+
+COPY entrypoint_spark.sh /usr/local/bin/
+ENTRYPOINT [ "/usr/bin/tini", "--", "entrypoint_spark.sh"]
+CMD [ "/usr/local/bin/run_jupyter.sh", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token="]
+
+# Switch back to jovyan to avoid accidental container runs as root
+USER $NB_UID
+
